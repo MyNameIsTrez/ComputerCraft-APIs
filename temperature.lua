@@ -1,9 +1,10 @@
+-- This API relies on the 'json' API being installed! https://pastebin.com/4nRg9CHU
+
 function getTemperature()
-  local URL = 'http://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam'
+  local URL = "http://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam"
   local table = http.get(URL)
-  local str_data = table.readAll()
-  local temp_index = str_data:find("temp")
-  local temp = string.sub(str_data, temp_index + 8, temp_index + 11)
-  return temp
+  local str = table.readAll()
+  table.close()
+  local obj = json.decode(str)
+  return obj.liveweer[1].temp
 end
-local text = 'TEMP '..getTemperature()
