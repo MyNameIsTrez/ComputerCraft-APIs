@@ -6,6 +6,7 @@
 
 entities = {}
 nodes = {}
+local sqrt2 = math.sqrt(2)
 
 
 
@@ -125,8 +126,14 @@ Entity = {
 		return false
 	end,
 
-	heuristic = function(self, a, b)
-		return cf.dist(a, b)
+	heuristic = function(self, node, target)
+		-- Euclidian distance.
+		-- return cf.dist(node, target)
+		
+		-- Octile distance.
+    	dx = math.abs(node.pos.x - target.pos.x)
+    	dy = math.abs(node.pos.y - target.pos.y)
+    	return (dx + dy) + (sqrt2 - 2) * math.min(dx, dy)
 	end,
 
 	setPath = function(self)
