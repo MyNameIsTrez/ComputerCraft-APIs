@@ -71,7 +71,7 @@ function handleKeys()
     while true do
         local event, keyNum = os.pullEvent()
 		if (event == "key") then
-			onKeyFn(getName(keyNum), keyNum)
+			onKeyFn()
 		end
     end
 end
