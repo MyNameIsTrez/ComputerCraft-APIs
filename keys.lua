@@ -68,7 +68,6 @@ function getName( _nKey )
 end
 
 function handleKeys()
-	local prevEvent
     while true do
         local event, keyNum = os.pullEvent()
 		if (event == "key") then
