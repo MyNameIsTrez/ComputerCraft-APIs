@@ -5,7 +5,7 @@
 -- See http://www.minecraftwiki.net/wiki/Key_codes for more info
 
 -- UNEDITABLE VARIABLES --------------------------------------------------------
-local onKey
+local onKeyFn
 
 
 
@@ -71,12 +71,12 @@ function handleKeys()
     while true do
         local event, keyNum = os.pullEvent()
 		if (event == "key") then
-			onKey(getName(keyNum), keyNum)
+			onKeyFn(getName(keyNum), keyNum)
 		end
     end
 end
 
 function startKeyHandling(fn, onKeyFn)
-	onKey = onKeyFn
+	onKeyFn = onKeyFn
 	parallel.waitForAny(fn, handleKeys)
 end
