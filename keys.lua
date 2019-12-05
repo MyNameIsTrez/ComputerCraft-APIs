@@ -76,7 +76,7 @@ function handleKeys()
     end
 end
 
-function startKeyHandling(fn, onKeyFn)
+function startKeyHandling(mainFn, onKeyFn)
 	onKeyFn = onKeyFn
-	parallel.waitForAny(fn, handleKeys)
+	parallel.waitForAny(mainFn, handleKeys)
 end
