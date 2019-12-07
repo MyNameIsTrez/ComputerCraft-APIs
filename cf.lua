@@ -83,3 +83,28 @@ function map(value, minVar, maxVar, minResult, maxResult)
 	local a = (value - minVar) / (maxVar - minVar)
 	return (1 - a) * minResult + a * maxResult;
 end
+
+function getFileCount(folder)
+	return #fs.list(folder)
+end
+
+function saveData(folder, string)
+	-- Creates a folder if it doesn't already exist.
+	if not fs.exists(folder) then
+		fs.makeDir(folder)
+	end
+
+	-- Creates a save file in write mode.
+	local num = getFileCount(folder) + 1
+	local file = fs.open(folder.."/"..num, "w")
+
+	file.write(string)
+	file.close()
+end
+
+function loadData(folder, name)
+	local file = fs.open(folder.."/"..name, "r")
+	local string = file.readAll()
+	file.close()
+	return string
+end
