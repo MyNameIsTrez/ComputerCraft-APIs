@@ -106,14 +106,19 @@ function bezierCurve(args)
 
     local t = 0
     local tStep = 1/(curvePointCount - 1)
-
-    local anchorPoints = args.anchorPoints or createRandomAnchorPoints({
-        anchorPointCount = anchorPointCount,
-        minX = minX,
-        minY = minY,
-		maxX = maxX,
-		maxY = maxY
-	})
+	
+	local anchorPoints
+	if args.anchorPoints and #args.anchorPoints > 0 then
+		anchorPoints = args.anchorPoints
+	else
+		anchorPoints = createRandomAnchorPoints({
+     	   anchorPointCount = anchorPointCount,
+     	   minX = minX,
+     	   minY = minY,
+			maxX = maxX,
+			maxY = maxY
+		})
+	end
     if showAnchorPointsBool then
         showAnchorPoints(anchorPoints, anchorIcon)
     end
