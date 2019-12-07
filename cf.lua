@@ -78,3 +78,8 @@ function yield()
 	os.queueEvent("randomEvent")
 	os.pullEvent("randomEvent")
 end
+
+function map(value, minVar, maxVar, minResult, maxResult)
+	local a = (value - minVar) / (maxVar - minVar)
+	return (1 - a) * minResult + a * maxResult;
+end
