@@ -3,32 +3,37 @@ This API needs the json API to convert a Lua table to a JavaScript object:
 https://pastebin.com/4nRg9CHU
 ]]--
  
+-- Website that transforms http requests from ComputerCraft into https requests.
+-- The website responds back to ComputerCraft's http message with the https response.
+local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
+ 
 -- Google Drive variables.
 -- All animations (videos, images) are stored in this Google Drive folder.
 local animationsFolderUrl = 'https://drive.google.com/drive/folders/1bcnkm896y2LeQyKabwVHtcAGjvtRQpvb?usp=sharing'
 local animationsFolderIndexUrl = 'https://docs.google.com/document/d/1BW4sea-6ML_9lgWdTsoNBYKKAHe9LVXTptyRunSJnHM/edit?usp=sharing'
 local animationStructure = nil -- Global variable, set by setAnimationStructure().
+local startIndexContentStr = '"s":"'
  
 -- Mega.nz variables.
 local sequenceNumber = math.random(1000000) -- Not sure what this is, see the Mega.nz tutorial linked below.
 local sessionId = nil -- Not sure what this is, see the Mega.nz tutorial linked below.
  
 function get(url)
-    local handle = http.post('http://request.mariusvanwijk.nl/', '{"url": "' .. url .. '"}' )
+    local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
     local string = handle.readAll()
     handle.close()
     return string
 end
  
 function post(url, data)
-    local handle = http.post('http://request.mariusvanwijk.nl/', '{"url": "' .. url .. '", "body": "' .. json.encode(data) .. '"}' )
+    local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '", "body": "' .. json.encode(data) .. '"}' )
     local string = handle.readAll()
     handle.close()
     return string
 end
  
 function request(data)
-    local handle = http.post('http://request.mariusvanwijk.nl', json.encode(data))
+    local handle = http.post(httpToHttpsUrl, json.encode(data))
     local string = handle.readAll()
     handle.close()
     return string
@@ -48,6 +53,26 @@ function unicodify(str)
     return str
 end
  
+function getStartIndexContent(str, start)
+    -- + #startIndexContentStr is hardcoded.
+    local temp = str:find(startIndexContentStr, start)
+    if temp then
+        return temp + 5
+    else
+        return nil
+    end
+end
+ 
+function getEndIndexContent(str, start)
+    -- Search for the endOfContentStr after the startIndexContent.
+    -- It doesn't matter if the frames contain the " character,
+    -- because the frames don't contain unicode characters.
+   
+    --local endIndexContentStr = '"},{'
+   
+    return str:find('"', start) - 1
+end
+ 
 -- indexTable specifies whether this is the file
 -- that holds names and URLs of all the other files.
 function getGoogleDriveFile(url, indexTable)
@@ -58,26 +83,37 @@ function getGoogleDriveFile(url, indexTable)
     local handle = io.open(tostring(math.random(1000000)), 'w')
     handle:write(str)
     handle:close()
-    ]]--
    
     print('#str: '..tostring(#str))
+    ]]--
    
-    local startIndexContentStr = '"s":"'
-    local endIndexContentStr = '"},{'
+    local startIndexContent = getStartIndexContent(str, 1)
+    local endIndexContent = getEndIndexContent(str, startIndexContent)
    
-    local startIndexContent = str:find(startIndexContentStr) + 5 -- + #startIndexContentStr is hardcoded.
-    local endIndexContent = str:find('"', startIndexContent) - 1 -- Search for the endOfContentStr at the end of the startIndexContent.
+    local fileLines = {}
    
-    local noUnicodeStr = str:sub(startIndexContent, endIndexContent)
-   
-    local result
-    if not indexTable then
-        result = noUnicodeStr
-    else
-        result = unicodify(noUnicodeStr)
+    while true do
+        print(tostring(startIndexContent))
+        print(tostring(endIndexContent))
+        print()
+       
+        local noUnicodeStr = str:sub(startIndexContent, endIndexContent)
+       
+        if not indexTable then
+            fileLines[#fileLines + 1] = noUnicodeStr
+        else
+            fileLines[#fileLines + 1] = unicodify(noUnicodeStr)
+        end
+       
+        startIndexContent = getStartIndexContent(str, endIndexContent)
+        if startIndexContent then
+            endIndexContent = getEndIndexContent(str, startIndexContent)
+        else
+            return fileLines
+        end
+       
+        sleep(3)
     end
-   
-    return result
 end
  
 -- Reads the index file inside of the Google Drive's Animation folder.
