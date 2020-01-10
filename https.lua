@@ -1,22 +1,43 @@
 --[[
+Because ComputerCraft can only send HTTP requests, and most websites block HTTP requests, most websites are unaccessible!
+This API allows you to send 'HTTPS' requests: POST, GET and REQUEST.
+ 
+It does so, by sending the HTTP request to a server that converts it into a HTTPS request, and sends that to any website.
+That website sends a HTTPS response back to the server, which converts it into a HTTP reply and sends that back to
+The original HTTP request sent from ComputerCraft!
+ 
 This API needs the json API to convert a Lua table to a JavaScript object:
 https://pastebin.com/4nRg9CHU
 ]]--
+ 
  
 -- Website that transforms http requests from ComputerCraft into https requests.
 -- The website responds back to ComputerCraft's http message with the https response.
 local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
  
+ 
 -- Google Drive variables.
--- All animations (videos, images) are stored in this Google Drive folder.
-local animationsFolderUrl = 'https://drive.google.com/drive/folders/1bcnkm896y2LeQyKabwVHtcAGjvtRQpvb?usp=sharing'
-local animationsFolderIndexUrl = 'https://docs.google.com/document/d/1BW4sea-6ML_9lgWdTsoNBYKKAHe9LVXTptyRunSJnHM/edit?usp=sharing'
-local animationStructure = nil -- Global variable, set by setAnimationStructure().
+ 
+-- An index of all the names and links to the animation files are stored inside of this folder.
+local fileIndexUrl = 'https://docs.google.com/document/d/1BW4sea-6ML_9lgWdTsoNBYKKAHe9LVXTptyRunSJnHM/edit?usp=sharing'
+ 
+-- Global variable, the user needs to set it with setFolderStructure().
+-- When set, it holds a table containing every folder name, file name and URL of every file.
+local folderStructure = nil
+ 
+-- Every line in each file is announced with this string.
 local startIndexContentStr = '"s":"'
  
+ 
 -- Mega.nz variables.
-local sequenceNumber = math.random(1000000) -- Not sure what this is, see the Mega.nz tutorial linked below.
+ 
+-- Not sure what this is, see the Mega.nz tutorial linked below.
+local sequenceNumber = math.random(1000000)
 local sessionId = nil -- Not sure what this is, see the Mega.nz tutorial linked below.
+ 
+ 
+-- HTTPS FUNCTIONS ----------
+ 
  
 function get(url)
     local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
@@ -67,43 +88,22 @@ function getEndIndexContent(str, start)
     -- Search for the endOfContentStr after the startIndexContent.
     -- It doesn't matter if the frames contain the " character,
     -- because the frames don't contain unicode characters.
-   
-    --local endIndexContentStr = '"},{'
-   
     return str:find('"', start) - 1
 end
  
--- indexTable specifies whether this is the file
--- that holds names and URLs of all the other files.
-function getGoogleDriveFile(url, indexTable)
+function getGoogleDriveFile(url)
     local str = https.get(url)
-   
-    --[[
-    -- This block of code is temporary.
-    local handle = io.open(tostring(math.random(1000000)), 'w')
-    handle:write(str)
-    handle:close()
-   
-    print('#str: '..tostring(#str))
-    ]]--
    
     local startIndexContent = getStartIndexContent(str, 1)
     local endIndexContent = getEndIndexContent(str, startIndexContent)
    
     local fileLines = {}
    
+    -- Gets every line of the file, and returns when all lines have been found.
     while true do
-        print(tostring(startIndexContent))
-        print(tostring(endIndexContent))
-        print()
-       
         local noUnicodeStr = str:sub(startIndexContent, endIndexContent)
        
-        if not indexTable then
-            fileLines[#fileLines + 1] = noUnicodeStr
-        else
-            fileLines[#fileLines + 1] = unicodify(noUnicodeStr)
-        end
+        fileLines[#fileLines + 1] = textutils.unserialize(unicodify(noUnicodeStr))
        
         startIndexContent = getStartIndexContent(str, endIndexContent)
         if startIndexContent then
@@ -111,37 +111,16 @@ function getGoogleDriveFile(url, indexTable)
         else
             return fileLines
         end
-       
-        sleep(3)
     end
 end
  
--- Reads the index file inside of the Google Drive's Animation folder.
-function setAnimationStructure()
-    local str = getGoogleDriveFile(animationsFolderIndexUrl, true)
-    animationStructure = textutils.unserialize(str)
+-- Reads the file index.
+function setFolderStructure()
+    folderStructure = getGoogleDriveFile(fileIndexUrl)
 end
  
-function getAnimationStructure()
-    return animationStructure
-end
- 
---[[
-Gets the names of the folders inside of the Google Drive Animations folder.
-It can't get the names of folders surrounding the Animations folder.
-Uses > and < signs to indicate folder names inside of the Animations folder.
-\u003e is the unicode character >.
-\u003c is the unicode character <.
-]]--
-function getGoogleDriveFolderNames()
-    --[[
-    local str = https.get(animationsFolderUrl)
-    local folderNames = {}
-    string.gsub(str, '\u003e ' .. '(.-)' .. ' \\\\u003c', function(folderName) folderNames[#folderNames + 1] = folderName end)
-    return folderNames
-    ]]--
-   
-   
+function getFolderStructure()
+    return folderStructure
 end
  
 -- MEGA.NZ ----------
