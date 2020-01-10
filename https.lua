@@ -14,7 +14,7 @@ https://pastebin.com/4nRg9CHU
 ]]--
  
  
--- Variables.
+-- General variables.
  
  
 -- Website that transforms http requests from ComputerCraft into https requests.
@@ -22,17 +22,29 @@ https://pastebin.com/4nRg9CHU
 local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
  
  
+-- GitHub variables.
+ 
+ 
+-- A file containing the structure of the folders and files inside of the ComputerCraft data storage repository.
+local gitHubStructureUrl = 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/structure.txt'
+ 
+-- Every line with valuable content in a file is announced with this string.
+local startContentStr = 'js-file-line">'
+-- Every line with valuable content in a file is ended with this string.
+local endContentStr = '</td>\n      </tr>'
+ 
+ 
 -- Google Drive variables.
  
  
--- An index of all the names and links to the animation files are stored inside of this folder.
+-- An index of all the names and links to the files are stored inside of this folder.
 local fileIndexUrl = 'https://docs.google.com/document/d/1BW4sea-6ML_9lgWdTsoNBYKKAHe9LVXTptyRunSJnHM/edit?usp=sharing'
  
 -- Global variable, the user needs to set it with setGoogleDriveFolderStructure().
 -- When set, it holds a table containing every folder name, file name and URL of every file.
 local googleDriveFolderStructure = nil
  
--- Every line in each file is announced with this string.
+-- Every line with valuable content in a file is announced with this string.
 local startIndexContentStr = '"s":"'
  
  
@@ -66,6 +78,33 @@ function request(data)
     local string = handle.readAll()
     handle.close()
     return string
+end
+ 
+ 
+-- GITHUB ----------
+ 
+ 
+function getGitHubFile(url)
+    local str = https.get(url)
+   
+    local startIndexContent = getStartIndexContent(str, 1)
+    local endIndexContent = getEndIndexContent(str, startIndexContent)
+   
+    local fileLines = {}
+   
+    -- Gets every line of the file, and returns when all lines have been found.
+    while true do
+        local noUnicodeStr = str:sub(startIndexContent, endIndexContent)
+       
+        fileLines[#fileLines + 1] = textutils.unserialize(unicodify(noUnicodeStr))
+       
+        startIndexContent = getStartIndexContent(str, endIndexContent)
+        if startIndexContent then
+            endIndexContent = getEndIndexContent(str, startIndexContent)
+        else
+            return fileLines
+        end
+    end
 end
  
  
