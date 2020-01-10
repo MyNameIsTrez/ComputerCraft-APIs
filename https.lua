@@ -1,3 +1,4 @@
+--------------------------------------------------
 -- README.
  
  
@@ -12,6 +13,10 @@ The original HTTP request sent from ComputerCraft!
 This API needs the json API to convert a Lua table to a JavaScript object:
 https://pastebin.com/4nRg9CHU
 ]]--
+ 
+ 
+--------------------------------------------------
+-- VARIABLES.
  
  
 -- General variables.
@@ -56,7 +61,11 @@ local sequenceNumber = math.random(1000000)
 local sessionId = nil -- Not sure what this is, see the Mega.nz tutorial linked below.
  
  
--- HTTPS FUNCTIONS ----------
+--------------------------------------------------
+-- FUNCTIONS.
+ 
+ 
+-- Https ----------
  
  
 function get(url)
@@ -81,7 +90,7 @@ function request(data)
 end
  
  
--- GITHUB ----------
+-- GitHub ----------
  
  
 function getGitHubFile(url)
@@ -108,7 +117,7 @@ function getGitHubFile(url)
 end
  
  
--- GOOGLE DRIVE ----------
+-- Google Drive ----------
  
  
 function unicodify(str)
@@ -173,7 +182,7 @@ function getGoogleDriveFolderStructure()
 end
  
  
--- MEGA.NZ ----------
+-- Mega.nz ----------
  
  
 -- This function is rewritten PHP that came from this Mega.nz tutorial:
@@ -193,3 +202,6 @@ function getMegaFile(req)
     local data = json.encode(req)
     return post(url, data)
 end
+ 
+ 
+--------------------------------------------------
