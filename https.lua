@@ -1,3 +1,6 @@
+-- README.
+ 
+ 
 --[[
 Because ComputerCraft can only send HTTP requests, and most websites block HTTP requests, most websites are unaccessible!
 This API allows you to send 'HTTPS' requests: POST, GET and REQUEST.
@@ -11,6 +14,9 @@ https://pastebin.com/4nRg9CHU
 ]]--
  
  
+-- Variables.
+ 
+ 
 -- Website that transforms http requests from ComputerCraft into https requests.
 -- The website responds back to ComputerCraft's http message with the https response.
 local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
@@ -18,18 +24,20 @@ local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
  
 -- Google Drive variables.
  
+ 
 -- An index of all the names and links to the animation files are stored inside of this folder.
 local fileIndexUrl = 'https://docs.google.com/document/d/1BW4sea-6ML_9lgWdTsoNBYKKAHe9LVXTptyRunSJnHM/edit?usp=sharing'
  
--- Global variable, the user needs to set it with setFolderStructure().
+-- Global variable, the user needs to set it with setGoogleDriveFolderStructure().
 -- When set, it holds a table containing every folder name, file name and URL of every file.
-local folderStructure = nil
+local googleDriveFolderStructure = nil
  
 -- Every line in each file is announced with this string.
 local startIndexContentStr = '"s":"'
  
  
 -- Mega.nz variables.
+ 
  
 -- Not sure what this is, see the Mega.nz tutorial linked below.
 local sequenceNumber = math.random(1000000)
@@ -60,7 +68,9 @@ function request(data)
     return string
 end
  
+ 
 -- GOOGLE DRIVE ----------
+ 
  
 function unicodify(str)
     -- Replace with an empty string.
@@ -115,19 +125,21 @@ function getGoogleDriveFile(url)
 end
  
 -- Reads the file index.
-function setFolderStructure()
-    folderStructure = getGoogleDriveFile(fileIndexUrl)
+function setGoogleDriveFolderStructure()
+    googleDriveFolderStructure = getGoogleDriveFile(fileIndexUrl)
 end
  
-function getFolderStructure()
-    return folderStructure
+function getGoogleDriveFolderStructure()
+    return googleDriveFolderStructure
 end
+ 
  
 -- MEGA.NZ ----------
  
+ 
 -- This function is rewritten PHP that came from this Mega.nz tutorial:
 -- http://julien-marchand.fr/blog/using-the-mega-api-with-php-examples/
-function getMega(req)
+function getMegaFile(req)
     -- No clue what req is, I just know it's a table.
     local urlSession
     if sessionId then
