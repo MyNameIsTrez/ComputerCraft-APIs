@@ -125,7 +125,7 @@ Animation = {
     getSelectedAnimationFileTabFromGitHub = function(self, fileName)
         print('Getting the data from GitHub...')
         local gitUrl = 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/Animations/size_30x30/' .. fileName .. '.txt'
-        local args = { url=gitUrl, delimiter=https.getGitHubDelimiter(), convertToUtf8=true }
+        local args = { url=gitUrl, convertToUtf8=true }
         return https.getFile(args)
     end,
    
