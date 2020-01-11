@@ -56,6 +56,7 @@ function get(url)
     local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
     local string = handle.readAll()
     handle.close()
+    if string == '404: Not Found' then error('404: File not found.') end
     return string
 end
  
@@ -93,9 +94,9 @@ function downloadFile(url, outputLocation, fileName)
     handle:close()
 end
  
-function getStructure(url)
+function getStructure()
     if not structure then
-        local str = https.get(url)
+        local str = https.get(fileStructureUrl)
         local fileLines = {}
         str:gsub(delimiter, function(line) fileLines[#fileLines + 1] = textutils.unserialize(unicodify(line)) end)
        
