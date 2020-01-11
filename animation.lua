@@ -135,23 +135,21 @@ Animation = {
         end
     end,
  
-    downloadAnimationFileFromGitHub = function(self, fileName, fileDimensions)
+    downloadAnimationFileFromGitHub = function(self, fileName, fileDimensions, outputFolder)
         self:printProgress('Fetching animation file from GitHub...')
        
-        local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/Animations/size_' ..
-        fileDimensions.width .. 'x' .. fileDimensions.height .. '/' .. fileName .. '.txt'
+        local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. outputFolder .. '/' .. fileName .. '.txt'
        
-        local outputFolder = 'animations/size_' .. cfg.animationSize.width .. 'x' .. cfg.animationSize.height
         https.downloadFile(url, outputFolder, fileName)
     end,
  
-    getSelectedAnimationData = function(self, fileName, fileDimensions)
-        local fileExists = fs.exists('animations/size_' .. cfg.animationSize.width .. 'x' .. cfg.animationSize.height .. '/' .. fileName .. '.txt')
+    getSelectedAnimationData = function(self, fileName, fileDimensions, outputFolder)
+        local fileExists = fs.exists(outputFolder .. '/' .. fileName .. '.txt')
         if not fileExists then
-            self:downloadAnimationFileFromGitHub(fileName, fileDimensions)
+            self:downloadAnimationFileFromGitHub(fileName, fileDimensions, outputFolder)
         end
        
-        local file = fs.open('animations/size_' .. cfg.animationSize.width .. 'x' .. cfg.animationSize.height .. '/' .. fileName .. '.txt', 'r')
+        local file = fs.open(outputFolder .. '/' .. fileName .. '.txt', 'r')
        
         if not file then
             error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
@@ -272,12 +270,12 @@ Animation = {
  
     -- CODE EXECUTION --------------------------------------------------------
  
-    loadAnimation = function(self, fileName, fileDimensions)
+    loadAnimation = function(self, fileName, fileDimensions, outputFolder)
         if not fileName then
             error('There was an attempt to load a file name that doesn\'t exist; check if the chosen file name and the file name in the input folder match.')
         end
        
-        self:getSelectedAnimationData(fileName, fileDimensions)
+        self:getSelectedAnimationData(fileName, fileDimensions, outputFolder)
         cf.tryYield()
        
         self:createGeneratedCodeFolder()
