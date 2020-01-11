@@ -7,6 +7,7 @@ REQUIREMENTS
     * Common Functions (cf): https://pastebin.com/p9tSSWcB -- Provides cf.tryYield().
     * JSON (json): https://pastebin.com/4nRg9CHU - Provides converting a Lua table into a JavaScript object for the HTTPS API.
     * HTTPS (https): https://pastebin.com/iyBc3BWj - Gets the animation files from a GitHub storage repository.
+    (Optional) BruteOS: <<<ADD PASTEBIN LINK HERE>>> -- Will use the BruteOS to print progress in loading animations.
  
 The default terminal ratio is 25:9.
 To get the terminal to fill your entire monitor and to get a custom text color:
@@ -39,9 +40,21 @@ Animation = {
     end,
  
     -- FUNCTIONS --------------------------------------------------------
+   
+    printProgress = function(self, str, x, y)
+        -- If the BruteOS API is used, print the message at a different location.
+        if _BRUTEOS then
+            os.setMessage(str, 'NotUsingMenu');
+        else
+            if x and y then
+                term.setCursorPos(x, y)
+            end
+            print(str)
+        end
+    end,
  
     unpackOptimizedFrames = function(self, optimizedFrames)
-        print('Unpacking optimized frames...')
+        self:printProgress('Unpacking optimized frames...')
        
         startTime = os.clock()
         local cursorX, cursorY = term.getCursorPos()
@@ -64,9 +77,9 @@ Animation = {
                
                 -- Clear.
                 clear = '       '
- 
-                term.setCursorPos(cursorX, cursorY) -- Used so the next 'Creating frame' print statement can overwrite itself in its for loop.
-                print(progress .. ', ' .. speed .. ', ' .. eta .. clear)
+               
+                local str = progress .. ', ' .. speed .. ', ' .. eta .. clear
+                self:printProgress(str, cursorX, cursorY)
                 startTime = os.clock()
             end
  
@@ -123,28 +136,28 @@ Animation = {
     end,
  
     downloadAnimationFileFromGitHub = function(self, fileName, fileDimensions)
-        print('Fetching animation file from GitHub...')
+        self:printProgress('Fetching animation file from GitHub...')
        
         local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/Animations/size_' ..
         fileDimensions.width .. 'x' .. fileDimensions.height .. '/' .. fileName .. '.txt'
        
-        local outputFolder = cfg.computerType .. ' inputs/'
+        local outputFolder = 'animations/size_' .. cfg.animationSize.width .. 'x' .. cfg.animationSize.height
         https.downloadFile(url, outputFolder, fileName)
     end,
  
     getSelectedAnimationData = function(self, fileName, fileDimensions)
-        local fileExists = fs.exists(cfg.computerType .. ' inputs/' .. fileName .. '.txt')
+        local fileExists = fs.exists('animations/size_' .. cfg.animationSize.width .. 'x' .. cfg.animationSize.height .. '/' .. fileName .. '.txt')
         if not fileExists then
             self:downloadAnimationFileFromGitHub(fileName, fileDimensions)
         end
        
-        local file = fs.open(cfg.computerType .. ' inputs/' .. fileName .. '.txt', 'r')
+        local file = fs.open('animations/size_' .. cfg.animationSize.width .. 'x' .. cfg.animationSize.height .. '/' .. fileName .. '.txt', 'r')
        
         if not file then
             error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
         end
  
-        print('Opening animation file...')
+        self:printProgress('Opening animation file...')
  
         cf.tryYield()
        
@@ -155,8 +168,7 @@ Animation = {
             table.insert(stringTab, lineStr)
  
             if i % 1000 == 0 then
-                term.setCursorPos(cursorX, cursorY)
-                print('Gotten '..tostring(i)..' frames...')
+                self:printProgress('Gotten '..tostring(i)..' frames...', cursorX, cursorY)
             end
             i = i + 1
  
@@ -164,8 +176,7 @@ Animation = {
         end
        
         -- For the final frame.
-        term.setCursorPos(cursorX, cursorY)
-        print('Gotten '..tostring(i - 2)..' frames...')
+        self:printProgress('Gotten '..tostring(i - 2)..' frames...', cursorX, cursorY)
        
         file:close()
         cf.tryYield()
@@ -245,8 +256,8 @@ Animation = {
                 handle:write(string)
                
                 if i % 1000 == 0 or i == self.frameCount then
-                    term.setCursorPos(cursorX, cursorY)
-                    print('Generated '..tostring(i)..'/'..tostring(self.frameCount)..' frames...')
+                    local str = 'Generated '..tostring(i)..'/'..tostring(self.frameCount)..' frames...'
+                    self:printProgress(str, cursorX, cursorY)
                 end
                 i = i + 1
                
@@ -262,10 +273,6 @@ Animation = {
     -- CODE EXECUTION --------------------------------------------------------
  
     loadAnimation = function(self, fileName, fileDimensions)
-        if cfg.computerType ~= 'laptop' and cfg.computerType ~= 'desktop' then
-            error('You didn\'t enter a valid \'computerType\' name in the cfg file!')
-        end
- 
         if not fileName then
             error('There was an attempt to load a file name that doesn\'t exist; check if the chosen file name and the file name in the input folder match.')
         end
@@ -288,10 +295,10 @@ Animation = {
     end,
  
     playAnimation = function(self, loop)
-        print('Playing animation...')
+        self:printProgress('Playing animation...')
         local len = #fs.list('.generatedCodeFiles')
  
-        if loop then
+        if loop and self.frameCount > 1 then
             while true do
                 if cfg.playAnimationBool then
                     self:_playAnimation(len)
