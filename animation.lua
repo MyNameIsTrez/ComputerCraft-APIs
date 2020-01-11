@@ -27,8 +27,8 @@ Animation = {
         local startingValues = {
             passedShell = shell,
             frameCount,
-            compressed,
-            unpackedOptimizedFrames = {}
+            unpackedOptimizedFrames = {},
+            structure = https.getStructure()
         }
        
         setmetatable(startingValues, {__index = self})
@@ -50,88 +50,6 @@ Animation = {
                 term.setCursorPos(x, y)
             end
             print(str)
-        end
-    end,
- 
-    unpackOptimizedFrames = function(self, optimizedFrames)
-        self:printProgress('Unpacking optimized frames...')
-       
-        startTime = os.clock()
-        local cursorX, cursorY = term.getCursorPos()
-        for f = 1, self.frameCount do
-            -- Print speed statistics.
-            if f % 10 == 0 then
-                -- Progress.
-                progress = 'Creating frame ' .. tostring(f) .. '/' .. tostring(self.frameCount)
- 
-                -- Speed.
-                elapsed = (os.clock() - startTime) / 10
-                processedFps = 1 / elapsed
-                speed = string.format('%d frames/s', processedFps)
-               
-                -- ETA.
-                framesLeft = self.frameCount - f
-                etaMinutes = math.floor(elapsed * framesLeft / 60)
-                etaSeconds = math.floor(elapsed * framesLeft) % 60
-                eta = string.format('%dm, %ds left', etaMinutes, etaSeconds)
-               
-                -- Clear.
-                clear = '       '
-               
-                local str = progress .. ', ' .. speed .. ', ' .. eta .. clear
-                self:printProgress(str, cursorX, cursorY)
-                startTime = os.clock()
-            end
- 
-            local unoptimizedString = ''
-            local optimizedFrame = optimizedFrames[f]
-           
-            local openBracketIndex = nil -- Probably not necessary to assign this with 'nil'.
- 
-            -- This can probably be done faster using table.concat:
-            -- https://stackoverflow.com/a/1407187
- 
-            for currentIndex = 1, #optimizedFrame do
-                local char = optimizedFrame:sub(currentIndex, currentIndex) -- can't use pairs or ipairs, I think
-               
-                if char == '[' then
-                    openBracketIndex = currentIndex
-                end
-               
-                if openBracketIndex == nil then
-                    unoptimizedString = unoptimizedString .. char
-                end
-               
-                if char == ']' then
-                    -- More efficient to look at 'optimizedFrame' once like this, because we 'sub:' it twice later.
-                    local closedBrackedIndex = currentIndex
-                    local searchedString = optimizedFrame:sub(openBracketIndex, closedBrackedIndex)
- 
-                    local delimiterIndex
-                    for i = 1, #searchedString do
-                        local char = searchedString:sub(i, i)
-                        if char == ';' then
-                            delimiterIndex = i
-                            break
-                        end
-                    end
- 
-                    local searchedDelimiterIndex = delimiterIndex + 2 - openBracketIndex
-                    local searchedClosedBracketIndex = closedBrackedIndex - openBracketIndex
-                    local repeatedChars = searchedString:sub(delimiterIndex + 1, searchedClosedBracketIndex)
-                   
-                    -- Add the repeated characters.
-                    local repetition = tonumber(searchedString:sub(2, delimiterIndex - 1))
- 
-                    unoptimizedString = unoptimizedString .. repeatedChars:rep(repetition)
-                   
-                    openBracketIndex = nil
-                end
-            end
- 
-            table.insert(self.unpackedOptimizedFrames, unoptimizedString)
- 
-            cf.tryYield()
         end
     end,
  
@@ -186,21 +104,12 @@ Animation = {
         fileInfo:gsub(frameSearch, function(count) self.frameCount = tonumber(count) end)
         cf.tryYield()
  
-        local compressedIndex = fileInfo:find('compressed') + 11
-        local compressedIndexComma = fileInfo:find(',', compressedIndex) - 1
-        self.compressed = fileInfo:sub(compressedIndex, compressedIndexComma) == 'true'
-        cf.tryYield()
- 
         -- The general information data can be removed, so only the frames are left.
         table.remove(stringTab, #stringTab)
         local optimizedFrames = stringTab
         cf.tryYield()
        
-        if self.compressed then
-            self:unpackOptimizedFrames(optimizedFrames)
-        else
-            self.unpackedOptimizedFrames = optimizedFrames
-        end
+        self.unpackedOptimizedFrames = optimizedFrames
     end,
  
     createGeneratedCodeFolder = function(self)
@@ -270,11 +179,7 @@ Animation = {
  
     -- CODE EXECUTION --------------------------------------------------------
  
-    loadAnimation = function(self, fileName, fileDimensions, outputFolder)
-        if not fileName then
-            error('There was an attempt to load a file name that doesn\'t exist; check if the chosen file name and the file name in the input folder match.')
-        end
-       
+    loadAnimation = function(self, fileName, fileDimensions, outputFolder)     
         self:getSelectedAnimationData(fileName, fileDimensions, outputFolder)
         cf.tryYield()
        
