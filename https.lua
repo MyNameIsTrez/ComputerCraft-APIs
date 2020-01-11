@@ -86,26 +86,21 @@ function unicodify(str)
     return str
 end
  
--- Called when getting a file.
--- Replaces characters in a string with their equivalent unicode character.
-function utf8ify(str)
-    return str:gsub('&#39;', "'")
+function downloadFile(url, outputLocation, fileName)
+    local str = https.get(url)
+    local handle = io.open(outputLocation .. '/' .. fileName .. '.txt', 'w')
+    handle:write(str)
+    handle:close()
 end
  
-function getFile(...)
-    local args = arg[1]
-    local str = https.get(args.url)
-    local fileLines = {}
-    -- Uses unicodify when convertToUnicode is true, utf8ify when convertToUtf8 is true, else nothing.
-    str:gsub(delimiter, function(line) fileLines[#fileLines + 1] = args.convertToUnicode and textutils.unserialize(unicodify(line) or args.convertToUtf8 and textutils.unserialize(utf8ify(line)) or textutils.unserialize(line)) end)
-    return fileLines
-end
- 
-function getStructure()
+function getStructure(url)
     if not structure then
+        local str = https.get(url)
+        local fileLines = {}
+        str:gsub(delimiter, function(line) fileLines[#fileLines + 1] = textutils.unserialize(unicodify(line)) end)
+       
         local strTab = {}
-        local args = { url = fileStructureUrl, convertToUnicode = true }
-        for key, line in ipairs(getFile(args)) do strTab[#strTab + 1] = line end
+        for key, line in ipairs(fileLines) do strTab[#strTab + 1] = line end
         -- Concat turns the table of strings into a single string, unserialize turns the string into a table.
         structure = textutils.unserialize(table.concat(strTab))
     end

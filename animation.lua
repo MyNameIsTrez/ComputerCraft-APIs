@@ -122,34 +122,20 @@ Animation = {
         end
     end,
  
-    getSelectedAnimationFileTabFromGitHub = function(self, fileName)
-        print('Getting the data from GitHub...')
-        local gitUrl = 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/Animations/size_30x30/' .. fileName .. '.txt'
-        local args = { url=gitUrl, convertToUtf8=true }
-        return https.getFile(args)
-    end,
-   
-    writeSelectedAnimationFileTabFromGitHub = function(self, fileName, fileTab)
-        print('Writing the data from GitHub to a file...')
-        local handle = io.open(cfg.computerType .. ' inputs/' .. fileName .. '.txt', 'w')
-        for key, line in pairs(fileTab) do
-            if key > 1 then
-                handle:write('\n' .. line)
-            else
-                handle:write(line)
-            end
-        end
-        handle:close()
+    downloadAnimationFileFromGitHub = function(self, fileName, fileDimensions)
+        print('Fetching animation file from GitHub...')
+       
+        local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/Animations/size_' ..
+        fileDimensions.width .. 'x' .. fileDimensions.height .. '/' .. fileName .. '.txt'
+       
+        local outputFolder = cfg.computerType .. ' inputs/'
+        https.downloadFile(url, outputFolder, fileName)
     end,
  
-    getSelectedAnimationData = function(self, fileName, fileTab)       
-        local fileInfo
+    getSelectedAnimationData = function(self, fileName, fileDimensions)
         local fileExists = fs.exists(cfg.computerType .. ' inputs/' .. fileName .. '.txt')
         if not fileExists then
-            local fileTab = self:getSelectedAnimationFileTabFromGitHub(fileName)
-            -- Get the file info, if the file was loaded from GitHub.
-            fileInfo = fileTab[#fileTab]
-            self:writeSelectedAnimationFileTabFromGitHub(fileName, fileTab)
+            self:downloadAnimationFileFromGitHub(fileName, fileDimensions)
         end
        
         local file = fs.open(cfg.computerType .. ' inputs/' .. fileName .. '.txt', 'r')
@@ -158,11 +144,7 @@ Animation = {
             error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
         end
  
-        print('Opening the data file...')
- 
-        if not fileName then
-            error('There was an attempt to load a file name that doesn\'t exist; check if the chosen file name and the file name in the input folder match.')
-        end
+        print('Opening animation file...')
  
         cf.tryYield()
        
@@ -172,14 +154,18 @@ Animation = {
         for lineStr in file.readLine do
             table.insert(stringTab, lineStr)
  
-            if i % 100 == 0 then
+            if i % 1000 == 0 then
                 term.setCursorPos(cursorX, cursorY)
-                print('Gotten ~'..tostring(i)..' data lines...')
+                print('Gotten '..tostring(i)..' frames...')
             end
             i = i + 1
  
             cf.yield()
         end
+       
+        -- For the final frame.
+        term.setCursorPos(cursorX, cursorY)
+        print('Gotten '..tostring(i - 2)..' frames...')
        
         file:close()
         cf.tryYield()
@@ -258,7 +244,7 @@ Animation = {
                
                 handle:write(string)
                
-                if i % 100 == 0 or i == self.frameCount then
+                if i % 1000 == 0 or i == self.frameCount then
                     term.setCursorPos(cursorX, cursorY)
                     print('Generated '..tostring(i)..'/'..tostring(self.frameCount)..' frames...')
                 end
@@ -275,12 +261,16 @@ Animation = {
  
     -- CODE EXECUTION --------------------------------------------------------
  
-    loadAnimation = function(self, fileName)
+    loadAnimation = function(self, fileName, fileDimensions)
         if cfg.computerType ~= 'laptop' and cfg.computerType ~= 'desktop' then
             error('You didn\'t enter a valid \'computerType\' name in the cfg file!')
         end
+ 
+        if not fileName then
+            error('There was an attempt to load a file name that doesn\'t exist; check if the chosen file name and the file name in the input folder match.')
+        end
        
-        self:getSelectedAnimationData(fileName, fileTab)
+        self:getSelectedAnimationData(fileName, fileDimensions)
         cf.tryYield()
        
         self:createGeneratedCodeFolder()
