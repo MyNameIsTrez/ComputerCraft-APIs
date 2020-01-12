@@ -179,7 +179,8 @@ Animation = {
  
     -- CODE EXECUTION --------------------------------------------------------
  
-    loadAnimation = function(self, fileName, fileDimensions, outputFolder)     
+    loadAnimation = function(self, fileName, fileDimensions, outputFolder)
+        if not fileName then error('fileName is nil, you need to enter the file name that you want to load.') end
         self:getSelectedAnimationData(fileName, fileDimensions, outputFolder)
         cf.tryYield()
        
