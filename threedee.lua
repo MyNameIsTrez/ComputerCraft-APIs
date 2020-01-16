@@ -43,14 +43,14 @@ ThreeDee = {
             local origin = self.points[originKey]
             for _, destinationKey in ipairs(destinations) do
                 local destination = self.points[destinationKey]
-                self:line(origin[1] * self.cameraProximity, origin[2] * self.cameraProximity, destination[1] * self.cameraProximity, destination[2] * self.cameraProximity)
+                self:line(origin[1] * self.cameraProximity, origin[2] * self.cameraProximity, destination[1] * self.cameraProximity, destination[2] * self.cameraProximity, '#')
             end
         end
        
         -- Draw fill.
         for _, fillPoints in ipairs(self.fillPoints) do
             local ps = self.points
-            self:fill(ps[fillPoints[1]], ps[fillPoints[2]], ps[fillPoints[3]], ps[fillPoints[4]])
+            self:fill(ps[fillPoints[1]], ps[fillPoints[2]], ps[fillPoints[3]])
         end
        
         --[[
@@ -74,7 +74,7 @@ ThreeDee = {
         ]]--
     end,
    
-    line = function(self, x1, y1, x2, y2)
+    line = function(self, x1, y1, x2, y2, char)
         local x_diff = x2 - x1
         local y_diff = y2 - y1
        
@@ -85,11 +85,11 @@ ThreeDee = {
         for i = 0, distance do
             local x = i * step_x
             local y = i * step_y
-            self:writeChar(math.floor(x1 + x + 0.5), math.floor(y1 + y + 0.5))
+            self:writeChar(math.floor(x1 + x + 0.5), math.floor(y1 + y + 0.5), char)
         end
     end,
  
-    writeChar = function(self, x, y)
+    writeChar = function(self, x, y, char)
         --[[
         local distCenterX = self.canvasCenterX - x
         local distCenterY = self.canvasCenterY - y
@@ -103,7 +103,7 @@ ThreeDee = {
        
         -- Might need < instead of <=.
         if self.canvasCenterY + y > 0 and self.canvasCenterY + y <= self.canvasHeight and self.canvasCenterX + x > 0 and self.canvasCenterX + x <= self.canvasWidth then
-            self.framebuffer.buffer[self.canvasCenterY + y][self.canvasCenterX + x] = '@'
+            self.framebuffer.buffer[self.canvasCenterY + y][self.canvasCenterX + x] = char
         end
     end,
    
@@ -124,26 +124,23 @@ ThreeDee = {
         end
     end,
    
-    fill = function(self, p1, p2, p3, p4)      
-        local x_diff = p4[1] * self.cameraProximity - p2[1] * self.cameraProximity
-        local y_diff = p4[2] * self.cameraProximity - p2[2] * self.cameraProximity
+    fill = function(self, p1, p2, p3, char)    
+        local x_diff = p3[1] * self.cameraProximity - p1[1] * self.cameraProximity
+        local y_diff = p3[2] * self.cameraProximity - p1[2] * self.cameraProximity
        
         local distance = math.sqrt(x_diff^2 + y_diff^2)
-        local step_x = x_diff / distance / self.cameraProximity
-        local step_y = y_diff / distance / self.cameraProximity
+        local step_x = x_diff / distance
+        local step_y = y_diff / distance
        
-        print('distance: ' .. tostring(distance))
-        print('step_x: ' .. tostring(step_x))
-        print('step_y: ' .. tostring(step_y))
-       
-        for i = 1, distance - 1 do
+        -- i = 1, distance - 1 doesn't seem to always work
+        for i = 0, distance do
             local x = i * step_x
             local y = i * step_y
-            local x1 = math.floor(p1[1] + x + 0.5)
-            local y1 = math.floor(p1[2] + y + 0.5)
-            local x2 = math.floor(p2[1] + x + 0.5)
-            local y2 = math.floor(p2[2] + y + 0.5)
-            self:line(x1 * self.cameraProximity, y1 * self.cameraProximity, x2 * self.cameraProximity, y2 * self.cameraProximity)
+            local x1 = p1[1] * self.cameraProximity + x
+            local y1 = p1[2] * self.cameraProximity + y
+            local x2 = p2[1] * self.cameraProximity + x
+            local y2 = p2[2] * self.cameraProximity + y
+            self:line(x1, y1, x2, y2, '@')
         end
     end,
  
