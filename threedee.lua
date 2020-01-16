@@ -18,12 +18,12 @@ REQUIREMENTS
  
 ThreeDee = {
  
-    new = function(self, framebuffer, points, connections, fillConnections, canvasWidth, canvasHeight, cameraProximity)
+    new = function(self, framebuffer, points, connections, fillPoints, canvasWidth, canvasHeight, cameraProximity)
         local startingValues = {
             framebuffer = framebuffer,
             points = points,
             connections = connections,
-            fillConnections = fillConnections,
+            fillPoints = fillPoints,
             canvasWidth = canvasWidth,
             canvasHeight = canvasHeight,
             cameraProximity = cameraProximity,
@@ -47,10 +47,15 @@ ThreeDee = {
             end
         end
        
+        -- Draw fill.
+        for _, fillPoints in ipairs(self.fillPoints) do
+            local ps = self.points
+            self:fill(ps[fillPoints[1]], ps[fillPoints[2]], ps[fillPoints[3]], ps[fillPoints[4]])
+        end
+       
         --[[
         -- Draw points.
         for _, point in ipairs(self.points) do
-            term.setCursorPos(point[1], point[2])
             self:writeChar(point[1], point[2])
         end
         ]]--
@@ -95,6 +100,7 @@ ThreeDee = {
             self.framebuffer.buffer[y][x] = char
         end
         ]]--
+       
         -- Might need < instead of <=.
         if self.canvasCenterY + y > 0 and self.canvasCenterY + y <= self.canvasHeight and self.canvasCenterX + x > 0 and self.canvasCenterX + x <= self.canvasWidth then
             self.framebuffer.buffer[self.canvasCenterY + y][self.canvasCenterX + x] = '@'
@@ -115,6 +121,29 @@ ThreeDee = {
             self.cameraProximity = self.cameraProximity / 1.5
         elseif (key == 's' or key == 'down') then
             self.cameraProximity = self.cameraProximity * 1.5
+        end
+    end,
+   
+    fill = function(self, p1, p2, p3, p4)      
+        local x_diff = p4[1] * self.cameraProximity - p2[1] * self.cameraProximity
+        local y_diff = p4[2] * self.cameraProximity - p2[2] * self.cameraProximity
+       
+        local distance = math.sqrt(x_diff^2 + y_diff^2)
+        local step_x = x_diff / distance / self.cameraProximity
+        local step_y = y_diff / distance / self.cameraProximity
+       
+        print('distance: ' .. tostring(distance))
+        print('step_x: ' .. tostring(step_x))
+        print('step_y: ' .. tostring(step_y))
+       
+        for i = 1, distance - 1 do
+            local x = i * step_x
+            local y = i * step_y
+            local x1 = math.floor(p1[1] + x + 0.5)
+            local y1 = math.floor(p1[2] + y + 0.5)
+            local x2 = math.floor(p2[1] + x + 0.5)
+            local y2 = math.floor(p2[2] + y + 0.5)
+            self:line(x1 * self.cameraProximity, y1 * self.cameraProximity, x2 * self.cameraProximity, y2 * self.cameraProximity)
         end
     end,
  
