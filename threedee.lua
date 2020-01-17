@@ -27,8 +27,8 @@ ThreeDee = {
             blockDiameter = blockDiameter,
             offsets = offsets,
            
-            canvasCenterX = math.floor(canvasWidth/2),
-            canvasCenterY = math.floor(canvasHeight/2),
+            canvasCenterX = canvasWidth/2,
+            canvasCenterY = canvasHeight/2,
             chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
            
             cubesCorners = self:getCubesCorners(cubesCoords, blockDiameter),
@@ -62,13 +62,13 @@ ThreeDee = {
             -- Corners A, B, C, D in the front. See getCubesCorners() documentation.
             for i = 1, 4 do
                 local cubeCorner = cubeCorners[i]
-                self:writeChar(math.floor(cubeCorner[1] + 0.5), math.floor(cubeCorner[2] + 0.5), '#')
+                self:writeChar(cubeCorner[1], cubeCorner[2], '#')
             end
             -- Corners E, F, G, H in the back.
             local offsets = self.offsets
             for i = 5, 8 do
                 local cubeCorner = cubeCorners[i]
-                self:writeChar(math.floor(cubeCorner[1] + offsets[1] + 0.5), math.floor(cubeCorner[2] + offsets[2] + 0.5), '#')
+                self:writeChar(cubeCorner[1] + offsets[1], cubeCorner[2] + offsets[2], '#')
             end
         end
        
@@ -95,7 +95,7 @@ ThreeDee = {
             local bXD, bYD, bZD = bX*bD, bY*bD, bZ*bD
            
             --[[
-            A to H are the eight returned corners,
+            A to H are the eight returned corners inside cubesCorners,
             and b is the center of the block, being {bX, bY, bZ}.
               E----------F
              /|         /|
@@ -132,7 +132,7 @@ ThreeDee = {
         for i = 0, distance do
             local x = i * step_x
             local y = i * step_y
-            self:writeChar(math.floor(x1 + x + 0.5), math.floor(y1 + y + 0.5), char)
+            self:writeChar(x1 + x, y1 + y, char)
         end
     end,
  
@@ -140,12 +140,7 @@ ThreeDee = {
         -- Might need < instead of <=.
         local inCanvas = self.canvasCenterY + y > 0 and self.canvasCenterY + y <= self.canvasHeight and self.canvasCenterX + x > 0 and self.canvasCenterX + x <= self.canvasWidth
         if inCanvas then
-            --[[
-            print(self.canvasCenterY + y)
-            print(self.canvasCenterX + x)
-            print(char)
-            ]]--
-            self.framebuffer.buffer[self.canvasCenterY + y][self.canvasCenterX + x] = char
+            self.framebuffer.buffer[math.floor(self.canvasCenterY + y + 0.5)][math.floor(self.canvasCenterX + x + 0.5)] = char
         end
     end,
    
