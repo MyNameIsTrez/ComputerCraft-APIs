@@ -136,11 +136,13 @@ ThreeDee = {
         end
     end,
  
-    writeChar = function(self, x, y, char)
+    writeChar = function(self, x1, y1, char)
         -- Might need < instead of <=.
-        local inCanvas = self.canvasCenterY + y > 0 and self.canvasCenterY + y <= self.canvasHeight and self.canvasCenterX + x > 0 and self.canvasCenterX + x <= self.canvasWidth
+        local inCanvas = self.canvasCenterY + y1 > 0 and self.canvasCenterY + y1 <= self.canvasHeight and self.canvasCenterX + x1 > 0 and self.canvasCenterX + x1 <= self.canvasWidth
         if inCanvas then
-            self.framebuffer.buffer[math.floor(self.canvasCenterY + y + 0.5)][math.floor(self.canvasCenterX + x + 0.5)] = char
+            local y = math.floor(self.canvasCenterY + y1 + 0.5)
+            local x = math.floor(self.canvasCenterX + x1 + 0.5)
+            self.framebuffer.buffer[y][x] = char
         end
     end,
    
