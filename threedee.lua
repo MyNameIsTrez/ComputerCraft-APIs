@@ -32,10 +32,13 @@ ThreeDee = {
             canvasCenterY = canvasHeight/2,
             chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
            
-            cubesCorners = ThreeDee.getCubesCorners({}, cubesCoords, blockDiameter),
+            cubesCorners = {},
         }
        
         setmetatable(self, {__index = ThreeDee})
+       
+        self:getCubesCorners(cubesCoords, blockDiameter)
+       
         return self
     end,
    
@@ -66,7 +69,7 @@ ThreeDee = {
                         origin[2],
                         destination[1] + (destIndex > 4 and offsets[1] or 0),
                         destination[2] + (destIndex > 4 and offsets[2] or 0),
-                        '@'
+                        '#'
                     )
                 end
             end
@@ -76,11 +79,11 @@ ThreeDee = {
                     local destIndex = connectionsTab[i][j] -- Destination index.
                     local destination = cubeCorners[destIndex]
                     self:line(
-                        origin[1] + (i > 4 and offsets[1] or 0),
-                        origin[2] + (i > 4 and offsets[2] or 0),
+                        origin[1] + offsets[1],
+                        origin[2] + offsets[2],
                         destination[1] + (destIndex > 4 and offsets[1] or 0),
                         destination[2] + (destIndex > 4 and offsets[2] or 0),
-                        '@'
+                        '#'
                     )
                 end
             end
@@ -96,12 +99,18 @@ ThreeDee = {
             {2, 3, 6}, -- BCF.
             {3, 4, 7}, -- CDG.
             {1, 4, 5}, -- ADE.
-            {6, 5, 7} -- FEG.
+            {6, 5, 7}  -- FEG.
         }
        
-        for _, cubeCorners in ipairs(self.cubesCorners) do
+        local offsets = self.offsets
+        -- cc is cubeCorners
+        for _, cc in ipairs(self.cubesCorners) do
             for i = 1, 6 do
-                self:fill(cubeCorners[tab[i][1]], cubeCorners[tab[i][2]], cubeCorners[tab[i][3]])
+                local a, b, c = tab[i][1], tab[i][2], tab[i][3]
+                local x1, y1 = cc[a][1] + (a > 4 and offsets[1] or 0), cc[a][2] + (a > 4 and offsets[2] or 0)
+                local x2, y2 = cc[b][1] + (b > 4 and offsets[1] or 0), cc[b][2] + (b > 4 and offsets[2] or 0)
+                local x3, y3 = cc[c][1] + (c > 4 and offsets[1] or 0), cc[c][2] + (c > 4 and offsets[2] or 0)
+                self:fill(x1, y1, x2, y2, x3, y3)
                
                 --self.framebuffer:draw() -- TEMPORARY!!!!!
                 --sleep(1) -- TEMPORARY!!!!!
@@ -131,7 +140,6 @@ ThreeDee = {
     end,
    
     getCubesCorners = function(self, cubesCoords, blockDiameter)
-        local cubesCorners = {}
         for i, cubeCoords in ipairs(cubesCoords) do
             local bX, bY, bZ = cubeCoords[1], cubeCoords[2], cubeCoords[3]
             local bD = blockDiameter
@@ -151,7 +159,7 @@ ThreeDee = {
             D----------C
             ]]--
            
-            cubesCorners[i] = {
+            self.cubesCorners[i] = {
                 -- {x, y, z}, ...
                 {bXD-hBDX, bYD+hBD, bZD-hBD}, -- A.
                 {bXD+hBDX, bYD+hBD, bZD-hBD}, -- B.
@@ -163,7 +171,6 @@ ThreeDee = {
                 {bXD-hBDX, bYD-hBD, bZD+hBD}, -- H.
             }
         end
-        return cubesCorners
     end,
    
     line = function(self, x1, y1, x2, y2, char)
@@ -201,18 +208,20 @@ ThreeDee = {
     end,
    
     moveCamera = function(self, key)
-        --[[
         if (key == 'w' or key == 'up') then
-            self.cameraProximity = self.cameraProximity / 1.5
+            self.offsets[2] = self.offsets[2] - 2
         elseif (key == 's' or key == 'down') then
-            self.cameraProximity = self.cameraProximity * 1.5
+            self.offsets[2] = self.offsets[2] + 2
+        elseif (key == 'a' or key == 'left') then
+            self.offsets[1] = self.offsets[1] - 2
+        elseif (key == 'd' or key == 'right') then
+            self.offsets[1] = self.offsets[1] + 2
         end
-        ]]--
     end,
    
-    fill = function(self, p1, p2, p3, char)    
-        local x_diff = p3[1] - p1[1]
-        local y_diff = p3[2] - p1[2]
+    fill = function(self, x1, y1, x2, y2, x3, y3)
+        local x_diff = x3 - x1
+        local y_diff = y3 - y1
        
         local distance = math.sqrt(x_diff^2 + y_diff^2)
         local step_x = x_diff / distance
@@ -220,13 +229,13 @@ ThreeDee = {
        
         -- i = 1, distance - 1 doesn't seem to always work
         for i = 0, distance do
-            local x = i * step_x
-            local y = i * step_y
-            local x1 = p1[1] + x
-            local y1 = p1[2] + y
-            local x2 = p2[1] + x
-            local y2 = p2[2] + y
-            self:line(x1, y1, x2, y2, '@')
+            local _x = i * step_x
+            local _y = i * step_y
+            local _x1 = x1 + _x
+            local _y1 = y1 + _y
+            local _x2 = x2 + _x
+            local _y2 = y2 + _y
+            self:line(_x1, _y1, _x2, _y2, '@')
         end
     end,
  

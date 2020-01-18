@@ -28,7 +28,7 @@ FrameBuffer = {
        
         setmetatable(self, {__index = FrameBuffer})
        
-        buffer = self:createBuffer(canvasWidth, canvasHeight)
+        self:createBuffer(canvasWidth, canvasHeight)
        
         return self
     end,
