@@ -19,26 +19,39 @@ REQUIREMENTS
  
 FrameBuffer = {
  
-    new = function(self, canvasWidth, canvasHeight)
-        local startingValues = {
+    new = function(canvasWidth, canvasHeight)
+        local self = {
             canvasWidth = canvasWidth,
             canvasHeight = canvasHeight,
-            buffer,
+            buffer = {},
         }
        
-        setmetatable(startingValues, {__index = self})
-        return startingValues
+        setmetatable(self, {__index = FrameBuffer})
+       
+        buffer = self:createBuffer(canvasWidth, canvasHeight)
+       
+        return self
     end,
    
-    createBuffer = function(self)
-        local buffer = {}
-        for y = 1, self.canvasHeight do
-            buffer[y] = {}
-            for x = 1, self.canvasWidth do
-                buffer[y][x] = ' '
+    createBuffer = function(self, canvasWidth, canvasHeight)
+        for y = 1, canvasHeight do
+            self.buffer[y] = {}
+            for x = 1, canvasWidth do
+                self.buffer[y][x] = ' '
             end
         end
-        self.buffer = buffer
+    end,
+   
+    resetBuffer = function(self)
+        local bufferCopy = self.buffer
+        for y = 1, self.canvasHeight do
+            for x = 1, self.canvasWidth do
+                if bufferCopy[y][x] ~= ' ' then
+                    bufferCopy[y][x] = ' '
+                end
+            end
+        end
+        self.buffer = bufferCopy
     end,
    
     draw = function(self)      
@@ -46,14 +59,14 @@ FrameBuffer = {
         strTab = {}
         for y = 1, self.canvasHeight do
             strTab[#strTab + 1] = table.concat(self.buffer[y])
-            strTab[#strTab + 1] = '\n'
+            strTab[#strTab + 1] = '\n' -- Maybe concating above instead is faster?
         end
         term.setCursorPos(cfg.playArea.X, cfg.playArea.Y)
         write(table.concat(strTab))
  
         -- Clear the buffer.
         -- Maybe faster to copy an empty table instead, but I think that needs recursion.
-        self:createBuffer()
+        self:resetBuffer()
     end,
  
 }
