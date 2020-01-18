@@ -39,21 +39,20 @@ ThreeDee = {
         return self
     end,
    
-    draw = function(self)
-        -- Draw connections.
+    drawConnections = function(self)
         -- Not using the z-axis yet!
         for _, cubeCorners in ipairs(self.cubesCorners) do
             connectionsTab = {
                 -- Each key is the index of a corner,
                 -- and it connects to each of the 3 values that are the indices of each corner.
-                {2, 4, 5}, -- A: B-D-E
-                {1, 3, 6}, -- B: A-C-F
-                {2, 4, 7}, -- C: B-D-G
-                {1, 3, 8}, -- D: A-C-H
-                {6, 8}, -- E: F-H
-                {5, 7}, -- F: E-G
-                {6, 8}, -- G: F-H
-                {5, 7}  -- H: E-G
+                {2, 4, 5}, -- A: B, D, E
+                {1, 3, 6}, -- B: A, C, F
+                {2, 4, 7}, -- C: B, D, G
+                {1, 3, 8}, -- D: A, C, H
+                {6, 8}, -- E: F, H
+                {5, 7}, -- F: E, G
+                {6, 8}, -- G: F, H
+                {5, 7}  -- H: E, G
             }
            
             local offsets = self.offsets
@@ -86,15 +85,31 @@ ThreeDee = {
                 end
             end
         end
+    end,
+   
+    drawFill = function(self)
+        -- Three corners per face are taken, where the first and third point have to
+        -- be next to each other, so no diagonal stepX or stepY can take place.
+        local tab = {
+            {1, 2, 4}, -- ABD.
+            {1, 2, 5}, -- ABE.
+            {2, 3, 6}, -- BCF.
+            {3, 4, 7}, -- CDG.
+            {1, 4, 5}, -- ADE.
+            {6, 5, 7} -- FEG.
+        }
        
-        -- Draw fill.
-        --for _, fillPoints in ipairs(self.cubes[1].fillPoints) do
-        --  local ps = self.cubes[1].points
-        --  self:fill(ps[fillPoints[1]], ps[fillPoints[2]], ps[fillPoints[3]])
-        --end
-       
-        --[[
-        -- Draw points.
+        for _, cubeCorners in ipairs(self.cubesCorners) do
+            for i = 1, 6 do
+                self:fill(cubeCorners[tab[i][1]], cubeCorners[tab[i][2]], cubeCorners[tab[i][3]])
+               
+                --self.framebuffer:draw() -- TEMPORARY!!!!!
+                --sleep(1) -- TEMPORARY!!!!!
+            end
+        end
+    end,
+   
+    drawPoints = function(self)
         -- Not using the z-axis yet!
         for _, cubeCorners in ipairs(self.cubesCorners) do
             -- Corners A, B, C, D in the front. See getCubesCorners() documentation.
@@ -109,20 +124,10 @@ ThreeDee = {
                 self:writeChar(cubeCorner[1] + offsets[1], cubeCorner[2] + offsets[2], '#')
             end
         end
-        ]]--
-       
-        --[[
-        -- Draw filled circle.
+    end,
+   
+    drawCircle = function(self)
         self:circle(self.canvasWidth/3, self.canvasHeight/2)
-        ]]--
-       
-        --[[
-        for y = 1, self.canvasHeight do
-            for x = 1, self.canvasWidth do
-                self:writeChar(x, y)
-            end
-        end
-        ]]--
     end,
    
     getCubesCorners = function(self, cubesCoords, blockDiameter)
@@ -187,12 +192,12 @@ ThreeDee = {
     end,
    
     circle = function(self, centerX, centerY, radius)
-          local xMult = 1.5 -- Characters are 6x9 pixels in size.
-          for rad = 0, 2 * math.pi, math.pi / 180 do
-              local x = math.cos(rad) * radius * xMult
-              local y = math.sin(rad) * radius
-              writeChar(centerX + x, centerY + y)
-          end
+        local xMult = 1.5 -- Characters are 6x9 pixels in size.
+        for rad = 0, 2 * math.pi, math.pi / 180 do
+            local x = math.cos(rad) * radius * xMult
+            local y = math.sin(rad) * radius
+            writeChar(centerX + x, centerY + y)
+        end
     end,
    
     moveCamera = function(self, key)
