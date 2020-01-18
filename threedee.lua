@@ -18,8 +18,9 @@ REQUIREMENTS
  
 ThreeDee = {
  
-    new = function(self, framebuffer, canvasWidth, canvasHeight, cubesCoords, blockDiameter, offsets)
-        local startingValues = {
+    new = function(framebuffer, canvasWidth, canvasHeight, cubesCoords, blockDiameter, offsets)
+        -- Constructor to create Object
+        local self = {
             framebuffer = framebuffer,
             canvasWidth = canvasWidth,
             canvasHeight = canvasHeight,
@@ -31,24 +32,60 @@ ThreeDee = {
             canvasCenterY = canvasHeight/2,
             chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
            
-            cubesCorners = self:getCubesCorners(cubesCoords, blockDiameter),
+            cubesCorners = ThreeDee.getCubesCorners({}, cubesCoords, blockDiameter),
         }
        
-        setmetatable(startingValues, {__index = self})
-        return startingValues
+        setmetatable(self, {__index = ThreeDee})
+        return self
     end,
    
     draw = function(self)
-        --[[
         -- Draw connections.
-        for originKey, destinations in ipairs(self.cubes[1].connections) do
-            local origin = self.cubes[1].points[originKey]
-            for _, destinationKey in ipairs(destinations) do
-                local destination = self.cubes[1].points[destinationKey]
-                self:line(origin[1], origin[2], destination[1], destination[2], '#')
+        -- Not using the z-axis yet!
+        for _, cubeCorners in ipairs(self.cubesCorners) do
+            connectionsTab = {
+                -- Each key is the index of a corner,
+                -- and it connects to each of the 3 values that are the indices of each corner.
+                {2, 4, 5}, -- A: B-D-E
+                {1, 3, 6}, -- B: A-C-F
+                {2, 4, 7}, -- C: B-D-G
+                {1, 3, 8}, -- D: A-C-H
+                {6, 8}, -- E: F-H
+                {5, 7}, -- F: E-G
+                {6, 8}, -- G: F-H
+                {5, 7}  -- H: E-G
+            }
+           
+            local offsets = self.offsets
+            for i = 1, 4 do
+                local origin = cubeCorners[i]
+                for j = 1, 3 do
+                    local destIndex = connectionsTab[i][j] -- Destination index.
+                    local destination = cubeCorners[destIndex]
+                    self:line(
+                        origin[1],
+                        origin[2],
+                        destination[1] + (destIndex > 4 and offsets[1] or 0),
+                        destination[2] + (destIndex > 4 and offsets[2] or 0),
+                        '@'
+                    )
+                end
+            end
+            for i = 5, 8 do
+                local origin = cubeCorners[i]
+                for j = 1, 2 do
+                    local destIndex = connectionsTab[i][j] -- Destination index.
+                    local destination = cubeCorners[destIndex]
+                    self:line(
+                        origin[1] + (i > 4 and offsets[1] or 0),
+                        origin[2] + (i > 4 and offsets[2] or 0),
+                        destination[1] + (destIndex > 4 and offsets[1] or 0),
+                        destination[2] + (destIndex > 4 and offsets[2] or 0),
+                        '@'
+                    )
+                end
             end
         end
-        ]]--
        
         -- Draw fill.
         --for _, fillPoints in ipairs(self.cubes[1].fillPoints) do
@@ -56,6 +93,7 @@ ThreeDee = {
         --  self:fill(ps[fillPoints[1]], ps[fillPoints[2]], ps[fillPoints[3]])
         --end
        
+        --[[
         -- Draw points.
         -- Not using the z-axis yet!
         for _, cubeCorners in ipairs(self.cubesCorners) do
@@ -71,6 +109,7 @@ ThreeDee = {
                 self:writeChar(cubeCorner[1] + offsets[1], cubeCorner[2] + offsets[2], '#')
             end
         end
+        ]]--
        
         --[[
         -- Draw filled circle.
@@ -92,6 +131,7 @@ ThreeDee = {
             local bX, bY, bZ = cubeCoords[1], cubeCoords[2], cubeCoords[3]
             local bD = blockDiameter
             local hBD = 0.5 * bD -- Half block diameter.
+            local hBDX = 1.5 * hBD -- Half block diameter for x, to compensate for 6:9 pixels characters.
             local bXD, bYD, bZD = bX*bD, bY*bD, bZ*bD
            
             --[[
@@ -108,14 +148,14 @@ ThreeDee = {
            
             cubesCorners[i] = {
                 -- {x, y, z}, ...
-                {bXD-hBD,bYD+hBD,bZD-hBD}, -- A.
-                {bXD+hBD,bYD+hBD,bZD-hBD}, -- B.
-                {bXD+hBD,bYD-hBD,bZD-hBD}, -- C.
-                {bXD-hBD,bYD-hBD,bZD-hBD}, -- D.
-                {bXD-hBD,bYD+hBD,bZD+hBD}, -- E.
-                {bXD+hBD,bYD+hBD,bZD+hBD}, -- F.
-                {bXD+hBD,bYD-hBD,bZD+hBD}, -- G.
-                {bXD-hBD,bYD-hBD,bZD+hBD}, -- H.
+                {bXD-hBDX, bYD+hBD, bZD-hBD}, -- A.
+                {bXD+hBDX, bYD+hBD, bZD-hBD}, -- B.
+                {bXD+hBDX, bYD-hBD, bZD-hBD}, -- C.
+                {bXD-hBDX, bYD-hBD, bZD-hBD}, -- D.
+                {bXD-hBDX, bYD+hBD, bZD+hBD}, -- E.
+                {bXD+hBDX, bYD+hBD, bZD+hBD}, -- F.
+                {bXD+hBDX, bYD-hBD, bZD+hBD}, -- G.
+                {bXD-hBDX, bYD-hBD, bZD+hBD}, -- H.
             }
         end
         return cubesCorners
