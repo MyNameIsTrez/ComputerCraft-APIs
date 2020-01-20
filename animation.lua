@@ -200,6 +200,7 @@ Animation = {
 
 	playAnimation = function(self, loop)
 		self:printProgress('Playing animation...')
+		
 		local len = #fs.list('.generatedCodeFiles')
 
 		if loop and self.frameCount > 1 then
