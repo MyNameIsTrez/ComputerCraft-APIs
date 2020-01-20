@@ -193,7 +193,7 @@ end
 
 function frameWrite(str)
 	local x, y = cfg.playArea.X, cfg.playArea.Y
-	if x ~= 1 and y ~= 1 then term.setCursorPos(x, y) end
+	if x ~= 1 or y ~= 1 then term.setCursorPos(x, y) end
 	write(str)
 end
 
