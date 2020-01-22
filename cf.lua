@@ -192,8 +192,7 @@ function find(str, searchedStr)
 end
 
 function frameWrite(str)
-	local x, y = cfg.playArea.X, cfg.playArea.Y
-	if x ~= 1 or y ~= 1 then term.setCursorPos(x, y) end
+	term.setCursorPos(cfg.playArea.X, cfg.playArea.Y)
 	write(str)
 end
 
@@ -223,4 +222,13 @@ function valueInTable(tab, search)
 		if val == search then return true end
 	end
 	return false
+end
+
+function getPeripheralSide()
+	for _, side in ipairs(rs.getSides()) do
+		if peripheral.isPresent(side) then
+			return side
+		end
+	end
+	error('No peripheral found!')
 end
