@@ -63,6 +63,21 @@ FrameBuffer = {
         end
     end,
 	
+	writeLine = function(self, x1, y1, x2, y2, char)
+  		local x_diff = x2 - x1
+  		local y_diff = y2 - y1
+		
+  		local distance = math.sqrt(x_diff^2 + y_diff^2)
+  		local step_x = x_diff / distance
+  		local step_y = y_diff / distance
+		
+  		for i = 0, distance do
+    		local x = i * step_x
+    		local y = i * step_y
+			self:writeChar(math.floor(x1 + x + 0.5), math.floor(y1 + y + 0.5), char)
+  		end
+	end,
+	
 	draw = function(self)		
 		-- Draw the current frame.
 		strTab = {}

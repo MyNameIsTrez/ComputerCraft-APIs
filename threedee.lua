@@ -66,11 +66,11 @@ ThreeDee = {
 				for j = 1, 3 do
 					local destIndex = connectionsTab[i][j] -- Destination index.
 					local destination = cubeCorners[destIndex]
-					self:line(
-						origin[1],
-						origin[2],
-						destination[1] + (destIndex > 4 and offsets[1] or 0),
-						destination[2] + (destIndex > 4 and offsets[2] or 0),
+					self.framebuffer:writeLine(
+						origin[1] + self.canvasCenterX,
+						origin[2] + self.canvasCenterY,
+						destination[1] + (destIndex > 4 and offsets[1] or 0) + self.canvasCenterX,
+						destination[2] + (destIndex > 4 and offsets[2] or 0) + self.canvasCenterY,
 						self.connectionChar
 					)
 				end
@@ -80,11 +80,11 @@ ThreeDee = {
 				for j = 1, 2 do
 					local destIndex = connectionsTab[i][j] -- Destination index.
 					local destination = cubeCorners[destIndex]
-					self:line(
-						origin[1] + offsets[1],
-						origin[2] + offsets[2],
-						destination[1] + (destIndex > 4 and offsets[1] or 0),
-						destination[2] + (destIndex > 4 and offsets[2] or 0),
+					self.framebuffer:writeLine(
+						origin[1] + offsets[1] + self.canvasCenterX,
+						origin[2] + offsets[2] + self.canvasCenterY,
+						destination[1] + (destIndex > 4 and offsets[1] or 0) + self.canvasCenterX,
+						destination[2] + (destIndex > 4 and offsets[2] or 0) + self.canvasCenterY,
 						self.connectionChar
 					)
 				end
@@ -175,21 +175,6 @@ ThreeDee = {
 		end
 	end,
 	
-	line = function(self, x1, y1, x2, y2, char)
-  		local x_diff = x2 - x1
-  		local y_diff = y2 - y1
-		
-  		local distance = math.sqrt(x_diff^2 + y_diff^2)
-  		local step_x = x_diff / distance
-  		local step_y = y_diff / distance
-		
-  		for i = 0, distance do
-    		local x = i * step_x
-    		local y = i * step_y
-			self.framebuffer:writeChar(math.floor(x1 + x + self.canvasCenterX + 0.5), math.floor(y1 + y + self.canvasCenterY + 0.5), char)
-  		end
-	end,
-	
 	circle = function(self, centerX, centerY, radius)
   		local xMult = 1.5 -- Characters are 6x9 pixels in size.
 		for rad = 0, 2 * math.pi, math.pi / 180 do
@@ -227,7 +212,12 @@ ThreeDee = {
     		local _y1 = y1 + _y
     		local _x2 = x2 + _x
     		local _y2 = y2 + _y
-			self:line(_x1, _y1, _x2, _y2, char)
+			self.framebuffer:writeLine(
+				_x1 + self.canvasCenterX,
+				_y1 + self.canvasCenterY,
+				_x2 + self.canvasCenterX,
+				_y2 + self.canvasCenterY, char
+			)
   		end
 	end,
 
