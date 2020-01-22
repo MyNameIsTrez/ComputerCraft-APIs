@@ -230,5 +230,4 @@ function getPeripheralSide()
 			return side
 		end
 	end
-	error('No peripheral found!')
 end
