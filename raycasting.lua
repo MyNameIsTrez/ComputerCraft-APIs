@@ -49,21 +49,30 @@ RayCasting = {
 	
 	createRayCasters = function(self)
 		local pos = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
-		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayChar, self.framebuffer)
+		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.framebuffer)
 	end,
 	
 	castRays = function(self)
 		for _, rayCaster in ipairs(self.rayCasters) do
 			for _, ray in ipairs(rayCaster.rays) do
+				local shortestDist = math.huge
+				local closestPt
 				for _, boundary in ipairs(self.boundaries) do
 					local pt = ray:cast(boundary)
 					if pt then
-						local x1 = math.floor(rayCaster.pos.x + 0.5)
-						local y1 = math.floor(rayCaster.pos.y + 0.5)
-						local x2 = math.floor(pt.x + 0.5)
-						local y2 = math.floor(pt.y + 0.5)
-						self.framebuffer:writeLine(x1, y1, x2, y2, 'H')
+						local dist = math.sqrt((rayCaster.pos.x - pt.x)^2 + (rayCaster.pos.y - pt.y)^2)
+						if dist < shortestDist then
+							shortestDist = dist
+							closestPt = pt
+						end
 					end
+				end
+				if closestPt then
+					local x1 = math.floor(rayCaster.pos.x + 0.5)
+					local y1 = math.floor(rayCaster.pos.y + 0.5)
+					local x2 = math.floor(closestPt.x + 0.5)
+					local y2 = math.floor(closestPt.y + 0.5)
+					self.framebuffer:writeLine(x1, y1, x2, y2, self.rayChar)
 				end
 			end
 		end
@@ -135,10 +144,9 @@ Ray = {
 
 RayCaster = {
 
-	new = function(pos, rayChar, framebuffer)
+	new = function(pos, framebuffer)
         local self = {
 			pos = pos,
-			rayChar = rayChar,
 			framebuffer = framebuffer,
 			
 			pi2 = math.pi * 2,
@@ -155,7 +163,7 @@ RayCaster = {
 	createRays = function(self)
 		for angle = 0, self.pi2, self.pi2 / 32 do
 			local dir = vector.new(math.cos(angle), math.sin(angle))
-			self.rays[#self.rays + 1] = Ray.new(self.pos, dir, self.rayChar, self.framebuffer)
+			self.rays[#self.rays + 1] = Ray.new(self.pos, dir, self.framebuffer)
 		end
 	end,
 
