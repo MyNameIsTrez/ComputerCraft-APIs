@@ -18,7 +18,7 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, fov, boundaryChar, rayChar, raycasterChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, fov, rotationSpeed, boundaryChar, rayChar, raycasterChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
@@ -26,13 +26,14 @@ RayCasting = {
 			boundaryCount = boundaryCount,
 			rayCount = rayCount,
 			fov = fov, -- field of view
+			rotationSpeed = rotationSpeed,
 			boundaryChar = boundaryChar,
 			rayChar = rayChar,
 			raycasterChar = raycasterChar,
 			framebuffer = framebuffer,
 			
 			boundaries = {},
-			rayCasters = {},
+			raycasters = {},
 			noiseX = 0,
 			noiseY = 10000,
 			scene = {},
@@ -43,7 +44,7 @@ RayCasting = {
 		setmetatable(self, {__index = RayCasting})
 		
 		self:createBoundaries()
-		self:createRayCasters()
+		self:createRaycasters()
 		
 		return self
     end,
@@ -69,13 +70,13 @@ RayCasting = {
 		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
 	end,
 	
-	createRayCasters = function(self)
+	createRaycasters = function(self)
 		local pos = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
-		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayCount, self.raycasterChar, self.fov, self.framebuffer)
+		self.raycasters[#self.raycasters + 1] = RayCaster.new(pos, self.rayCount, self.raycasterChar, self.fov, self.framebuffer)
 	end,
 	
 	castRays = function(self)
-		for _, rayCaster in ipairs(self.rayCasters) do
+		for _, rayCaster in ipairs(self.raycasters) do
 			for i = 1, #rayCaster.rays do
 				local ray = rayCaster.rays[i]
 				local shortestDist = math.huge
@@ -98,30 +99,40 @@ RayCasting = {
 		end
 	end,
 	
-	moveRayCasters = function(self, key)
+	moveRaycasters = function(self, key)
+		local raycaster = self.raycasters[1]
+		
 		local stepX, stepY = 0, 0
-    	if (key == 'w' or key == 'up') then
+    	if (key == 'w' and raycaster.pos.y > 2) then
         	stepY = -1
-    	elseif (key == 's' or key == 'down') then
+    	elseif (key == 's' and raycaster.pos.y < self.canvasHeight - 1) then
         	stepY = 1
-		elseif (key == 'a' or key == 'left') then
+		elseif (key == 'a' and raycaster.pos.x > 2) then
         	stepX = -1
-    	elseif (key == 'd' or key == 'right') then
+    	elseif (key == 'd' and raycaster.pos.x < self.canvasWidth - 1) then
         	stepX = 1
     	end
 		
-		local rayCaster = self.rayCasters[1]
-		local newPos = vector.new(rayCaster.pos.x + stepX, rayCaster.pos.y + stepY)
-		rayCaster.pos = newPos
-		rayCaster:moveRays(newPos)
+		local newPos = vector.new(raycaster.pos.x + stepX, raycaster.pos.y + stepY)
+		raycaster.pos = newPos
+		raycaster:moveRays(newPos)
 		
 		--self.noiseX = self.noiseX + 0.05
 		--self.noiseY = self.noiseY + 0.05
 		--local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
 		--local y = (pn.perlin:noise(self.noiseY)+1)/2 * self.canvasHeight
 		--local newPos = vector.new(x, y)
-		--self.rayCasters[1].pos = newPos
-		--self.rayCasters[1]:moveRays(newPos)
+		--self.raycasters[1].pos = newPos
+		--self.raycasters[1]:moveRays(newPos)
+	end,
+	
+	rotateRaycasters = function(self, key)
+		local raycaster = self.raycasters[1]
+    	if (key == 'left') then
+        	raycaster:rotate(self.rotationSpeed)
+    	elseif (key == 'right') then
+        	raycaster:rotate(-self.rotationSpeed)
+    	end
 	end,
 	
 	map = function(self, value, minVar, maxVar, minResult, maxResult)
@@ -171,16 +182,22 @@ Boundary = {
 
 Ray = {
 
-	new = function(pos, dir)
+	new = function(pos, angle)
         local self = {
 			pos = pos,
-			dir = dir,
+			dir,
 		}
 		
 		setmetatable(self, {__index = Ray})
 		
+		self:setDir(angle)
+		
 		return self
     end,
+	
+	setDir = function(self, angle)
+		self.dir = vector.new(math.cos(angle), math.sin(angle))
+	end,
 	
 	cast = function(self, boundary)
 		-- https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
@@ -231,8 +248,7 @@ RayCaster = {
 	
 	createRays = function(self)
 		for angle = -self.fov/2, self.fov/2, self.fov/self.rayCount do
-			local dir = vector.new(math.cos(angle), math.sin(angle))
-			self.rays[#self.rays + 1] = Ray.new(self.pos, dir)
+			self.rays[#self.rays + 1] = Ray.new(self.pos, angle)
 		end
 	end,
 	
@@ -244,8 +260,10 @@ RayCaster = {
 	
 	rotate = function(self, angle)
 		self.heading = self.heading + angle
-		for i = 0, #self.rays do
-			rays[i]:setAngle(i+self.heading)
+		local index = 1
+		for angle = -self.fov/2, self.fov/2, self.fov/self.rayCount do
+			self.rays[index]:setDir(angle + self.heading)
+			index = index + 1
 		end
 	end,
 	
