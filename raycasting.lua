@@ -107,10 +107,6 @@ Ray = {
 		return self
     end,
 	
-	draw = function(self)
-		self.framebuffer:writeLine(self.pos.x, self.pos.y, self.pos.x + self.dir.x * 20, self.pos.y + self.dir.y * 20, self.char)
-	end,
-	
 	cast = function(self, boundary)
 		-- https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
 		local x1, y1, x2, y2 = boundary.pos1.x, boundary.pos1.y, boundary.pos2.x, boundary.pos2.y
