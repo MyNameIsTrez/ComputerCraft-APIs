@@ -55,7 +55,11 @@ RayCasting = {
 				for _, boundary in ipairs(self.boundaries) do
 					local pt = ray:cast(boundary)
 					if pt then
-						self.framebuffer:writeChar(math.floor(pt.x + 0.5), math.floor(pt.y + 0.5), 'H')
+						local x1 = math.floor(rayCaster.pos.x + 0.5)
+						local y1 = math.floor(rayCaster.pos.y + 0.5)
+						local x2 = math.floor(pt.x + 0.5)
+						local y2 = math.floor(pt.y + 0.5)
+						self.framebuffer:writeLine(x1, y1, x2, y2, 'H')
 					end
 				end
 			end
