@@ -18,7 +18,7 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, fov, rotationSpeed, boundaryChar, rayChar, raycasterChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, fov, rotationSpeed, grayscaleBool, boundaryChar, rayChar, raycasterChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
@@ -37,11 +37,17 @@ RayCasting = {
 			noiseX = 0,
 			noiseY = 10000,
 			scene = {},
-            chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
+            chars,
 			maxRayLength = math.sqrt(canvasWidth^2 + canvasHeight^2),
 		}
 		
 		setmetatable(self, {__index = RayCasting})
+		
+		if grayscaleBool then
+			self.chars = {'~', '}', '|', '{', 'z', 'y', 'x', 'w', 'v', 'u', 't', 's', 'r', 'q', 'p', 'o', 'n', 'm', 'l', 'k', 'j', 'i', 'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a', '_', '^', ']', '\\', '[', 'Z', 'Y', 'X', 'W', 'V', 'U', 'T', 'S', 'R', 'Q', 'P', 'O', 'N', 'M', 'L', 'K', 'J', 'I', 'H', 'G', 'F', 'E', 'D', 'C', 'B', 'A', '@', '?', '>', '=', '<', ';', ':', '9', '8', '7', '6', '5', '4', '3', '2', '1', '0', '/', '.', '-', ',', '+', '*', ')', '(', "\'", '&', '%', '$', '#', '\"', '!'}
+		else
+			self.chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'}
+		end
 		
 		self:createBoundaries()
 		self:createRaycasters()
@@ -86,7 +92,18 @@ RayCasting = {
 				for _, boundary in ipairs(self.boundaries) do
 					local pt = ray:cast(boundary)
 					if pt then
+						-- Euclidian distance.
 						local dist = math.sqrt((rayCaster.pos.x - pt.x)^2 + (rayCaster.pos.y - pt.y)^2)
+						
+						-- NEED TO FIX THIS CODE SO IT CAN BE ADDED!!!
+						-- Used for fixing the fisheye effect.
+						--local rayHeading = math.atan2(ray.dir.x, ray.dir.y)
+						--print('rayHeading: '..tostring(rayHeading))
+						--print('ray.dir: '..tostring(ray.dir))
+						--local angle = rayHeading - rayCaster.heading
+						--print('angle: '..tostring(angle))
+						--dist = dist * math.cos(angle)
+						
 						if dist < shortestDist then
 							shortestDist = dist
 							closestPt = pt
@@ -148,7 +165,7 @@ RayCasting = {
 			local firstPersonWidthSq = self.firstPersonWidth^2
 			
 			-- Uses inverse square law to fix the fisheye effect.
-			local b = self:map(sceneSq, 0, firstPersonWidthSq, 1, 19)
+			local b = self:map(sceneSq, 0, firstPersonWidthSq, 1, #self.chars)
 			
 			local char = self.chars[math.floor(b + 0.5)]
 			if math.floor(b + 0.5) > #self.chars then
