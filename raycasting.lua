@@ -118,15 +118,6 @@ RayCasting = {
 		local newPos = vector.new(raycaster.pos.x + stepX, raycaster.pos.y + stepY)
 		raycaster.pos = newPos
 		raycaster:moveRays(newPos)
-		
-		-- Moves the raycaster with perlin noise.
-		--self.noiseX = self.noiseX + 0.05
-		--self.noiseY = self.noiseY + 0.05
-		--local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
-		--local y = (pn.perlin:noise(self.noiseY)+1)/2 * self.canvasHeight
-		--local newPos = vector.new(x, y)
-		--self.raycasters[1].pos = newPos
-		--self.raycasters[1]:moveRays(newPos)
 	end,
 	
 	rotateRaycasters = function(self, key)
@@ -163,7 +154,7 @@ RayCasting = {
 			if math.floor(b + 0.5) > #self.chars then
 				char = ' '
 			elseif not char then -- Maybe not necessary anymore?
-				char = '@'
+				char = self.chars[1]
 			end
 			
 			self.framebuffer:writeRect(x1, y1, x2, y2, char, true)
