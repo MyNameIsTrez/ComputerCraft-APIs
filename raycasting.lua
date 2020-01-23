@@ -56,7 +56,7 @@ RayCasting = {
 			self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
 		end
 		
-		--[[ optional walls on the sides of the top-down view
+		----[[ optional walls on the sides of the top-down view
 		pos1 = vector.new(1, 1)
 		pos2 = vector.new(self.canvasWidth, 1)
 		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
@@ -69,7 +69,7 @@ RayCasting = {
 		pos1 = vector.new(1, self.canvasHeight)
 		pos2 = vector.new(1, 1)
 		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
-		]]--
+		--]]--
 	end,
 	
 	createRaycasters = function(self)
@@ -105,13 +105,13 @@ RayCasting = {
 		local raycaster = self.raycasters[1]
 		
 		local stepX, stepY = 0, 0
-    	if (key == 'w' and raycaster.pos.y > 1) then
+    	if (key == 'w' and raycaster.pos.y > 2) then
         	stepY = -1
-    	elseif (key == 's' and raycaster.pos.y < self.canvasHeight) then
+    	elseif (key == 's' and raycaster.pos.y < self.canvasHeight - 1) then
         	stepY = 1
-		elseif (key == 'a' and raycaster.pos.x > 1) then
+		elseif (key == 'a' and raycaster.pos.x > 2) then
         	stepX = -1
-    	elseif (key == 'd' and raycaster.pos.x < self.canvasWidth) then
+    	elseif (key == 'd' and raycaster.pos.x < self.canvasWidth - 1) then
         	stepX = 1
     	end
 		
@@ -132,9 +132,9 @@ RayCasting = {
 	rotateRaycasters = function(self, key)
 		local raycaster = self.raycasters[1]
     	if (key == 'left') then
-        	raycaster:rotate(self.rotationSpeed)
-    	elseif (key == 'right') then
         	raycaster:rotate(-self.rotationSpeed)
+    	elseif (key == 'right') then
+        	raycaster:rotate(self.rotationSpeed)
     	end
 	end,
 	
@@ -156,10 +156,15 @@ RayCasting = {
 			local sceneSq = self.scene[i]^2
 			local firstPersonWidthSq = self.firstPersonWidth^2
 			
-			local b = self:map(self.scene[i], 0, self.maxRayLength, 1, 19)
+			-- Uses inverse square law to fix the fisheye effect.
+			local b = self:map(sceneSq, 0, firstPersonWidthSq, 1, 19)
 			
 			local char = self.chars[math.floor(b + 0.5)]
-			if not char then char = self.chars[1] end
+			if math.floor(b + 0.5) > #self.chars then
+				char = ' '
+			elseif not char then -- Maybe not necessary anymore?
+				char = '@'
+			end
 			
 			self.framebuffer:writeRect(x1, y1, x2, y2, char, true)
 		end
