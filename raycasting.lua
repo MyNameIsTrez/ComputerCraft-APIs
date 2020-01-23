@@ -51,11 +51,9 @@ RayCasting = {
 		for _, ray in ipairs(self.rays) do
 			for _, boundary in ipairs(self.boundaries) do
 				local pt = ray:cast(boundary)
-				term.setCursorPos(50, 50)
-				write(tostring(pt))
-				--if pt then
-				--	self.framebuffer:writeChar(pt.x, pt.y, 'H')
-				--end
+				if pt then
+					self.framebuffer:writeChar(math.floor(pt.x + 0.5), math.floor(pt.y + 0.5), 'H')
+				end
 			end
 		end
 	end,
@@ -119,10 +117,22 @@ Ray = {
 		local u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den
 		
 		if t > 0 and t < 1 and u > 0 then
-			return true
+			local pt = {}
+			pt.x = x1 + t * (x2 - x1)
+			pt.y = y1 + t * (y2 - y1)
+			return pt
 		else
 			return
 		end
 	end,
+	
+	lookAt = function(self, x, y)
+		local diffX = x - self.x
+		local diffY = y - self.y
+		-- normalize to get a unit vector
+		local len = math.sqrt(diffX^2 + diffY^2)
+		self.dirX = diffX / len
+		self.dirY = diffY / len
+	end
 
 }
