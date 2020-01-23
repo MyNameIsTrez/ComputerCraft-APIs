@@ -18,13 +18,14 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, boundaryChar, rayChar, raycasterChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, fov, boundaryChar, rayChar, raycasterChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
 			firstPersonWidth = firstPersonWidth,
 			boundaryCount = boundaryCount,
 			rayCount = rayCount,
+			fov = fov, -- field of view
 			boundaryChar = boundaryChar,
 			rayChar = rayChar,
 			raycasterChar = raycasterChar,
@@ -70,7 +71,7 @@ RayCasting = {
 	
 	createRayCasters = function(self)
 		local pos = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
-		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayCount, self.raycasterChar, self.framebuffer)
+		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayCount, self.raycasterChar, self.fov, self.framebuffer)
 	end,
 	
 	castRays = function(self)
@@ -97,24 +98,50 @@ RayCasting = {
 		end
 	end,
 	
-	moveRayCasters = function(self)
-		self.noiseX = self.noiseX + 0.05
-		self.noiseY = self.noiseY + 0.05
-		local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
-		local y = (pn.perlin:noise(self.noiseY)+1)/2 * self.canvasHeight
-		local newPos = vector.new(x, y)
-		self.rayCasters[1].pos = newPos
-		self.rayCasters[1]:moveRays(newPos)
+	moveRayCasters = function(self, key)
+		local stepX, stepY = 0, 0
+    	if (key == 'w' or key == 'up') then
+        	stepY = -1
+    	elseif (key == 's' or key == 'down') then
+        	stepY = 1
+		elseif (key == 'a' or key == 'left') then
+        	stepX = -1
+    	elseif (key == 'd' or key == 'right') then
+        	stepX = 1
+    	end
+		
+		local rayCaster = self.rayCasters[1]
+		local newPos = vector.new(rayCaster.pos.x + stepX, rayCaster.pos.y + stepY)
+		rayCaster.pos = newPos
+		rayCaster:moveRays(newPos)
+		
+		--self.noiseX = self.noiseX + 0.05
+		--self.noiseY = self.noiseY + 0.05
+		--local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
+		--local y = (pn.perlin:noise(self.noiseY)+1)/2 * self.canvasHeight
+		--local newPos = vector.new(x, y)
+		--self.rayCasters[1].pos = newPos
+		--self.rayCasters[1]:moveRays(newPos)
+	end,
+	
+	map = function(self, value, minVar, maxVar, minResult, maxResult)
+    	local a = (value - minVar) / (maxVar - minVar)
+    	return (1 - a) * minResult + a * maxResult;
 	end,
 	
 	drawFirstPerson = function(self)
 		local w = self.firstPersonWidth / #self.scene
 		for i = 1, #self.scene do
+			local h = self:map(self.scene[i], 0, self.maxRayLength, self.canvasHeight/2, 0)
+			
 			local x1 = self.canvasWidth+i*w-w+2
-			local y1 = 1
+			local y1 = self.canvasHeight/2 - h + 1
 			local x2 = self.canvasWidth+i*w+2
-			local y2 = self.canvasHeight
+			local y2 = self.canvasHeight/2 + h
+			
 			local char = self.chars[math.floor(self.scene[i]/self.maxRayLength*#self.chars + 0.5)]
+			if not char then char = self.chars[1] end
+			
 			self.framebuffer:writeRect(x1, y1, x2, y2, char, true)
 		end
 	end,
@@ -183,15 +210,16 @@ Ray = {
 
 RayCaster = {
 
-	new = function(pos, rayCount, char, framebuffer)
+	new = function(pos, rayCount, char, fov, framebuffer)
         local self = {
 			pos = pos,
 			rayCount = rayCount,
 			char = char,
+			fov = fov,
 			framebuffer = framebuffer,
 			
-			pi2 = math.pi * 2,
 			rays = {},
+			heading = 0,
 		}
 		
 		setmetatable(self, {__index = RayCaster})
@@ -202,7 +230,7 @@ RayCaster = {
     end,
 	
 	createRays = function(self)
-		for angle = 0, self.pi2 / 9, (self.pi2 / 9) / self.rayCount do
+		for angle = -self.fov/2, self.fov/2, self.fov/self.rayCount do
 			local dir = vector.new(math.cos(angle), math.sin(angle))
 			self.rays[#self.rays + 1] = Ray.new(self.pos, dir)
 		end
@@ -211,6 +239,13 @@ RayCaster = {
 	moveRays = function(self, pos)
 		for _, ray in ipairs(self.rays) do
 			ray.pos = pos
+		end
+	end,
+	
+	rotate = function(self, angle)
+		self.heading = self.heading + angle
+		for i = 0, #self.rays do
+			rays[i]:setAngle(i+self.heading)
 		end
 	end,
 	
