@@ -18,17 +18,20 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, boundaryCount, boundaryChar, rayChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, boundaryCount, rayCount, boundaryChar, rayChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
 			boundaryCount = boundaryCount,
+			rayCount = rayCount,
 			boundaryChar = boundaryChar,
 			rayChar = rayChar,
 			framebuffer = framebuffer,
 			
 			boundaries = {},
 			rayCasters = {},
+			noiseX = 0,
+			noiseY = 10000,
 		}
 		
 		setmetatable(self, {__index = RayCasting})
@@ -45,11 +48,24 @@ RayCasting = {
 			local pos2 = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
 			self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
 		end
+		
+		pos1 = vector.new(1, 1)
+		pos2 = vector.new(self.canvasWidth, 1)
+		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
+		pos1 = vector.new(self.canvasWidth, 1)
+		pos2 = vector.new(self.canvasWidth, self.canvasHeight)
+		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
+		pos1 = vector.new(self.canvasWidth, self.canvasHeight)
+		pos2 = vector.new(1, self.canvasHeight)
+		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
+		pos1 = vector.new(1, self.canvasHeight)
+		pos2 = vector.new(1, 1)
+		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
 	end,
 	
 	createRayCasters = function(self)
 		local pos = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
-		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.framebuffer)
+		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayCount, self.framebuffer)
 	end,
 	
 	castRays = function(self)
@@ -77,7 +93,17 @@ RayCasting = {
 			end
 		end
 	end,
-
+	
+	moveRayCasters = function(self)
+		self.noiseX = self.noiseX + 0.1
+		self.noiseY = self.noiseY + 0.1
+		local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
+		local y = (pn.perlin:noise(self.noiseY)+1)/2 * self.canvasHeight
+		local newPos = vector.new(x, y)
+		self.rayCasters[1].pos = newPos
+		self.rayCasters[1]:moveRays(newPos)
+	end,
+	
 }
 
 Boundary = {
@@ -103,11 +129,10 @@ Boundary = {
 
 Ray = {
 
-	new = function(pos, dir, char, framebuffer)
+	new = function(pos, dir, framebuffer)
         local self = {
 			pos = pos,
 			dir = dir,
-			char = char,
 			framebuffer = framebuffer,
 		}
 		
@@ -139,14 +164,19 @@ Ray = {
 	lookAt = function(self, pos)
 		self.dir = pos:sub(self.pos):normalize()
 	end,
+	
+	draw = function(self)
+		self.framebuffer:writeLine(self.pos.x, self.pos.y, self.pos.x + self.dir.x * 20, self.pos.y + self.dir.y * 20, '$')
+	end,
 
 }
 
 RayCaster = {
 
-	new = function(pos, framebuffer)
+	new = function(pos, rayCount, framebuffer)
         local self = {
 			pos = pos,
+			rayCount = rayCount,
 			framebuffer = framebuffer,
 			
 			pi2 = math.pi * 2,
@@ -161,9 +191,15 @@ RayCaster = {
     end,
 	
 	createRays = function(self)
-		for angle = 0, self.pi2, self.pi2 / 32 do
+		for angle = 0, self.pi2, self.pi2 / self.rayCount do
 			local dir = vector.new(math.cos(angle), math.sin(angle))
 			self.rays[#self.rays + 1] = Ray.new(self.pos, dir, self.framebuffer)
+		end
+	end,
+	
+	moveRays = function(self, pos)
+		for _, ray in ipairs(self.rays) do
+			ray.pos = pos
 		end
 	end,
 
