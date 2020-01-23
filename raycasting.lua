@@ -27,13 +27,13 @@ RayCasting = {
 			framebuffer = framebuffer,
 			
 			boundaries = {},
-			rays = {},
+			rayCasters = {},
 		}
 		
 		setmetatable(self, {__index = RayCasting})
 		
 		self:createBoundaries()
-		self:createRays()
+		self:createRayCasters()
 		
 		return self
     end,
@@ -43,16 +43,18 @@ RayCasting = {
 		self.boundaries[#self.boundaries + 1] = Boundary.new(x1, y1, x2, y2, self.boundaryChar, self.framebuffer)
 	end,
 	
-	createRays = function(self)
-		self.rays[#self.rays + 1] = Ray.new(self.canvasWidth/4, self.canvasHeight/2, 1, 1, self.rayChar, self.framebuffer)
+	createRayCasters = function(self)
+		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(self.canvasWidth/4, self.canvasHeight/2, self.rayChar, self.framebuffer)
 	end,
 	
 	castRays = function(self)
-		for _, ray in ipairs(self.rays) do
-			for _, boundary in ipairs(self.boundaries) do
-				local pt = ray:cast(boundary)
-				if pt then
-					self.framebuffer:writeChar(math.floor(pt.x + 0.5), math.floor(pt.y + 0.5), 'H')
+		for _, rayCaster in ipairs(self.rayCasters) do
+			for _, ray in ipairs(rayCaster.rays) do
+				for _, boundary in ipairs(self.boundaries) do
+					local pt = ray:cast(boundary)
+					if pt then
+						self.framebuffer:writeChar(math.floor(pt.x + 0.5), math.floor(pt.y + 0.5), 'H')
+					end
 				end
 			end
 		end
@@ -89,11 +91,10 @@ Ray = {
         local self = {
 			x = x,
 			y = y,
-			char = char,
-			framebuffer = framebuffer,
-			
 			dirX = dirX,
 			dirY = dirY,
+			char = char,
+			framebuffer = framebuffer,
 		}
 		
 		setmetatable(self, {__index = Ray})
@@ -133,6 +134,31 @@ Ray = {
 		local len = math.sqrt(diffX^2 + diffY^2)
 		self.dirX = diffX / len
 		self.dirY = diffY / len
-	end
+	end,
+
+}
+
+RayCaster = {
+
+	new = function(x, y, rayChar, framebuffer)
+        local self = {
+			x = x,
+			y = y,
+			rayChar = rayChar,
+			framebuffer = framebuffer,
+			
+			rays = {},
+		}
+		
+		setmetatable(self, {__index = RayCaster})
+		
+		self:createRays()
+		
+		return self
+    end,
+	
+	createRays = function(self)
+		self.rays[#self.rays + 1] = Ray.new(self.x, self.y, 1, 1, self.rayChar, self.framebuffer)
+	end,
 
 }
