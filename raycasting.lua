@@ -18,10 +18,11 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, boundaryChar, rayChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, boundaryCount, boundaryChar, rayChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
+			boundaryCount = boundaryCount,
 			boundaryChar = boundaryChar,
 			rayChar = rayChar,
 			framebuffer = framebuffer,
@@ -39,9 +40,11 @@ RayCasting = {
     end,
 	
 	createBoundaries = function(self)
-		local pos1 = vector.new(self.canvasWidth/4*3, self.canvasHeight/10)
-		local pos2 = vector.new(self.canvasWidth/4*3, self.canvasHeight/10*9)
-		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
+		for i = 1, self.boundaryCount do
+			local pos1 = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
+			local pos2 = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
+			self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
+		end
 	end,
 	
 	createRayCasters = function(self)
