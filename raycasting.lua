@@ -44,13 +44,18 @@ RayCasting = {
 	end,
 	
 	createRays = function(self)
-		self.rays[#self.rays + 1] = Ray.new(self.canvasWidth/4, self.canvasHeight/2, self.rayChar, self.framebuffer)
+		self.rays[#self.rays + 1] = Ray.new(self.canvasWidth/4, self.canvasHeight/2, 1, 1, self.rayChar, self.framebuffer)
 	end,
 	
 	castRays = function(self)
 		for _, ray in ipairs(self.rays) do
 			for _, boundary in ipairs(self.boundaries) do
-				ray:cast(boundary)
+				local pt = ray:cast(boundary)
+				term.setCursorPos(50, 50)
+				write(tostring(pt))
+				--if pt then
+				--	self.framebuffer:writeChar(pt.x, pt.y, 'H')
+				--end
 			end
 		end
 	end,
@@ -82,14 +87,15 @@ Boundary = {
 
 Ray = {
 
-	new = function(x, y, char, framebuffer)
+	new = function(x, y, dirX, dirY, char, framebuffer)
         local self = {
 			x = x,
 			y = y,
 			char = char,
 			framebuffer = framebuffer,
 			
-			dir = vector.new(1, 0),
+			dirX = dirX,
+			dirY = dirY,
 		}
 		
 		setmetatable(self, {__index = Ray})
@@ -98,11 +104,25 @@ Ray = {
     end,
 	
 	draw = function(self)
-		self.framebuffer:writeLine(self.x, self.y, self.x + self.dir.x * 10, self.y + self.dir.y * 10, self.char)
+		self.framebuffer:writeLine(self.x, self.y, self.x + self.dirX * 10, self.y + self.dirY * 10, self.char)
 	end,
 	
 	cast = function(self, boundary)
-		print(1)
+		-- https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+		local x1, y1, x2, y2 = boundary.x1, boundary.y1, boundary.x2, boundary.y2
+		local x3, y3, x4, y4 = self.x, self.y, self.x + self.dirX, self.y + self.dirY
+		
+		local den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+		if den == 0 then return end -- ray and boundary are parallel
+		
+		local t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / den
+		local u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den
+		
+		if t > 0 and t < 1 and u > 0 then
+			return true
+		else
+			return
+		end
 	end,
 
 }
