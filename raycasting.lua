@@ -39,12 +39,14 @@ RayCasting = {
     end,
 	
 	createBoundaries = function(self)
-		local x1, y1, x2, y2 = self.canvasWidth/4*3, self.canvasHeight/10, self.canvasWidth/4*3, self.canvasHeight/10*9
-		self.boundaries[#self.boundaries + 1] = Boundary.new(x1, y1, x2, y2, self.boundaryChar, self.framebuffer)
+		local pos1 = vector.new(self.canvasWidth/4*3, self.canvasHeight/10)
+		local pos2 = vector.new(self.canvasWidth/4*3, self.canvasHeight/10*9)
+		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
 	end,
 	
 	createRayCasters = function(self)
-		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(self.canvasWidth/4, self.canvasHeight/2, self.rayChar, self.framebuffer)
+		local pos = vector.new(self.canvasWidth/4, self.canvasHeight/2)
+		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayChar, self.framebuffer)
 	end,
 	
 	castRays = function(self)
@@ -64,12 +66,10 @@ RayCasting = {
 
 Boundary = {
 
-	new = function(x1, y1, x2, y2, char, framebuffer)
+	new = function(pos1, pos2, char, framebuffer)
         local self = {
-			x1 = x1,
-			y1 = y1,
-			x2 = x2,
-			y2 = y2,
+			pos1 = pos1,
+			pos2 = pos2,
 			char = char,
 			framebuffer = framebuffer,
 		}
@@ -80,19 +80,17 @@ Boundary = {
     end,
 	
 	draw = function(self)
-		self.framebuffer:writeLine(self.x1, self.y1, self.x2, self.y2, self.char)
+		self.framebuffer:writeLine(self.pos1.x, self.pos1.y, self.pos2.x, self.pos2.y, self.char)
 	end,
 
 }
 
 Ray = {
 
-	new = function(x, y, dirX, dirY, char, framebuffer)
+	new = function(pos, dir, char, framebuffer)
         local self = {
-			x = x,
-			y = y,
-			dirX = dirX,
-			dirY = dirY,
+			pos = pos,
+			dir = dir,
 			char = char,
 			framebuffer = framebuffer,
 		}
@@ -103,13 +101,13 @@ Ray = {
     end,
 	
 	draw = function(self)
-		self.framebuffer:writeLine(self.x, self.y, self.x + self.dirX * 10, self.y + self.dirY * 10, self.char)
+		self.framebuffer:writeLine(self.pos.x, self.pos.y, self.pos.x + self.dir.x * 20, self.pos.y + self.dir.y * 20, self.char)
 	end,
 	
 	cast = function(self, boundary)
 		-- https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
-		local x1, y1, x2, y2 = boundary.x1, boundary.y1, boundary.x2, boundary.y2
-		local x3, y3, x4, y4 = self.x, self.y, self.x + self.dirX, self.y + self.dirY
+		local x1, y1, x2, y2 = boundary.pos1.x, boundary.pos1.y, boundary.pos2.x, boundary.pos2.y
+		local x3, y3, x4, y4 = self.pos.x, self.pos.y, self.pos.x + self.dir.x, self.pos.y + self.dir.y
 		
 		local den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
 		if den == 0 then return end -- ray and boundary are parallel
@@ -118,35 +116,29 @@ Ray = {
 		local u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / den
 		
 		if t > 0 and t < 1 and u > 0 then
-			local pt = {}
-			pt.x = x1 + t * (x2 - x1)
-			pt.y = y1 + t * (y2 - y1)
-			return pt
+			local x = x1 + t * (x2 - x1)
+			local y = y1 + t * (y2 - y1)
+			return vector.new(x, y)
 		else
 			return
 		end
 	end,
 	
-	lookAt = function(self, x, y)
-		local diffX = x - self.x
-		local diffY = y - self.y
-		-- normalize to get a unit vector
-		local len = math.sqrt(diffX^2 + diffY^2)
-		self.dirX = diffX / len
-		self.dirY = diffY / len
+	lookAt = function(self, pos)
+		self.dir = pos:sub(self.pos):normalize()
 	end,
 
 }
 
 RayCaster = {
 
-	new = function(x, y, rayChar, framebuffer)
+	new = function(pos, rayChar, framebuffer)
         local self = {
-			x = x,
-			y = y,
+			pos = pos,
 			rayChar = rayChar,
 			framebuffer = framebuffer,
 			
+			pi2 = math.pi * 2,
 			rays = {},
 		}
 		
@@ -158,7 +150,10 @@ RayCaster = {
     end,
 	
 	createRays = function(self)
-		self.rays[#self.rays + 1] = Ray.new(self.x, self.y, 1, 1, self.rayChar, self.framebuffer)
+		for angle = 0, self.pi2, self.pi2 / 32 do
+			local dir = vector.new(math.cos(angle), math.sin(angle))
+			self.rays[#self.rays + 1] = Ray.new(self.pos, dir, self.rayChar, self.framebuffer)
+		end
 	end,
 
 }
