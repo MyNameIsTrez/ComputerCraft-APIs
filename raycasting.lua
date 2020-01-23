@@ -95,8 +95,8 @@ RayCasting = {
 	end,
 	
 	moveRayCasters = function(self)
-		self.noiseX = self.noiseX + 0.1
-		self.noiseY = self.noiseY + 0.1
+		self.noiseX = self.noiseX + 0.05
+		self.noiseY = self.noiseY + 0.05
 		local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
 		local y = (pn.perlin:noise(self.noiseY)+1)/2 * self.canvasHeight
 		local newPos = vector.new(x, y)
@@ -165,9 +165,11 @@ Ray = {
 		self.dir = pos:sub(self.pos):normalize()
 	end,
 	
+	--[[ debugging
 	draw = function(self)
 		self.framebuffer:writeLine(self.pos.x, self.pos.y, self.pos.x + self.dir.x * 20, self.pos.y + self.dir.y * 20, '$')
 	end,
+	]]--
 
 }
 

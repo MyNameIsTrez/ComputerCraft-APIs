@@ -58,7 +58,7 @@ FrameBuffer = {
 	
 	writeChar = function(self, x, y, char)
         -- Might need < instead of <= .
-        if y > self.startY and y <= self.canvasHeight + self.startY and x > self.startX and x <= self.canvasWidth + self.startX then
+        if y >= self.startY and y <= self.canvasHeight + self.startY and x >= self.startX and x <= self.canvasWidth + self.startX then
             self.buffer[y][x] = char
         end
     end,
@@ -83,7 +83,9 @@ FrameBuffer = {
 		strTab = {}
 		for y = 1, self.canvasHeight do
 			strTab[#strTab + 1] = table.concat(self.buffer[y])
-			strTab[#strTab + 1] = '\n' -- Maybe concating above instead is faster?
+			if y ~= self.canvasHeight then
+				strTab[#strTab + 1] = '\n' -- Maybe concating above instead is faster?
+			end
 		end
 		term.setCursorPos(self.startX, self.startY)
 		write(table.concat(strTab))
