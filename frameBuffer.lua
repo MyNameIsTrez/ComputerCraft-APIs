@@ -79,6 +79,19 @@ FrameBuffer = {
   		end
 	end,
 	
+	writeRect = function(self, x1, y1, x2, y2, char, fill)
+		local fill = fill or true and false -- false by default.
+  		local x_diff = x2 - x1
+		if fill then
+  			for i = 0, x_diff do
+				local x = x1 + i
+				self:writeLine(x, y1, x, y2, char)
+  			end
+		else
+			error('writeRect() misses code for filling the rectangle')
+		end
+	end,
+	
 	draw = function(self)		
 		-- Draw the current frame.
 		strTab = {}

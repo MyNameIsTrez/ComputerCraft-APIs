@@ -18,10 +18,11 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, boundaryCount, rayCount, boundaryChar, rayChar, raycasterChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, firstPersonWidth, boundaryCount, rayCount, boundaryChar, rayChar, raycasterChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
+			firstPersonWidth = firstPersonWidth,
 			boundaryCount = boundaryCount,
 			rayCount = rayCount,
 			boundaryChar = boundaryChar,
@@ -33,6 +34,9 @@ RayCasting = {
 			rayCasters = {},
 			noiseX = 0,
 			noiseY = 10000,
+			scene = {},
+            chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
+			maxRayLength = math.sqrt(canvasWidth^2 + canvasHeight^2),
 		}
 		
 		setmetatable(self, {__index = RayCasting})
@@ -71,7 +75,8 @@ RayCasting = {
 	
 	castRays = function(self)
 		for _, rayCaster in ipairs(self.rayCasters) do
-			for _, ray in ipairs(rayCaster.rays) do
+			for i = 1, #rayCaster.rays do
+				local ray = rayCaster.rays[i]
 				local shortestDist = math.huge
 				local closestPt
 				for _, boundary in ipairs(self.boundaries) do
@@ -87,6 +92,7 @@ RayCasting = {
 				if closestPt then
 					self.framebuffer:writeLine(rayCaster.pos.x, rayCaster.pos.y, closestPt.x, closestPt.y, self.rayChar)
 				end
+				self.scene[i] = shortestDist
 			end
 		end
 	end,
@@ -99,6 +105,18 @@ RayCasting = {
 		local newPos = vector.new(x, y)
 		self.rayCasters[1].pos = newPos
 		self.rayCasters[1]:moveRays(newPos)
+	end,
+	
+	drawFirstPerson = function(self)
+		local w = self.firstPersonWidth / #self.scene
+		for i = 1, #self.scene do
+			local x1 = self.canvasWidth+i*w-w+2
+			local y1 = 1
+			local x2 = self.canvasWidth+i*w+2
+			local y2 = self.canvasHeight
+			local char = self.chars[math.floor(self.scene[i]/self.maxRayLength*#self.chars + 0.5)]
+			self.framebuffer:writeRect(x1, y1, x2, y2, char, true)
+		end
 	end,
 	
 }
@@ -184,7 +202,7 @@ RayCaster = {
     end,
 	
 	createRays = function(self)
-		for angle = 0, self.pi2, self.pi2 / self.rayCount do
+		for angle = 0, self.pi2 / 9, (self.pi2 / 9) / self.rayCount do
 			local dir = vector.new(math.cos(angle), math.sin(angle))
 			self.rays[#self.rays + 1] = Ray.new(self.pos, dir)
 		end
