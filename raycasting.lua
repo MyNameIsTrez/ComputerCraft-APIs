@@ -45,7 +45,7 @@ RayCasting = {
 	end,
 	
 	createRayCasters = function(self)
-		local pos = vector.new(self.canvasWidth/4, self.canvasHeight/2)
+		local pos = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
 		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayChar, self.framebuffer)
 	end,
 	
