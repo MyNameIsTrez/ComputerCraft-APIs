@@ -18,7 +18,7 @@ REQUIREMENTS
 
 RayCasting = {
 
-	new = function(canvasWidth, canvasHeight, boundaryCount, rayCount, boundaryChar, rayChar, framebuffer)
+	new = function(canvasWidth, canvasHeight, boundaryCount, rayCount, boundaryChar, rayChar, raycasterChar, framebuffer)
         local self = {
 			canvasWidth = canvasWidth,
 			canvasHeight = canvasHeight,
@@ -26,6 +26,7 @@ RayCasting = {
 			rayCount = rayCount,
 			boundaryChar = boundaryChar,
 			rayChar = rayChar,
+			raycasterChar = raycasterChar,
 			framebuffer = framebuffer,
 			
 			boundaries = {},
@@ -65,7 +66,7 @@ RayCasting = {
 	
 	createRayCasters = function(self)
 		local pos = vector.new(math.random(self.canvasWidth), math.random(self.canvasHeight))
-		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayCount, self.framebuffer)
+		self.rayCasters[#self.rayCasters + 1] = RayCaster.new(pos, self.rayCount, self.raycasterChar, self.framebuffer)
 	end,
 	
 	castRays = function(self)
@@ -84,11 +85,7 @@ RayCasting = {
 					end
 				end
 				if closestPt then
-					local x1 = math.floor(rayCaster.pos.x + 0.5)
-					local y1 = math.floor(rayCaster.pos.y + 0.5)
-					local x2 = math.floor(closestPt.x + 0.5)
-					local y2 = math.floor(closestPt.y + 0.5)
-					self.framebuffer:writeLine(x1, y1, x2, y2, self.rayChar)
+					self.framebuffer:writeLine(rayCaster.pos.x, rayCaster.pos.y, closestPt.x, closestPt.y, self.rayChar)
 				end
 			end
 		end
@@ -129,11 +126,10 @@ Boundary = {
 
 Ray = {
 
-	new = function(pos, dir, framebuffer)
+	new = function(pos, dir)
         local self = {
 			pos = pos,
 			dir = dir,
-			framebuffer = framebuffer,
 		}
 		
 		setmetatable(self, {__index = Ray})
@@ -164,21 +160,16 @@ Ray = {
 	lookAt = function(self, pos)
 		self.dir = pos:sub(self.pos):normalize()
 	end,
-	
-	--[[ debugging
-	draw = function(self)
-		self.framebuffer:writeLine(self.pos.x, self.pos.y, self.pos.x + self.dir.x * 20, self.pos.y + self.dir.y * 20, '$')
-	end,
-	]]--
 
 }
 
 RayCaster = {
 
-	new = function(pos, rayCount, framebuffer)
+	new = function(pos, rayCount, char, framebuffer)
         local self = {
 			pos = pos,
 			rayCount = rayCount,
+			char = char,
 			framebuffer = framebuffer,
 			
 			pi2 = math.pi * 2,
@@ -195,7 +186,7 @@ RayCaster = {
 	createRays = function(self)
 		for angle = 0, self.pi2, self.pi2 / self.rayCount do
 			local dir = vector.new(math.cos(angle), math.sin(angle))
-			self.rays[#self.rays + 1] = Ray.new(self.pos, dir, self.framebuffer)
+			self.rays[#self.rays + 1] = Ray.new(self.pos, dir)
 		end
 	end,
 	
@@ -203,6 +194,10 @@ RayCaster = {
 		for _, ray in ipairs(self.rays) do
 			ray.pos = pos
 		end
+	end,
+	
+	draw = function(self)
+		self.framebuffer:writeChar(self.pos.x, self.pos.y, self.char)
 	end,
 
 }

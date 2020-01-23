@@ -57,8 +57,9 @@ FrameBuffer = {
 	end,
 	
 	writeChar = function(self, x, y, char)
-        -- Might need < instead of <= .
-        if y >= self.startY and y <= self.canvasHeight + self.startY and x >= self.startX and x <= self.canvasWidth + self.startX then
+		local x, y = math.floor(x + 0.5), math.floor(y + 0.5)
+        -- Might need <= instead of < .
+        if y >= self.startY and y < self.canvasHeight + self.startY and x >= self.startX and x < self.canvasWidth + self.startX then
             self.buffer[y][x] = char
         end
     end,
@@ -74,7 +75,7 @@ FrameBuffer = {
   		for i = 0, distance do
     		local x = i * step_x
     		local y = i * step_y
-			self:writeChar(math.floor(x1 + x + 0.5), math.floor(y1 + y + 0.5), char)
+			self:writeChar(x1 + x, y1 + y, char)
   		end
 	end,
 	

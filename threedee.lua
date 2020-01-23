@@ -126,13 +126,13 @@ ThreeDee = {
 			-- Corners A, B, C, D in the front. See getCubesCorners() documentation.
 			for i = 1, 4 do
 				local cubeCorner = cubeCorners[i]
-				self.framebuffer:writeChar(math.floor(cubeCorner[1] + self.canvasCenterX + 0.5), math.floor(cubeCorner[2] + self.canvasCenterY + 0.5), self.pointChar)
+				self.framebuffer:writeChar(cubeCorner[1] + self.canvasCenterX, cubeCorner[2] + self.canvasCenterY, self.pointChar)
 			end
 			-- Corners E, F, G, H in the back.
 			local offsets = self.offsets
 			for i = 5, 8 do
 				local cubeCorner = cubeCorners[i]
-				self.framebuffer:writeChar(math.floor(cubeCorner[1] + offsets[1] + self.canvasCenterX + 0.5), math.floor(cubeCorner[2] + offsets[2] + self.canvasCenterY + 0.5), self.pointChar)
+				self.framebuffer:writeChar(cubeCorner[1] + offsets[1] + self.canvasCenterX, cubeCorner[2] + offsets[2] + self.canvasCenterY, self.pointChar)
 			end
 		end
 	end,
@@ -180,7 +180,7 @@ ThreeDee = {
 		for rad = 0, 2 * math.pi, math.pi / 180 do
     	    local x = math.cos(rad) * radius * xMult
     	    local y = math.sin(rad) * radius
-    	    self.framebuffer:writeChar(math.floor(centerX + x + self.canvasCenterX + 0.5), math.floor(centerY + y + self.canvasCenterY + 0.5))
+    	    self.framebuffer:writeChar(centerX + x + self.canvasCenterX, centerY + y + self.canvasCenterY)
   		end
 	end,
 	
@@ -216,7 +216,8 @@ ThreeDee = {
 				_x1 + self.canvasCenterX,
 				_y1 + self.canvasCenterY,
 				_x2 + self.canvasCenterX,
-				_y2 + self.canvasCenterY, char
+				_y2 + self.canvasCenterY,
+				char
 			)
   		end
 	end,
