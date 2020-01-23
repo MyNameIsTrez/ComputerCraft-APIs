@@ -56,6 +56,7 @@ RayCasting = {
 			self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
 		end
 		
+		--[[ optional walls on the sides of the top-down view
 		pos1 = vector.new(1, 1)
 		pos2 = vector.new(self.canvasWidth, 1)
 		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
@@ -68,6 +69,7 @@ RayCasting = {
 		pos1 = vector.new(1, self.canvasHeight)
 		pos2 = vector.new(1, 1)
 		self.boundaries[#self.boundaries + 1] = Boundary.new(pos1, pos2, self.boundaryChar, self.framebuffer)
+		]]--
 	end,
 	
 	createRaycasters = function(self)
@@ -103,13 +105,13 @@ RayCasting = {
 		local raycaster = self.raycasters[1]
 		
 		local stepX, stepY = 0, 0
-    	if (key == 'w' and raycaster.pos.y > 2) then
+    	if (key == 'w' and raycaster.pos.y > 1) then
         	stepY = -1
-    	elseif (key == 's' and raycaster.pos.y < self.canvasHeight - 1) then
+    	elseif (key == 's' and raycaster.pos.y < self.canvasHeight) then
         	stepY = 1
-		elseif (key == 'a' and raycaster.pos.x > 2) then
+		elseif (key == 'a' and raycaster.pos.x > 1) then
         	stepX = -1
-    	elseif (key == 'd' and raycaster.pos.x < self.canvasWidth - 1) then
+    	elseif (key == 'd' and raycaster.pos.x < self.canvasWidth) then
         	stepX = 1
     	end
 		
@@ -117,6 +119,7 @@ RayCasting = {
 		raycaster.pos = newPos
 		raycaster:moveRays(newPos)
 		
+		-- Moves the raycaster with perlin noise.
 		--self.noiseX = self.noiseX + 0.05
 		--self.noiseY = self.noiseY + 0.05
 		--local x = (pn.perlin:noise(self.noiseX)+1)/2 * self.canvasWidth
@@ -150,7 +153,12 @@ RayCasting = {
 			local x2 = self.canvasWidth+i*w+2
 			local y2 = self.canvasHeight/2 + h
 			
-			local char = self.chars[math.floor(self.scene[i]/self.maxRayLength*#self.chars + 0.5)]
+			local sceneSq = self.scene[i]^2
+			local firstPersonWidthSq = self.firstPersonWidth^2
+			
+			local b = self:map(self.scene[i], 0, self.maxRayLength, 1, 19)
+			
+			local char = self.chars[math.floor(b + 0.5)]
 			if not char then char = self.chars[1] end
 			
 			self.framebuffer:writeRect(x1, y1, x2, y2, char, true)
