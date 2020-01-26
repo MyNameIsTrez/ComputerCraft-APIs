@@ -19,7 +19,7 @@ REQUIREMENTS
 
 ThreeDee = {
 
-	new = function(framebuffer, canvasX1, canvasY1, canvasX2, canvasY2, distance, rotation, corners, connectionChar, cornerChar)
+	new = function(framebuffer, canvasX1, canvasY1, canvasX2, canvasY2, distance, rotation, cubesCoords, connectionChar, cornerChar)
         -- Constructor to create Object
         local self = {
             framebuffer = framebuffer,
@@ -35,22 +35,41 @@ ThreeDee = {
 			distance = distance,
 			rotation = rotation,
 			
-			corners = corners,
-			
 			connectionChar = connectionChar,
 			cornerChar = cornerChar,
            	
             chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
 			
 			projectedCorners = {},
+			
+			cubesCorners = {},
         }
         
         setmetatable(self, {__index = ThreeDee})
 		
+		self:setCubesCorners(cubesCoords)
+		
         return self
     end,
 	
-	getProjectedCorners = function(self)
+	setCubesCorners = function(self, cubesCoords)
+		for i = 1, #cubesCoords do
+			local cc = cubesCoords[i]
+			self.cubesCorners[i] = {}
+			
+			self.cubesCorners[i][1] = vector.new(-0.5+cc.x, -0.5+cc.y, -0.5+cc.z)
+			self.cubesCorners[i][2] = vector.new( 0.5+cc.x, -0.5+cc.y, -0.5+cc.z)
+			self.cubesCorners[i][3] = vector.new( 0.5+cc.x,  0.5+cc.y, -0.5+cc.z)
+			self.cubesCorners[i][4] = vector.new(-0.5+cc.x,  0.5+cc.y, -0.5+cc.z)
+			
+			self.cubesCorners[i][5] = vector.new(-0.5+cc.x, -0.5+cc.y, 0.5+cc.z)
+			self.cubesCorners[i][6] = vector.new( 0.5+cc.x, -0.5+cc.y, 0.5+cc.z)
+			self.cubesCorners[i][7] = vector.new( 0.5+cc.x,  0.5+cc.y, 0.5+cc.z)
+			self.cubesCorners[i][8] = vector.new(-0.5+cc.x,  0.5+cc.y, 0.5+cc.z)
+		end
+	end,
+	
+	setProjectedCorners = function(self)
 		local rotation = self.rotation
 		local rotationX = {
 			{ 1, 0, 0 },
@@ -68,28 +87,32 @@ ThreeDee = {
 			{ 0, 0, 1 }
 		}
 		
-		for i = 1, #self.corners do
-			local v = self.corners[i]
-			local m = matrix.vecToMat(v)
-			local rotated = matrix.matMul(rotationX, m)
-			rotated = matrix.matMul(rotationY, rotated)
-			rotated = matrix.matMul(rotationZ, rotated)
-			
-			local z = 1 / (self.distance - rotated[3][1])
-			local projection = {
-				{z, 0, 0},
-				{0, z, 0}
-			}
-			
-			local projected2d = matrix.matMul(projection, rotated)
-			projected2d[1][1] = projected2d[1][1] * 100
-			projected2d[2][1] = projected2d[2][1] * 100
-			self.projectedCorners[i] = projected2d
+		for i = 1, #self.cubesCorners do
+			self.projectedCorners[i] = {}
+			local cubeCorners = self.cubesCorners[i]
+			for j = 1, #cubeCorners do
+				local v = cubeCorners[j]
+				local m = matrix.vecToMat(v)
+				local rotated = matrix.matMul(rotationX, m)
+				rotated = matrix.matMul(rotationY, rotated)
+				rotated = matrix.matMul(rotationZ, rotated)
+				
+				local z = 1 / (self.distance - rotated[3][1])
+				local projection = {
+					{z, 0, 0},
+					{0, z, 0}
+				}
+				
+				local projected2d = matrix.matMul(projection, rotated)
+				projected2d[1][1] = projected2d[1][1] * 100
+				projected2d[2][1] = projected2d[2][1] * 100
+				self.projectedCorners[i][j] = projected2d
+			end
 		end
 	end,
 
-	connect = function(self, i, j)
-		local a, b = self.projectedCorners[i], self.projectedCorners[j]
+	connect = function(self, cube, i, j)
+		local a, b = cube[i], cube[j]
 
 		-- Translate to the middle of the screen and stretch x by 50%.
 		local _x1, _y1 = a[1][1], a[2][1]
@@ -100,12 +123,24 @@ ThreeDee = {
 		self.framebuffer:writeLine(x1, y1, x2, y2, self.connectionChar)
 	end,
 	
+	drawCorners = function(self)
+		for _, cube in ipairs(self.projectedCorners) do
+			for _, m in ipairs(cube) do
+				local _x, _y = m[1][1], m[2][1]
+				local x, y = self.centerX + _x * 1.5, self.centerY + _y
+				self.framebuffer:writeChar(x, y, self.cornerChar)
+			end
+		end
+	end,
+	
 	-- Draw lines between corners.
 	drawConnections = function(self)
-		for i = 1, 4 do
-			self:connect(i, i % 4 + 1) -- Front.
-			self:connect(i, i + 4) -- Middle.
-			self:connect(i + 4, i % 4 + 5) -- Back.
+		for _, cube in ipairs(self.projectedCorners) do
+			for j = 1, 4 do
+				self:connect(cube, j, j % 4 + 1) -- Front.
+				self:connect(cube, j, j + 4) -- Middle.
+				self:connect(cube, j + 4, j % 4 + 5) -- Back.
+			end
 		end
 	end,
 	
@@ -135,14 +170,6 @@ ThreeDee = {
 				--sleep(1) -- TEMPORARY!!!!!
 			end
         end
-	end,
-	
-	drawCorners = function(self)
-		for _, m in ipairs(self.projectedCorners) do
-			local _x, _y = m[1][1], m[2][1]
-			local x, y = self.centerX + _x * 1.5, self.centerY + _y
-			self.framebuffer:writeChar(x, y, self.cornerChar)
-		end
 	end,
 	
 	moveCamera = function(self, key)
