@@ -7,7 +7,8 @@
 API to draw 3D objects.
 
 REQUIREMENTS
-	* None
+	* matrix: https://pastebin.com/9g8zvPpX -- Matrix multiplications and vector to matrix conversion.
+	* framebuffer: https://pastebin.com/83q6p4Sp -- write() replacement, by drawing the entire screen with only one write() call for every frame.
 
 ]]--
 
@@ -18,77 +19,91 @@ REQUIREMENTS
 
 ThreeDee = {
 
-	new = function(framebuffer, canvasWidth, canvasHeight, cubesCoords, blockDiameter, offsets, connectionChar, pointChar)
+	new = function(framebuffer, canvasX1, canvasY1, canvasX2, canvasY2, distance, corners, connectionChar, cornerChar)
         -- Constructor to create Object
         local self = {
             framebuffer = framebuffer,
-            canvasWidth = canvasWidth,
-            canvasHeight = canvasHeight,
-            cubesCoords = cubesCoords,
-            blockDiameter = blockDiameter,
-            offsets = offsets,
+			
+			canvasX1 = canvasX1,
+			canvasY1 = canvasY1,
+			canvasX2 = canvasX2,
+			canvasY2 = canvasY2,
+			
+			centerX = math.floor((canvasX2-canvasX1)/2 + 0.5),
+			centerY = math.floor((canvasY2-canvasY1)/2 + 0.5),
+			
+			distance = distance,
+			
+			corners = corners,
+			
 			connectionChar = connectionChar,
-			pointChar = pointChar,
+			cornerChar = cornerChar,
            	
-            canvasCenterX = canvasWidth/2,
-            canvasCenterY = canvasHeight/2,
             chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
-            
-			cubesCorners = {},
+			
+			projectedCorners = {},
         }
         
         setmetatable(self, {__index = ThreeDee})
 		
-        self:getCubesCorners(cubesCoords, blockDiameter)
-		
         return self
     end,
 	
-	drawConnections = function(self)
-		-- Not using the z-axis yet!
-		for _, cubeCorners in ipairs(self.cubesCorners) do
-			connectionsTab = {
-				-- Each key is the index of a corner,
-				-- and it connects to each of the 3 values that are the indices of each corner.
-				{2, 4, 5}, -- A: B, D, E
-				{1, 3, 6}, -- B: A, C, F
-				{2, 4, 7}, -- C: B, D, G
-				{1, 3, 8}, -- D: A, C, H
-				{6, 8}, -- E: F, H
-				{5, 7}, -- F: E, G
-				{6, 8}, -- G: F, H
-				{5, 7}  -- H: E, G
+	getProjectedCorners = function(self, rotation)
+		local rotationX = {
+			{ 1, 0, 0 },
+			{ 0, math.cos(rotation.x), -math.sin(rotation.x) },
+			{ 0, math.sin(rotation.x),  math.cos(rotation.x) }
+		}
+		local rotationY = {
+			{ math.cos(rotation.y), 0, -math.sin(rotation.y) },
+			{ 0, 1, 0 },
+			{ math.sin(rotation.y), 0, math.cos(rotation.y) }
+		}
+		local rotationZ = {
+			{ math.cos(rotation.z), -math.sin(rotation.z), 0 },
+			{ math.sin(rotation.z),  math.cos(rotation.z), 0 },
+			{ 0, 0, 1 }
+		}
+		
+		for i = 1, #self.corners do
+			local v = self.corners[i]
+			local m = matrix.vecToMat(v)
+			local rotated = matrix.matMul(rotationX, m)
+			rotated = matrix.matMul(rotationY, rotated)
+			rotated = matrix.matMul(rotationZ, rotated)
+			
+			local z = 1 / (self.distance - rotated[3][1])
+			local projection = {
+				{z, 0, 0},
+				{0, z, 0}
 			}
 			
-			local offsets = self.offsets
-			for i = 1, 4 do
-				local origin = cubeCorners[i]
-				for j = 1, 3 do
-					local destIndex = connectionsTab[i][j] -- Destination index.
-					local destination = cubeCorners[destIndex]
-					self.framebuffer:writeLine(
-						origin[1] + self.canvasCenterX,
-						origin[2] + self.canvasCenterY,
-						destination[1] + (destIndex > 4 and offsets[1] or 0) + self.canvasCenterX,
-						destination[2] + (destIndex > 4 and offsets[2] or 0) + self.canvasCenterY,
-						self.connectionChar
-					)
-				end
-			end
-			for i = 5, 8 do
-				local origin = cubeCorners[i]
-				for j = 1, 2 do
-					local destIndex = connectionsTab[i][j] -- Destination index.
-					local destination = cubeCorners[destIndex]
-					self.framebuffer:writeLine(
-						origin[1] + offsets[1] + self.canvasCenterX,
-						origin[2] + offsets[2] + self.canvasCenterY,
-						destination[1] + (destIndex > 4 and offsets[1] or 0) + self.canvasCenterX,
-						destination[2] + (destIndex > 4 and offsets[2] or 0) + self.canvasCenterY,
-						self.connectionChar
-					)
-				end
-			end
+			local projected2d = matrix.matMul(projection, rotated)
+			projected2d[1][1] = projected2d[1][1] * 100
+			projected2d[2][1] = projected2d[2][1] * 100
+			self.projectedCorners[i] = projected2d
+		end
+	end,
+
+	connect = function(self, i, j)
+		local a, b = self.projectedCorners[i], self.projectedCorners[j]
+
+		-- Translate to the middle of the screen and stretch x by 50%.
+		local _x1, _y1 = a[1][1], a[2][1]
+		local x1, y1 = self.centerX + _x1 * 1.5, self.centerY + _y1
+		local _x2, _y2 = b[1][1], b[2][1]
+		local x2, y2 = self.centerX + _x2 * 1.5, self.centerY + _y2
+
+		self.framebuffer:writeLine(x1, y1, x2, y2, self.connectionChar)
+	end,
+	
+	-- Draw lines between corners.
+	drawConnections = function(self)
+		for i = 1, 4 do
+			self:connect(i, i % 4 + 1) -- Front.
+			self:connect(i, i + 4) -- Middle.
+			self:connect(i + 4, i % 4 + 5) -- Back.
 		end
 	end,
 	
@@ -120,68 +135,12 @@ ThreeDee = {
         end
 	end,
 	
-	drawPoints = function(self)
-		-- Not using the z-axis yet!
-		for _, cubeCorners in ipairs(self.cubesCorners) do
-			-- Corners A, B, C, D in the front. See getCubesCorners() documentation.
-			for i = 1, 4 do
-				local cubeCorner = cubeCorners[i]
-				self.framebuffer:writeChar(cubeCorner[1] + self.canvasCenterX, cubeCorner[2] + self.canvasCenterY, self.pointChar)
-			end
-			-- Corners E, F, G, H in the back.
-			local offsets = self.offsets
-			for i = 5, 8 do
-				local cubeCorner = cubeCorners[i]
-				self.framebuffer:writeChar(cubeCorner[1] + offsets[1] + self.canvasCenterX, cubeCorner[2] + offsets[2] + self.canvasCenterY, self.pointChar)
-			end
+	drawCorners = function(self)
+		for _, m in ipairs(self.projectedCorners) do
+			local _x, _y = m[1][1], m[2][1]
+			local x, y = self.centerX + _x * 1.5, self.centerY + _y
+			self.framebuffer:writeChar(x, y, self.cornerChar)
 		end
-	end,
-	
-	drawCircle = function(self)
-		self:circle(self.canvasWidth/3, self.canvasHeight/2)
-	end,
-	
-	getCubesCorners = function(self, cubesCoords, blockDiameter)
-		for i, cubeCoords in ipairs(cubesCoords) do
-			local bX, bY, bZ = cubeCoords[1], cubeCoords[2], cubeCoords[3]
-			local bD = blockDiameter
-			local hBD = 0.5 * bD -- Half block diameter.
-			local hBDX = 1.5 * hBD -- Half block diameter for x, to compensate for 6:9 pixels characters.
-			local bXD, bYD, bZD = bX*bD, bY*bD, bZ*bD
-			
-			--[[
-			A to H are the eight returned corners inside cubesCorners,
-			and b is the center of the block, being {bX, bY, bZ}.
-        	  E----------F
-			 /|         /|
-			A----------B |
-			| |   b    | |
-			| H--------|-G
-			|/         |/
-			D----------C
-			]]--
-			
-			self.cubesCorners[i] = {
-				-- {x, y, z}, ...
-				{bXD-hBDX, bYD+hBD, bZD-hBD}, -- A.
-				{bXD+hBDX, bYD+hBD, bZD-hBD}, -- B.
-				{bXD+hBDX, bYD-hBD, bZD-hBD}, -- C.
-				{bXD-hBDX, bYD-hBD, bZD-hBD}, -- D.
-				{bXD-hBDX, bYD+hBD, bZD+hBD}, -- E.
-				{bXD+hBDX, bYD+hBD, bZD+hBD}, -- F.
-				{bXD+hBDX, bYD-hBD, bZD+hBD}, -- G.
-				{bXD-hBDX, bYD-hBD, bZD+hBD}, -- H.
-			}
-		end
-	end,
-	
-	circle = function(self, centerX, centerY, radius)
-  		local xMult = 1.5 -- Characters are 6x9 pixels in size.
-		for rad = 0, 2 * math.pi, math.pi / 180 do
-    	    local x = math.cos(rad) * radius * xMult
-    	    local y = math.sin(rad) * radius
-    	    self.framebuffer:writeChar(centerX + x + self.canvasCenterX, centerY + y + self.canvasCenterY)
-  		end
 	end,
 	
 	moveCamera = function(self, key)
@@ -223,6 +182,3 @@ ThreeDee = {
 	end,
 
 }
-
-
---------------------------------------------------
