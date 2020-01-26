@@ -19,7 +19,7 @@ REQUIREMENTS
 
 ThreeDee = {
 
-	new = function(framebuffer, canvasX1, canvasY1, canvasX2, canvasY2, distance, corners, connectionChar, cornerChar)
+	new = function(framebuffer, canvasX1, canvasY1, canvasX2, canvasY2, distance, rotation, corners, connectionChar, cornerChar)
         -- Constructor to create Object
         local self = {
             framebuffer = framebuffer,
@@ -33,6 +33,7 @@ ThreeDee = {
 			centerY = math.floor((canvasY2-canvasY1)/2 + 0.5),
 			
 			distance = distance,
+			rotation = rotation,
 			
 			corners = corners,
 			
@@ -49,7 +50,8 @@ ThreeDee = {
         return self
     end,
 	
-	getProjectedCorners = function(self, rotation)
+	getProjectedCorners = function(self)
+		local rotation = self.rotation
 		local rotationX = {
 			{ 1, 0, 0 },
 			{ 0, math.cos(rotation.x), -math.sin(rotation.x) },
@@ -144,14 +146,22 @@ ThreeDee = {
 	end,
 	
 	moveCamera = function(self, key)
-    	if (key == 'w' or key == 'up') then
-        	self.offsets[2] = self.offsets[2] - 1
-    	elseif (key == 's' or key == 'down') then
-        	self.offsets[2] = self.offsets[2] + 1
-		elseif (key == 'a' or key == 'left') then
-        	self.offsets[1] = self.offsets[1] - 1
-    	elseif (key == 'd' or key == 'right') then
-        	self.offsets[1] = self.offsets[1] + 1
+    	if (key == 'space') then
+			self.rotation.x = self.rotation.x - 0.1
+    	elseif (key == 'leftShift') then
+			self.rotation.x = self.rotation.x + 0.1
+		elseif (key == 'a') then
+			self.rotation.y = self.rotation.y - 0.1
+    	elseif (key == 'd') then
+			self.rotation.y = self.rotation.y + 0.1
+		elseif (key == 'q') then
+			self.rotation.z = self.rotation.z - 0.1
+    	elseif (key == 'e') then
+			self.rotation.z = self.rotation.z + 0.1
+		elseif (key == 'w') then
+			self.distance = self.distance - 0.1
+    	elseif (key == 's') then
+			self.distance = self.distance + 0.1
     	end
 	end,
 	
