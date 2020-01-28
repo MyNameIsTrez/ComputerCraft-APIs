@@ -110,8 +110,18 @@ ThreeDee = {
 			end
 		end
 	end,
+	
+	drawCorners = function(self)
+		for _, cube in ipairs(self.projectedCorners) do
+			for _, m in ipairs(cube) do
+				local _x, _y = m[1][1], m[2][1]
+				local x, y = self.centerX + _x * 1.5, self.centerY + _y
+				self.framebuffer:writeChar(x, y, self.cornerChar)
+			end
+		end
+	end,
 
-	connect = function(self, cube, i, j)
+	connectCorners = function(self, cube, i, j)
 		local a, b = cube[i], cube[j]
 
 		-- Translate to the middle of the screen and stretch x by 50%.
@@ -123,47 +133,41 @@ ThreeDee = {
 		self.framebuffer:writeLine(x1, y1, x2, y2, self.connectionChar)
 	end,
 	
-	drawCorners = function(self)
-		for _, cube in ipairs(self.projectedCorners) do
-			for _, m in ipairs(cube) do
-				local _x, _y = m[1][1], m[2][1]
-				local x, y = self.centerX + _x * 1.5, self.centerY + _y
-				self.framebuffer:writeChar(x, y, self.cornerChar)
-			end
-		end
-	end,
-	
 	-- Draw lines between corners.
 	drawConnections = function(self)
 		for _, cube in ipairs(self.projectedCorners) do
 			for j = 1, 4 do
-				self:connect(cube, j, j % 4 + 1) -- Front.
-				self:connect(cube, j, j + 4) -- Middle.
-				self:connect(cube, j + 4, j % 4 + 5) -- Back.
+				self:connectCorners(cube, j, j % 4 + 1) -- Four front edges.
+				self:connectCorners(cube, j, j + 4) -- Four middle edges.
+				self:connectCorners(cube, j + 4, j % 4 + 5) -- Four back edges.
 			end
 		end
 	end,
 	
 	drawFill = function(self)
-		-- Three corners per face are taken, where the first and third point have to
-		-- be next to each other, so no diagonal stepX or stepY can take place.
-		local tab = {
-			{1, 2, 4}, -- ABD.
-			{1, 2, 5}, -- ABE.
-			{2, 3, 6}, -- BCF.
-			{3, 4, 7}, -- CDG.
-			{1, 4, 5}, -- ADE.
-			{6, 5, 7}  -- FEG.
+		-- FillConnections below here holds three corners for each side of the cube.
+		-- The first and third point have to be next to each other, because stepX and stepY can't be diagonal.
+		local fillConnections = {
+			{1, 2, 4}, -- ABD. -- Front face.
+			{1, 2, 5}, -- ABE. -- Top face.
+			{2, 3, 6}, -- BCF. -- Right face.
+			{3, 4, 7}, -- CDG. -- Bottom face.
+			{1, 4, 5}, -- ADE. -- Left face.
+			{6, 5, 7}  -- FEG. -- Back face. -- There's a reason it's not EFG - don't remember why. :(
 		}
 		
 		local offsets = self.offsets
-		-- cc is cubeCorners
-        for _, cc in ipairs(self.cubesCorners) do
-			for i = 1, 6 do
-				local a, b, c = tab[i][1], tab[i][2], tab[i][3]
+        for _, cc in ipairs(self.cubesCorners) do -- cc is cubeCorners.
+			for i = 1, 6 do -- For all faces of the cube.
+				local side = fillConnections[i] -- Can't use an ipairs() loop, because i is needed at the end.
+				local a, b, c = side[1], side[2], side[3] -- Get the three corners.
+				
+				-- Get the coordinates of the three corners. Add offsets[1] and offsets[2] if it's one of the four back corners.
 				local x1, y1 = cc[a][1] + (a > 4 and offsets[1] or 0), cc[a][2] + (a > 4 and offsets[2] or 0)
 				local x2, y2 = cc[b][1] + (b > 4 and offsets[1] or 0), cc[b][2] + (b > 4 and offsets[2] or 0)
 				local x3, y3 = cc[c][1] + (c > 4 and offsets[1] or 0), cc[c][2] + (c > 4 and offsets[2] or 0)
+				
+				-- self.chars[6 + i] just means each face gets a different char. Use for debugging only.
 				self:fill(x1, y1, x2, y2, x3, y3, self.chars[6 + i])
 				
    				--self.framebuffer:draw() -- TEMPORARY!!!!!
