@@ -100,37 +100,33 @@ ThreeDee = {
 				local z = 1 / (self.distance - rotated[3][1])
 				local projection = {
 					{z, 0, 0},
-					{0, z, 0}
+					{0, z, 0},
+					{0, 0, z}
 				}
 				
-				local projected2d = matrix.matMul(projection, rotated)
-				projected2d[1][1] = projected2d[1][1] * 100
-				projected2d[2][1] = projected2d[2][1] * 100
-				self.projectedCorners[i][j] = projected2d
+				local projectedMatrix = matrix.matMul(projection, rotated)
+				local projectedVector = matrix.matToVec(projectedMatrix)
+				
+				-- Stretch x by 50%, because characters are 6:9 pixels on the screen.				
+				projectedVector.x = self.centerX + projectedVector.x * 100 * 1.5
+				projectedVector.y = self.centerY + projectedVector.y * 100
+				
+				self.projectedCorners[i][j] = projectedVector
 			end
 		end
 	end,
 	
 	drawCorners = function(self)
 		for _, cube in ipairs(self.projectedCorners) do
-			for _, m in ipairs(cube) do
-				local _x, _y = m[1][1], m[2][1]
-				local x, y = self.centerX + _x * 1.5, self.centerY + _y
-				self.framebuffer:writeChar(x, y, self.cornerChar)
+			for _, v in ipairs(cube) do
+				self.framebuffer:writeChar(v.x, v.y, self.cornerChar)
 			end
 		end
 	end,
 
 	connectCorners = function(self, cube, i, j)
-		local a, b = cube[i], cube[j]
-
-		-- Translate to the middle of the screen and stretch x by 50%.
-		local _x1, _y1 = a[1][1], a[2][1]
-		local x1, y1 = self.centerX + _x1 * 1.5, self.centerY + _y1
-		local _x2, _y2 = b[1][1], b[2][1]
-		local x2, y2 = self.centerX + _x2 * 1.5, self.centerY + _y2
-
-		self.framebuffer:writeLine(x1, y1, x2, y2, self.connectionChar)
+		local c1, c2 = cube[i], cube[j] -- Get two corners.
+		self.framebuffer:writeLine(c1.x, c1.y, c2.x, c2.y, self.connectionChar)
 	end,
 	
 	-- Draw lines between corners.
