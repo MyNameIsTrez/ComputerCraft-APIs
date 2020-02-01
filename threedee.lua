@@ -40,9 +40,9 @@ ThreeDee = {
            	
             chars = {'@', '#', '0', 'A', '5', '2', '$', '3', 'C', '1', '%', '=', '(', '/', '!', '-', ':', "'", '.'},
 			
-			projectedCorners = {},
-			
 			cubesCorners = {},
+			
+			projectedCorners = {},
         }
         
         setmetatable(self, {__index = ThreeDee})
@@ -101,7 +101,7 @@ ThreeDee = {
 				local projection = {
 					{z, 0, 0},
 					{0, z, 0},
-					{0, 0, z}
+					{0, 0, z} -- Not sure if this '{0, 0, z}' works.
 				}
 				
 				local projectedMatrix = matrix.matMul(projection, rotated)
@@ -110,29 +110,38 @@ ThreeDee = {
 				-- Stretch x by 50%, because characters are 6:9 pixels on the screen.				
 				projectedVector.x = self.centerX + projectedVector.x * 100 * 1.5
 				projectedVector.y = self.centerY + projectedVector.y * 100
+				projectedVector.z = projectedVector.z -- Not sure if this works.
 				
 				self.projectedCorners[i][j] = projectedVector
 			end
 		end
 	end,
+   
+    map = function(self, value, minVar, maxVar, minResult, maxResult)
+        local a = (value - minVar) / (maxVar - minVar)
+        return (1 - a) * minResult + a * maxResult
+    end,
 	
 	drawCorners = function(self)
 		for _, cube in ipairs(self.projectedCorners) do
 			for _, v in ipairs(cube) do
-				self.framebuffer:writeChar(v.x, v.y, self.cornerChar)
+				--local char = self.chars[math.floor(self:map(v.z, -100, 100, #self.chars, 1) + 0.5)]
+				local char = 'c'
+				self.framebuffer:writeChar(v.x, v.y, char)
+				--self.framebuffer:writeChar(v.x + 1, v.y, ' (' .. tostring(math.floor(v.x + 0.5)) .. ',' .. tostring(math.floor(v.y + 0.5)) .. ',' .. tostring(v.z) .. ')')
 			end
 		end
 	end,
 
 	connectCorners = function(self, cube, i, j)
-		local c1, c2 = cube[i], cube[j] -- Get two corners.
-		self.framebuffer:writeLine(c1.x, c1.y, c2.x, c2.y, self.connectionChar)
+		local a, b = cube[i], cube[j] -- Get two corners.
+		self.framebuffer:writeLine(a.x, a.y, b.x, b.y, self.connectionChar)
 	end,
 	
 	-- Draw lines between corners.
 	drawConnections = function(self)
 		for _, cube in ipairs(self.projectedCorners) do
-			for j = 1, 4 do
+			for j = 1, 4 do -- 4 * 3 makes for the 12 edges of a cube.
 				self:connectCorners(cube, j, j % 4 + 1) -- Four front edges.
 				self:connectCorners(cube, j, j + 4) -- Four middle edges.
 				self:connectCorners(cube, j + 4, j % 4 + 5) -- Four back edges.
@@ -152,22 +161,15 @@ ThreeDee = {
 			{6, 5, 7}  -- FEG. -- Back face. -- There's a reason it's not EFG - don't remember why. :(
 		}
 		
-		local offsets = self.offsets
-        for _, cc in ipairs(self.cubesCorners) do -- cc is cubeCorners.
-			for i = 1, 6 do -- For all faces of the cube.
-				local side = fillConnections[i] -- Can't use an ipairs() loop, because i is needed at the end.
-				local a, b, c = side[1], side[2], side[3] -- Get the three corners.
+        for _, cc in ipairs(self.projectedCorners) do -- cc is cubeCorners.
+			for _, side in ipairs(fillConnections) do
+				local a, b, c = side[1], side[2], side[3] -- Get the three corners indices.
 				
-				-- Get the coordinates of the three corners. Add offsets[1] and offsets[2] if it's one of the four back corners.
-				local x1, y1 = cc[a][1] + (a > 4 and offsets[1] or 0), cc[a][2] + (a > 4 and offsets[2] or 0)
-				local x2, y2 = cc[b][1] + (b > 4 and offsets[1] or 0), cc[b][2] + (b > 4 and offsets[2] or 0)
-				local x3, y3 = cc[c][1] + (c > 4 and offsets[1] or 0), cc[c][2] + (c > 4 and offsets[2] or 0)
+				local x1, y1 = cc[a].x, cc[a].y
+				local x2, y2 = cc[b].x, cc[b].y
+				local x3, y3 = cc[c].x, cc[c].y
 				
-				-- self.chars[6 + i] just means each face gets a different char. Use for debugging only.
-				self:fill(x1, y1, x2, y2, x3, y3, self.chars[6 + i])
-				
-   				--self.framebuffer:draw() -- TEMPORARY!!!!!
-				--sleep(1) -- TEMPORARY!!!!!
+				self:fill(x1, y1, x2, y2, x3, y3, '@')
 			end
         end
 	end,
@@ -200,7 +202,7 @@ ThreeDee = {
   		local step_x = x_diff / distance
   		local step_y = y_diff / distance
 		
-		-- i = 1, distance - 1 doesn't seem to always work
+		-- i = 1, distance - 1 doesn't seem to always work.
   		for i = 0, distance do
 			local _x = i * step_x
 			local _y = i * step_y
@@ -208,13 +210,7 @@ ThreeDee = {
     		local _y1 = y1 + _y
     		local _x2 = x2 + _x
     		local _y2 = y2 + _y
-			self.framebuffer:writeLine(
-				_x1 + self.canvasCenterX,
-				_y1 + self.canvasCenterY,
-				_x2 + self.canvasCenterX,
-				_y2 + self.canvasCenterY,
-				char
-			)
+			self.framebuffer:writeLine(_x1, _y1, _x2, _y2, char)
   		end
 	end,
 
