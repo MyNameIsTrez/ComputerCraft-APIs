@@ -216,5 +216,106 @@ ThreeDee = {
 			self.framebuffer:writeLine(x1, y1, x2, y2, char)
   		end
 	end,
+	
+	drawFilledTriangle = function(self, vertices)
+		-- Sort vertices, so v0.y <= v1.y <= v2.y.
+		table.sort(vertices, function(a, b) return a.y < b.y end)
+		
+		local v0 = vertices[1]
+		local v1 = vertices[2]
+		local v2 = vertices[3]
+		
+		if (v0.y == v1.y) then -- Natural flat top.
+			-- Sort so v0 is on the left of v1.
+			if (v1.x < v0.x) then
+				local _v0 = v0
+				v0 = v1
+				v1 = _v0
+			end
+			self:drawFlatTopTriangle(v0, v1, v2)
+		elseif (v1.y == v2.y) then -- Natural flat bottom.
+			-- Sort so v1 is on the left of v2.
+			if (v2.x < v1.x) then
+				local _v1 = v1
+				v1 = v2
+				v2 = _v1
+			end
+			self:drawFlatBottomTriangle(v0, v1, v2)
+		else -- General triangle.
+			-- Find splitting vertex.
+			local alphaSplit = (v1.y - v0.y) / (v2.y - v0.y)
+			-- vi = v0 + (v2 - v0) * alphaSplit
+			-- local vi = vector.add(v0, vector.mul(vector.sub(v2, v0), alphaSplit))
+			local vi = v2:sub(v0):mul(alphaSplit):add(v0)
+			
+			if (v1.x < vi.x) then -- Major right.
+				self:drawFlatBottomTriangle(v0, v1, vi)
+				self:drawFlatTopTriangle(v1, vi, v2)
+			else -- Major left.
+				self:drawFlatBottomTriangle(v0, vi, v1)
+				self:drawFlatTopTriangle(vi, v1, v2)
+			end
+		end
+	end,
+	
+	drawFlatTopTriangle = function(self, v0, v1, v2)
+		-- Calculate inverse slopes of left and right lines.
+  		-- Note it's dx/dy, not dy/dx, to prevent div by 0.
+  		-- This works, because there are no perfectly horizontal lines for the left and right triangle edges.
+		local m0 = (v2.x - v0.x) / (v2.y - v0.y)
+		local m1 = (v2.x - v1.x) / (v2.y - v1.y)
+		
+		-- Calculate start and end scanline y values as ints.
+  		-- Top part of the top-left rule.
+  		-- The difference between ceil(n-0.5) and round(n) is that ceil(1.5-0.5) === 1, while round(1.5) === 2, but not sure if round() could be used instead.
+		local yStart = math.ceil(v0.y - 0.5)
+		local yEnd = math.ceil(v2.y - 0.5) -- The scanline AFTER the last line drawn.
+		
+		for y = yStart, yEnd do
+			-- Calculate start and end points (x-coords).
+			-- Add 0.5 to y value because we're calculating based on pixel CENTERS.
+			local px0 = m0 * (y + 0.5 - v0.y) + v0.x
+			local px1 = m1 * (y + 0.5 - v1.y) + v1.x
+			
+			-- Calculate start and end pixels.
+			-- Left part of the top-left rule.
+			local xStart = math.ceil(px0 - 0.5)
+			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
+			
+			for x = xStart, xEnd do
+				self.framebuffer:writeChar(x, y, '@')
+			end
+		end
+	end,
+	
+	drawFlatBottomTriangle = function(self, v0, v1, v2)
+		-- Calculate inverse slopes of left and right lines.
+  		-- Note it's dx/dy, not dy/dx, to prevent div by 0.
+  		-- This works, because there are no perfectly horizontal lines for the left and right triangle edges.
+		local m0 = (v1.x - v0.x) / (v1.y - v0.y)
+		local m1 = (v2.x - v0.x) / (v2.y - v0.y)
+		
+		-- Calculate start and end scanline y values as ints.
+  		-- Top part of the top-left rule.
+  		-- The difference between ceil(n-0.5) and round(n) is that ceil(1.5-0.5) === 1, while round(1.5) === 2, but not sure if round() could be used instead.
+		local yStart = math.ceil(v0.y - 0.5)
+		local yEnd = math.ceil(v2.y - 0.5) -- The scanline AFTER the last line drawn.
+		
+		for y = yStart, yEnd do
+			-- Calculate start and end points (x-coords).
+			-- Add 0.5 to y value because we're calculating based on pixel CENTERS.
+			local px0 = m0 * (y + 0.5 - v0.y) + v0.x
+			local px1 = m1 * (y + 0.5 - v0.y) + v0.x
+			
+			-- Calculate start and end pixels.
+			-- Left part of the top-left rule.
+			local xStart = math.ceil(px0 - 0.5)
+			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
+			
+			for x = xStart, xEnd do
+				self.framebuffer:writeChar(x, y, '@')
+			end
+		end
+	end,
 
 }
