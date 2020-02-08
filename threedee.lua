@@ -271,7 +271,7 @@ ThreeDee = {
 		local yStart = math.ceil(v0.y - 0.5)
 		local yEnd = math.ceil(v2.y - 0.5) -- The scanline AFTER the last line drawn.
 		
-		for y = yStart, yEnd do
+		for y = yStart, yEnd - 1 do -- Draw up to but not including yEnd.
 			-- Calculate start and end points (x-coords).
 			-- Add 0.5 to y value because we're calculating based on pixel CENTERS.
 			local px0 = m0 * (y + 0.5 - v0.y) + v0.x
@@ -282,8 +282,7 @@ ThreeDee = {
 			local xStart = math.ceil(px0 - 0.5)
 			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
 			
-			for x = xStart, xEnd do
-				--print('x: ' .. tostring(x + self.centerX) .. ', y: ' .. tostring(y + self.centerY))
+			for x = xStart, xEnd - 1 do -- Draw up to but not including xEnd.
 				self.framebuffer:writeChar(x + self.centerX, y + self.centerY, '@')
 			end
 		end
@@ -302,7 +301,7 @@ ThreeDee = {
 		local yStart = math.ceil(v0.y - 0.5)
 		local yEnd = math.ceil(v2.y - 0.5) -- The scanline AFTER the last line drawn.
 		
-		for y = yStart, yEnd do
+		for y = yStart, yEnd - 1 do -- Draw up to but not including yEnd.
 			-- Calculate start and end points (x-coords).
 			-- Add 0.5 to y value because we're calculating based on pixel CENTERS.
 			local px0 = m0 * (y + 0.5 - v0.y) + v0.x
@@ -313,8 +312,7 @@ ThreeDee = {
 			local xStart = math.ceil(px0 - 0.5)
 			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
 			
-			for x = xStart, xEnd do
-				--print('x: ' .. tostring(x + self.centerX) .. ', y: ' .. tostring(y + self.centerY))
+			for x = xStart, xEnd - 1 do -- Draw up to but not including xEnd.
 				self.framebuffer:writeChar(x + self.centerX, y + self.centerY, '@')
 			end
 		end
