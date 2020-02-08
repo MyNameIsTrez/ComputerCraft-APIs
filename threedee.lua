@@ -101,7 +101,7 @@ ThreeDee = {
 				local projection = {
 					{z, 0, 0},
 					{0, z, 0},
-					{0, 0, z} -- Not sure if this '{0, 0, z}' works.
+					--{0, 0, z} -- Not sure if this '{0, 0, z}' works.
 				}
 				
 				local projectedMatrix = matrix.matMul(projection, rotated)
@@ -110,7 +110,7 @@ ThreeDee = {
 				-- Stretch x by 50%, because characters are 6:9 pixels on the screen.				
 				projectedVector.x = self.centerX + projectedVector.x * 100 * 1.5
 				projectedVector.y = self.centerY + projectedVector.y * 100
-				projectedVector.z = projectedVector.z -- Not sure if this works.
+				--projectedVector.z = projectedVector.z -- Not sure if this works.
 				
 				self.projectedCorners[i][j] = projectedVector
 			end
@@ -124,9 +124,12 @@ ThreeDee = {
 	
 	drawCorners = function(self)
 		for _, cube in ipairs(self.projectedCorners) do
-			for _, v in ipairs(cube) do
+			--for _, v in ipairs(cube) do
+			for i = 1, #cube do
+				local v = cube[i]
 				--local char = self.chars[math.floor(self:map(v.z, -100, 100, #self.chars, 1) + 0.5)]
-				local char = 'c'
+				--local char = 'c'
+				local char = tostring(i)
 				self.framebuffer:writeChar(v.x, v.y, char)
 				--self.framebuffer:writeChar(v.x + 1, v.y, ' (' .. tostring(math.floor(v.x + 0.5)) .. ',' .. tostring(math.floor(v.y + 0.5)) .. ',' .. tostring(v.z) .. ')')
 			end
@@ -154,11 +157,11 @@ ThreeDee = {
 		-- The first and third point have to be next to each other, because stepX and stepY can't be diagonal.
 		local fillConnections = {
 			{1, 2, 4}, -- ABD. -- Front face.
-			{1, 2, 5}, -- ABE. -- Top face.
-			{2, 3, 6}, -- BCF. -- Right face.
-			{3, 4, 7}, -- CDG. -- Bottom face.
-			{1, 4, 5}, -- ADE. -- Left face.
-			{6, 5, 7}  -- FEG. -- Back face. -- There's a reason it's not EFG - don't remember why. :(
+			--{1, 2, 5}, -- ABE. -- Top face.
+			--{2, 3, 6}, -- BCF. -- Right face.
+			--{3, 4, 7}, -- CDG. -- Bottom face.
+			--{1, 4, 5}, -- ADE. -- Left face.
+			--{6, 5, 7}  -- FEG. -- Back face. -- There's a reason it's not EFG - don't remember why. :(
 		}
 		
         for _, cc in ipairs(self.projectedCorners) do -- cc is cubeCorners.
@@ -194,23 +197,23 @@ ThreeDee = {
     	end
 	end,
 	
-	fill = function(self, x1, y1, x2, y2, x3, y3, char)
-  		local x_diff = x3 - x1
-  		local y_diff = y3 - y1
+	fill = function(self, _x1, _y1, _x2, _y2, _x3, _y3, char)
+  		local xDiff = _x3 - _x1
+  		local yDiff = _y3 - _y1
 		
-  		local distance = math.sqrt(x_diff^2 + y_diff^2)
-  		local step_x = x_diff / distance
-  		local step_y = y_diff / distance
+  		local distance = math.sqrt(xDiff^2 + yDiff^2)
+  		local xStep = xDiff / distance
+  		local yStep = yDiff / distance
 		
 		-- i = 1, distance - 1 doesn't seem to always work.
   		for i = 0, distance do
-			local _x = i * step_x
-			local _y = i * step_y
-    		local _x1 = x1 + _x
-    		local _y1 = y1 + _y
-    		local _x2 = x2 + _x
-    		local _y2 = y2 + _y
-			self.framebuffer:writeLine(_x1, _y1, _x2, _y2, char)
+			local _x = i * xStep
+			local _y = i * yStep
+    		local x1 = _x1 + _x
+    		local y1 = _y1 + _y
+    		local x2 = _x2 + _x
+    		local y2 = _y2 + _y
+			self.framebuffer:writeLine(x1, y1, x2, y2, char)
   		end
 	end,
 
