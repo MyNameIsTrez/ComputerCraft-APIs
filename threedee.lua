@@ -283,7 +283,8 @@ ThreeDee = {
 			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
 			
 			for x = xStart, xEnd do
-				self.framebuffer:writeChar(x, y, '@')
+				--print('x: ' .. tostring(x + self.centerX) .. ', y: ' .. tostring(y + self.centerY))
+				self.framebuffer:writeChar(x + self.centerX, y + self.centerY, '@')
 			end
 		end
 	end,
@@ -313,7 +314,8 @@ ThreeDee = {
 			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
 			
 			for x = xStart, xEnd do
-				self.framebuffer:writeChar(x, y, '@')
+				--print('x: ' .. tostring(x + self.centerX) .. ', y: ' .. tostring(y + self.centerY))
+				self.framebuffer:writeChar(x + self.centerX, y + self.centerY, '@')
 			end
 		end
 	end,
