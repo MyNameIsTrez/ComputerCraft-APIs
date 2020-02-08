@@ -153,26 +153,33 @@ ThreeDee = {
 	end,
 	
 	drawFill = function(self)
-		-- FillConnections below here holds three corners for each side of the cube.
-		-- The first and third point have to be next to each other, because stepX and stepY can't be diagonal.
+		-- FillConnections holds two times three corners for each side of the cube.
 		local fillConnections = {
-			{1, 2, 4}, -- ABD. -- Front face.
-			--{1, 2, 5}, -- ABE. -- Top face.
-			--{2, 3, 6}, -- BCF. -- Right face.
-			--{3, 4, 7}, -- CDG. -- Bottom face.
-			--{1, 4, 5}, -- ADE. -- Left face.
-			--{6, 5, 7}  -- FEG. -- Back face. -- There's a reason it's not EFG - don't remember why. :(
+			{{1, 2, 4}, {2, 3, 4}}, -- Front face.
+			{{1, 2, 5}, {2, 5, 6}}, -- Top face.
+			{{2, 3, 6}, {3, 6, 7}}, -- Right face.
+			{{3, 4, 7}, {4, 7, 8}}, -- Bottom face.
+			{{1, 4, 5}, {4, 5, 8}}, -- Left face.
+			{{5, 6, 7}, {5, 7, 8}}  -- Back face.
 		}
 		
         for _, cc in ipairs(self.projectedCorners) do -- cc is cubeCorners.
-			for _, side in ipairs(fillConnections) do
-				local a, b, c = side[1], side[2], side[3] -- Get the three corners indices.
-				
-				local x1, y1 = cc[a].x, cc[a].y
-				local x2, y2 = cc[b].x, cc[b].y
-				local x3, y3 = cc[c].x, cc[c].y
-				
-				self:fill(x1, y1, x2, y2, x3, y3, '@')
+			--for _, side in ipairs(fillConnections) do
+			for i = 1, #fillConnections do
+				local side = fillConnections[i]
+				--for _, triangle in ipairs(side) do
+				for j = 1, #side do
+					local triangle = side[j]
+					local a, b, c = triangle[1], triangle[2], triangle[3]
+					
+					local x1, y1 = cc[a].x, cc[a].y
+					local x2, y2 = cc[b].x, cc[b].y
+					local x3, y3 = cc[c].x, cc[c].y
+					
+					local vertices = {cc[a], cc[b], cc[c]}
+					local char = self.chars[i * 2 + j]
+					self:drawFilledTriangle(vertices, char)
+				end
 			end
         end
 	end,
@@ -197,27 +204,7 @@ ThreeDee = {
     	end
 	end,
 	
-	fill = function(self, _x1, _y1, _x2, _y2, _x3, _y3, char)
-  		local xDiff = _x3 - _x1
-  		local yDiff = _y3 - _y1
-		
-  		local distance = math.sqrt(xDiff^2 + yDiff^2)
-  		local xStep = xDiff / distance
-  		local yStep = yDiff / distance
-		
-		-- i = 1, distance - 1 doesn't seem to always work.
-  		for i = 0, distance do
-			local _x = i * xStep
-			local _y = i * yStep
-    		local x1 = _x1 + _x
-    		local y1 = _y1 + _y
-    		local x2 = _x2 + _x
-    		local y2 = _y2 + _y
-			self.framebuffer:writeLine(x1, y1, x2, y2, char)
-  		end
-	end,
-	
-	drawFilledTriangle = function(self, vertices)
+	drawFilledTriangle = function(self, vertices, char)
 		-- Sort vertices, so v0.y <= v1.y <= v2.y.
 		table.sort(vertices, function(a, b) return a.y < b.y end)
 		
@@ -232,7 +219,7 @@ ThreeDee = {
 				v0 = v1
 				v1 = _v0
 			end
-			self:drawFlatTopTriangle(v0, v1, v2)
+			self:drawFlatTopTriangle(v0, v1, v2, char)
 		elseif (v1.y == v2.y) then -- Natural flat bottom.
 			-- Sort so v1 is on the left of v2.
 			if (v2.x < v1.x) then
@@ -240,7 +227,7 @@ ThreeDee = {
 				v1 = v2
 				v2 = _v1
 			end
-			self:drawFlatBottomTriangle(v0, v1, v2)
+			self:drawFlatBottomTriangle(v0, v1, v2, char)
 		else -- General triangle.
 			-- Find splitting vertex.
 			local alphaSplit = (v1.y - v0.y) / (v2.y - v0.y)
@@ -249,16 +236,16 @@ ThreeDee = {
 			local vi = v2:sub(v0):mul(alphaSplit):add(v0)
 			
 			if (v1.x < vi.x) then -- Major right.
-				self:drawFlatBottomTriangle(v0, v1, vi)
-				self:drawFlatTopTriangle(v1, vi, v2)
+				self:drawFlatBottomTriangle(v0, v1, vi, char)
+				self:drawFlatTopTriangle(v1, vi, v2, char)
 			else -- Major left.
-				self:drawFlatBottomTriangle(v0, vi, v1)
-				self:drawFlatTopTriangle(vi, v1, v2)
+				self:drawFlatBottomTriangle(v0, vi, v1, char)
+				self:drawFlatTopTriangle(vi, v1, v2, char)
 			end
 		end
 	end,
 	
-	drawFlatTopTriangle = function(self, v0, v1, v2)
+	drawFlatTopTriangle = function(self, v0, v1, v2, char)
 		-- Calculate inverse slopes of left and right lines.
   		-- Note it's dx/dy, not dy/dx, to prevent div by 0.
   		-- This works, because there are no perfectly horizontal lines for the left and right triangle edges.
@@ -283,12 +270,12 @@ ThreeDee = {
 			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
 			
 			for x = xStart, xEnd - 1 do -- Draw up to but not including xEnd.
-				self.framebuffer:writeChar(x + self.centerX, y + self.centerY, '@')
+				self.framebuffer:writeChar(x, y, char)
 			end
 		end
 	end,
 	
-	drawFlatBottomTriangle = function(self, v0, v1, v2)
+	drawFlatBottomTriangle = function(self, v0, v1, v2, char)
 		-- Calculate inverse slopes of left and right lines.
   		-- Note it's dx/dy, not dy/dx, to prevent div by 0.
   		-- This works, because there are no perfectly horizontal lines for the left and right triangle edges.
@@ -312,8 +299,8 @@ ThreeDee = {
 			local xStart = math.ceil(px0 - 0.5)
 			local xEnd = math.ceil(px1 - 0.5) -- The pixel AFTER the last pixel drawn.
 			
-			for x = xStart, xEnd - 1 do -- Draw up to but not including xEnd.
-				self.framebuffer:writeChar(x + self.centerX, y + self.centerY, '@')
+			for x = xStart, xEnd - 1 do -- Draw up to but not including xEnd.=
+				self.framebuffer:writeChar(x, y, char)
 			end
 		end
 	end,
