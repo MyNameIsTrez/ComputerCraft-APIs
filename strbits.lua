@@ -13,7 +13,7 @@ function strToBits(str)
 	return ret
 end
 
--- Same speed as the same function name above.
+-- Same speed and equivalent to the function above.
 --[[
 function strToBits(str)
     local bitTable = {}
