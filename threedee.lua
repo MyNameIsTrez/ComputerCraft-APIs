@@ -116,41 +116,6 @@ ThreeDee = {
 			end
 		end
 	end,
-   
-    map = function(self, value, minVar, maxVar, minResult, maxResult)
-        local a = (value - minVar) / (maxVar - minVar)
-        return (1 - a) * minResult + a * maxResult
-    end,
-	
-	drawCorners = function(self)
-		for _, cube in ipairs(self.projectedCorners) do
-			--for _, v in ipairs(cube) do
-			for i = 1, #cube do
-				local v = cube[i]
-				--local char = self.chars[math.floor(self:map(v.z, -100, 100, #self.chars, 1) + 0.5)]
-				--local char = 'c'
-				local char = tostring(i)
-				self.framebuffer:writeChar(v.x, v.y, char)
-				--self.framebuffer:writeChar(v.x + 1, v.y, ' (' .. tostring(math.floor(v.x + 0.5)) .. ',' .. tostring(math.floor(v.y + 0.5)) .. ',' .. tostring(v.z) .. ')')
-			end
-		end
-	end,
-
-	connectCorners = function(self, cube, i, j)
-		local a, b = cube[i], cube[j] -- Get two corners.
-		self.framebuffer:writeLine(a.x, a.y, b.x, b.y, self.connectionChar)
-	end,
-	
-	-- Draw lines between corners.
-	drawConnections = function(self)
-		for _, cube in ipairs(self.projectedCorners) do
-			for j = 1, 4 do -- 4 * 3 makes for the 12 edges of a cube.
-				self:connectCorners(cube, j, j % 4 + 1) -- Four front edges.
-				self:connectCorners(cube, j, j + 4) -- Four middle edges.
-				self:connectCorners(cube, j + 4, j % 4 + 5) -- Four back edges.
-			end
-		end
-	end,
 	
 	drawFill = function(self)
 		-- FillConnections holds two times three corners for each side of the cube.
@@ -182,26 +147,6 @@ ThreeDee = {
 				end
 			end
         end
-	end,
-	
-	moveCamera = function(self, key)
-    	if (key == 'space') then
-			self.rotation.x = self.rotation.x - 0.1
-    	elseif (key == 'leftShift') then
-			self.rotation.x = self.rotation.x + 0.1
-		elseif (key == 'a') then
-			self.rotation.y = self.rotation.y - 0.1
-    	elseif (key == 'd') then
-			self.rotation.y = self.rotation.y + 0.1
-		elseif (key == 'q') then
-			self.rotation.z = self.rotation.z - 0.1
-    	elseif (key == 'e') then
-			self.rotation.z = self.rotation.z + 0.1
-		elseif (key == 'w') then
-			self.distance = self.distance - 0.1
-    	elseif (key == 's') then
-			self.distance = self.distance + 0.1
-    	end
 	end,
 	
 	drawFilledTriangle = function(self, vertices, char)
@@ -303,6 +248,26 @@ ThreeDee = {
 				self.framebuffer:writeChar(x, y, char)
 			end
 		end
+	end,
+	
+	moveCamera = function(self, key)
+    	if (key == 'space') then
+			self.rotation.x = self.rotation.x - 0.1
+    	elseif (key == 'leftShift') then
+			self.rotation.x = self.rotation.x + 0.1
+		elseif (key == 'a') then
+			self.rotation.y = self.rotation.y - 0.1
+    	elseif (key == 'd') then
+			self.rotation.y = self.rotation.y + 0.1
+		elseif (key == 'q') then
+			self.rotation.z = self.rotation.z - 0.1
+    	elseif (key == 'e') then
+			self.rotation.z = self.rotation.z + 0.1
+		elseif (key == 'w') then
+			self.distance = self.distance - 0.1
+    	elseif (key == 's') then
+			self.distance = self.distance + 0.1
+    	end
 	end,
 
 }
