@@ -133,28 +133,43 @@ ThreeDee = {
 				self.projectedCubes[i][j] = projectedVector
 			end
 			
+			local projectedCube = self.projectedCubes[i]
 			self.cubesCullFlags[i] = {}
 			
 			for j = 1, 6 do
 				self.cubesCullFlags[i][j] = {}
 				for k = 1, 2 do
-					local cull = false
-					self.cubesCullFlags[i][j][k] = cull
+					local triangle = self.fillConnections[j][k]
+					local ai, bi, ci = triangle[1], triangle[2], triangle[3]
+					local v0, v1, v2 = projectedCube[ai], projectedCube[bi], projectedCube[ci]
+					
+					-- (v1 - v0) cross (v2 - v0) dot v0 >= 0
+					local a = v1:sub(v0)
+					local b = v2:sub(v0)
+					local notNormalizedNormal = a:cross(b)
+					write('notNormalizedNormal: ')
+					print(notNormalizedNormal)
+					write('v0: ')
+					print(v0)
+					local cull = notNormalizedNormal:dot(v0)
+					write('cull: ')
+					print(cull)
+					self.cubesCullFlags[i][j][k] = cull >= 0
 				end
 			end
 		end
-		--cf.printTable(self.cubesCullFlags)
+		cf.printTable(self.cubesCullFlags)
 	end,
 	
 	drawFill = function(self)
 		for i = 1, #self.cubesCullFlags do
+			local projectedCube = self.projectedCubes[i]
 			for j = 1, 6 do
 				for k = 1, 2 do
 					local cull = self.cubesCullFlags[i][j][k]
 					if not cull then
 						local triangle = self.fillConnections[j][k]
 						local ai, bi, ci = triangle[1], triangle[2], triangle[3]
-						local projectedCube = self.projectedCubes[i]
 						local vertices = {
 							projectedCube[ai],
 							projectedCube[bi],
