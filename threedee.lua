@@ -54,18 +54,19 @@ ThreeDee = {
 	
 	setCubesCorners = function(self, cubesCoords)
 		for i = 1, #cubesCoords do
-			local cc = cubesCoords[i]
+			local cC = cubesCoords[i] -- cC means cubeCoords.
+			
 			self.cubesCorners[i] = {}
 			
-			self.cubesCorners[i][1] = vector.new(-0.5+cc.x, -0.5+cc.y, -0.5+cc.z)
-			self.cubesCorners[i][2] = vector.new( 0.5+cc.x, -0.5+cc.y, -0.5+cc.z)
-			self.cubesCorners[i][3] = vector.new( 0.5+cc.x,  0.5+cc.y, -0.5+cc.z)
-			self.cubesCorners[i][4] = vector.new(-0.5+cc.x,  0.5+cc.y, -0.5+cc.z)
+			self.cubesCorners[i][1] = vector.new(-0.5+cC.x, -0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[i][2] = vector.new( 0.5+cC.x, -0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[i][3] = vector.new( 0.5+cC.x,  0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[i][4] = vector.new(-0.5+cC.x,  0.5+cC.y, -0.5+cC.z)
 			
-			self.cubesCorners[i][5] = vector.new(-0.5+cc.x, -0.5+cc.y, 0.5+cc.z)
-			self.cubesCorners[i][6] = vector.new( 0.5+cc.x, -0.5+cc.y, 0.5+cc.z)
-			self.cubesCorners[i][7] = vector.new( 0.5+cc.x,  0.5+cc.y, 0.5+cc.z)
-			self.cubesCorners[i][8] = vector.new(-0.5+cc.x,  0.5+cc.y, 0.5+cc.z)
+			self.cubesCorners[i][5] = vector.new(-0.5+cC.x, -0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[i][6] = vector.new( 0.5+cC.x, -0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[i][7] = vector.new( 0.5+cC.x,  0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[i][8] = vector.new(-0.5+cC.x,  0.5+cC.y,  0.5+cC.z)
 		end
 	end,
 	
@@ -90,27 +91,32 @@ ThreeDee = {
 		for i = 1, #self.cubesCorners do
 			self.projectedCorners[i] = {}
 			local cubeCorners = self.cubesCorners[i]
+			
 			for j = 1, #cubeCorners do
 				local v = cubeCorners[j]
 				local m = matrix.vecToMat(v)
-				local rotated = matrix.matMul(rotationX, m)
+				
+				local rotated
+				rotated = matrix.matMul(rotationX, m)
 				rotated = matrix.matMul(rotationY, rotated)
 				rotated = matrix.matMul(rotationZ, rotated)
 				
-				local z = 1 / (self.distance - rotated[3][1])
+				local rotatedZ = rotated[3][1]
+				local z = 1 / (self.distance - rotatedZ)
 				local projection = {
 					{z, 0, 0},
 					{0, z, 0},
-					--{0, 0, z} -- Not sure if this '{0, 0, z}' works.
+					--{0, 0, z} -- Not sure if this belongs here.
 				}
 				
 				local projectedMatrix = matrix.matMul(projection, rotated)
 				local projectedVector = matrix.matToVec(projectedMatrix)
 				
-				-- Stretch x by 50%, because characters are 6:9 pixels on the screen.				
+				-- HARD CODING MULTIPLYING BY 100 HERE IS BAD!
+				-- Stretch x by 50%, because characters are 6:9 pixels on the screen.
 				projectedVector.x = self.centerX + projectedVector.x * 100 * 1.5
 				projectedVector.y = self.centerY + projectedVector.y * 100
-				--projectedVector.z = projectedVector.z -- Not sure if this works.
+				--projectedVector.z = projectedVector.z -- Not sure if this belongs here.
 				
 				self.projectedCorners[i][j] = projectedVector
 			end
@@ -128,20 +134,15 @@ ThreeDee = {
 			{{5, 6, 7}, {5, 7, 8}}  -- Back face.
 		}
 		
-        for _, cc in ipairs(self.projectedCorners) do -- cc is cubeCorners.
+        for _, cC in ipairs(self.projectedCorners) do -- cC is cubeCorners.
 			--for _, side in ipairs(fillConnections) do
 			for i = 1, #fillConnections do
 				local side = fillConnections[i]
 				--for _, triangle in ipairs(side) do
 				for j = 1, #side do
 					local triangle = side[j]
-					local a, b, c = triangle[1], triangle[2], triangle[3]
-					
-					local x1, y1 = cc[a].x, cc[a].y
-					local x2, y2 = cc[b].x, cc[b].y
-					local x3, y3 = cc[c].x, cc[c].y
-					
-					local vertices = {cc[a], cc[b], cc[c]}
+					local ai, bi, ci = triangle[1], triangle[2], triangle[3]
+					local vertices = {cC[ai], cC[bi], cC[ci]}
 					local char = self.chars[i * 2 + j]
 					self:drawFilledTriangle(vertices, char)
 				end
