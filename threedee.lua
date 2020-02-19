@@ -43,6 +43,17 @@ ThreeDee = {
 			cubesCorners = {},
 			
 			projectedCubes = {},
+			
+			cubesCullFlags = {},
+			
+			fillConnections = {
+				{ {1, 2, 4}, {2, 3, 4} }, -- Front face.
+				{ {1, 2, 5}, {2, 5, 6} }, -- Top face.
+				{ {2, 3, 6}, {3, 6, 7} }, -- Right face.
+				{ {3, 4, 7}, {4, 7, 8} }, -- Bottom face.
+				{ {1, 4, 5}, {4, 5, 8} }, -- Left face.
+				{ {5, 6, 7}, {5, 7, 8} }  -- Back face.
+			},
         }
         
         setmetatable(self, {__index = ThreeDee})
@@ -72,6 +83,7 @@ ThreeDee = {
 	
 	setProjectedCubes = function(self)
 		local rotation = self.rotation
+		
 		local rotationX = {
 			{ 1, 0, 0 },
 			{ 0, math.cos(rotation.x), -math.sin(rotation.x) },
@@ -121,35 +133,39 @@ ThreeDee = {
 				self.projectedCubes[i][j] = projectedVector
 			end
 			
+			self.cubesCullFlags[i] = {}
 			
+			for j = 1, 6 do
+				self.cubesCullFlags[i][j] = {}
+				for k = 1, 2 do
+					local cull = false
+					self.cubesCullFlags[i][j][k] = cull
+				end
+			end
 		end
+		--cf.printTable(self.cubesCullFlags)
 	end,
 	
 	drawFill = function(self)
-		-- FillConnections holds two times three corners for each side of the cube.
-		local fillConnections = {
-			{ {1, 2, 4}, {2, 3, 4} }, -- Front face.
-			{ {1, 2, 5}, {2, 5, 6} }, -- Top face.
-			{ {2, 3, 6}, {3, 6, 7} }, -- Right face.
-			{ {3, 4, 7}, {4, 7, 8} }, -- Bottom face.
-			{ {1, 4, 5}, {4, 5, 8} }, -- Left face.
-			{ {5, 6, 7}, {5, 7, 8} }  -- Back face.
-		}
-		
-        for _, pC in ipairs(self.projectedCubes) do -- pC is projectedCube.
-			--for _, side in ipairs(fillConnections) do
-			for i = 1, #fillConnections do
-				local sideConnections = fillConnections[i]
-				--for _, triangle in ipairs(sideConnections) do
-				for j = 1, #sideConnections do
-					local triangle = sideConnections[j]
-					local ai, bi, ci = triangle[1], triangle[2], triangle[3]
-					local vertices = { pC[ai], pC[bi], pC[ci] }
-					local char = self.chars[i * 2 + j]
-					self:drawFilledTriangle(vertices, char)
+		for i = 1, #self.cubesCullFlags do
+			for j = 1, 6 do
+				for k = 1, 2 do
+					local cull = self.cubesCullFlags[i][j][k]
+					if not cull then
+						local triangle = self.fillConnections[j][k]
+						local ai, bi, ci = triangle[1], triangle[2], triangle[3]
+						local projectedCube = self.projectedCubes[i]
+						local vertices = {
+							projectedCube[ai],
+							projectedCube[bi],
+							projectedCube[ci]
+						}
+						local char = self.chars[j * 2 + k]
+						self:drawFilledTriangle(vertices, char)
+					end
 				end
 			end
-        end
+		end
 	end,
 	
 	drawFilledTriangle = function(self, vertices, char)
