@@ -120,6 +120,8 @@ ThreeDee = {
 				
 				self.projectedCubes[i][j] = projectedVector
 			end
+			
+			
 		end
 	end,
 	
@@ -134,13 +136,13 @@ ThreeDee = {
 			{ {5, 6, 7}, {5, 7, 8} }  -- Back face.
 		}
 		
-        for _, pC in ipairs(self.projectedCubes) do -- pC is projectedCubes.
+        for _, pC in ipairs(self.projectedCubes) do -- pC is projectedCube.
 			--for _, side in ipairs(fillConnections) do
 			for i = 1, #fillConnections do
-				local side = fillConnections[i]
-				--for _, triangle in ipairs(side) do
-				for j = 1, #side do
-					local triangle = side[j]
+				local sideConnections = fillConnections[i]
+				--for _, triangle in ipairs(sideConnections) do
+				for j = 1, #sideConnections do
+					local triangle = sideConnections[j]
 					local ai, bi, ci = triangle[1], triangle[2], triangle[3]
 					local vertices = { pC[ai], pC[bi], pC[ci] }
 					local char = self.chars[i * 2 + j]
