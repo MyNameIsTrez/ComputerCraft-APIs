@@ -42,7 +42,7 @@ ThreeDee = {
 			
 			cubesCorners = {},
 			
-			projectedCorners = {},
+			projectedCubes = {},
         }
         
         setmetatable(self, {__index = ThreeDee})
@@ -70,7 +70,7 @@ ThreeDee = {
 		end
 	end,
 	
-	setProjectedCorners = function(self)
+	setProjectedCubes = function(self)
 		local rotation = self.rotation
 		local rotationX = {
 			{ 1, 0, 0 },
@@ -89,7 +89,7 @@ ThreeDee = {
 		}
 		
 		for i = 1, #self.cubesCorners do
-			self.projectedCorners[i] = {}
+			self.projectedCubes[i] = {}
 			local cubeCorners = self.cubesCorners[i]
 			
 			for j = 1, #cubeCorners do
@@ -104,9 +104,9 @@ ThreeDee = {
 				local rotatedZ = rotated[3][1]
 				local z = 1 / (self.distance - rotatedZ)
 				local projection = {
-					{z, 0, 0},
-					{0, z, 0},
-					--{0, 0, z} -- Not sure if this belongs here.
+					{ z, 0, 0 },
+					{ 0, z, 0 },
+					--{ 0, 0, z } -- Not sure if this belongs here.
 				}
 				
 				local projectedMatrix = matrix.matMul(projection, rotated)
@@ -118,7 +118,7 @@ ThreeDee = {
 				projectedVector.y = self.centerY + projectedVector.y * 100
 				--projectedVector.z = projectedVector.z -- Not sure if this belongs here.
 				
-				self.projectedCorners[i][j] = projectedVector
+				self.projectedCubes[i][j] = projectedVector
 			end
 		end
 	end,
@@ -126,15 +126,15 @@ ThreeDee = {
 	drawFill = function(self)
 		-- FillConnections holds two times three corners for each side of the cube.
 		local fillConnections = {
-			{{1, 2, 4}, {2, 3, 4}}, -- Front face.
-			{{1, 2, 5}, {2, 5, 6}}, -- Top face.
-			{{2, 3, 6}, {3, 6, 7}}, -- Right face.
-			{{3, 4, 7}, {4, 7, 8}}, -- Bottom face.
-			{{1, 4, 5}, {4, 5, 8}}, -- Left face.
-			{{5, 6, 7}, {5, 7, 8}}  -- Back face.
+			{ {1, 2, 4}, {2, 3, 4} }, -- Front face.
+			{ {1, 2, 5}, {2, 5, 6} }, -- Top face.
+			{ {2, 3, 6}, {3, 6, 7} }, -- Right face.
+			{ {3, 4, 7}, {4, 7, 8} }, -- Bottom face.
+			{ {1, 4, 5}, {4, 5, 8} }, -- Left face.
+			{ {5, 6, 7}, {5, 7, 8} }  -- Back face.
 		}
 		
-        for _, cC in ipairs(self.projectedCorners) do -- cC is cubeCorners.
+        for _, pC in ipairs(self.projectedCubes) do -- pC is projectedCubes.
 			--for _, side in ipairs(fillConnections) do
 			for i = 1, #fillConnections do
 				local side = fillConnections[i]
@@ -142,7 +142,7 @@ ThreeDee = {
 				for j = 1, #side do
 					local triangle = side[j]
 					local ai, bi, ci = triangle[1], triangle[2], triangle[3]
-					local vertices = {cC[ai], cC[bi], cC[ci]}
+					local vertices = { pC[ai], pC[bi], pC[ci] }
 					local char = self.chars[i * 2 + j]
 					self:drawFilledTriangle(vertices, char)
 				end
