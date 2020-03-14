@@ -149,15 +149,14 @@ Animation = {
 			local maxFrames = frameOffset + frameCountToFile
 
 			for f = minFrames, maxFrames do
-				local string = '\ncf.frameWrite("' .. self.unpackedOptimizedFrames[f] .. '")'..
-				'\nos.queueEvent("r")'..
-				'\nos.pullEvent("r")'
+				local string = '\ncf.frameWrite("' .. self.unpackedOptimizedFrames[f] .. '")'
 
 				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
 				if cfg.frameSleeping and cfg.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
-					string = string..
-					'\nsleep(' .. tostring(cfg.frameSleep) .. ')'
+					string = string .. '\nsleep(' .. tostring(cfg.frameSleep) .. ')'
 					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
+				else
+					string = string .. '\nos.queueEvent("r")' .. '\nos.pullEvent("r")'
 				end
 				
 				handle:write(string)
