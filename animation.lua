@@ -93,11 +93,12 @@ Animation = {
 	end,
 
 	downloadAnimationFile = function(self, path, fileDimensions)
-		self:printProgress('Fetching animation file from GitHub...')
-
+		local cursorX, cursorY = term.getCursorPos()
 		local path = path .. '/data'
 		
 		for i = 1, self.info.data_files do
+			self:printProgress('Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub...', cursorX, cursorY)
+
 			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/' .. i .. '.txt'
 			
 			https.downloadFile(url, path, i)
@@ -125,14 +126,14 @@ Animation = {
 		-- 	error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
 		-- end
 
-		self:printProgress('Opening animation file...')
+		self:printProgress('Opening data files...')
 
 		cf.tryYield()
 		
 		local cursorX, cursorY = term.getCursorPos()
 		local i = 1
 
-		self.frameStrings = {}
+		frameStrings = {}
 
 		for j = 1, self.info.data_files do
 			local path2 = path .. '/data/' .. tostring(j) .. '.txt'
@@ -141,23 +142,24 @@ Animation = {
 			-- self.frameStrings = {}
 
 			for lineStr in file.readLine do
-				table.insert(self.frameStrings, lineStr)
+				frameStrings[i] = lineStr
 
 				if i % 1000 == 0 then
-					self:printProgress('Gotten '..tostring(i)..' frames...', cursorX, cursorY)
+					cf.tryYield()
+					self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 				end
 
 				i = i + 1
-
-				cf.yield()
 			end
 			
 			file:close()
 			cf.tryYield()
 		end
+
+		self.frameStrings = frameStrings
 		
 		-- For the final frame.
-		-- self:printProgress('Gotten '..tostring(i - 2)..' frames...', cursorX, cursorY)
+		self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 	end,
 
 	createGeneratedCodeFolder = function(self)
@@ -181,8 +183,8 @@ Animation = {
 		local i = 1
 
 		local framesToSleep = {}
-		for v = cfg.frameSleepSkipping, self.info.frame_count, cfg.frameSleepSkipping do
-			table.insert(framesToSleep, cf.round(v))
+		for v = 1, self.info.frame_count, cfg.frameSleepSkipping do
+			table.insert(framesToSleep, math.floor(v + 0.5))
 		end
 		local frameSleepSkippingIndex = 1
 
@@ -196,31 +198,70 @@ Animation = {
 			local minFrames = frameOffset + 1
 			local maxFrames = frameOffset + frameCountToFile
 
+			-- I expect handle:write() to be an expensive operation, so that's why I chose to only write to it every 1000 frames.
+			local strTable = {}
+			local k = 1
+
 			for f = minFrames, maxFrames do
-				local str = '\ncf.frameWrite("' .. self.frameStrings[f] .. '")'
+				-- Prevents the first line of each generated code file being empty.
+				if k > 1 then
+					strTable[k] = '\n'
+					k = k + 1
+				end
+				
+				strTable[k] = 'cf.frameWrite("'
+				k = k + 1
+				strTable[k] = self.frameStrings[f]
+				k = k + 1
+				strTable[k] = '")'
+				k = k + 1
 
 				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
 				if cfg.frameSleeping and cfg.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
-					str = str .. '\nsleep(' .. tostring(cfg.frameSleep) .. ')'
+					strTable[k] = '\nsleep('
+					k = k + 1
+					strTable[k] = tostring(cfg.frameSleep)
+					k = k + 1
+					strTable[k] = ')'
+					k = k + 1
 					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
 				else
-					str = str .. '\nos.queueEvent("r")' .. '\nos.pullEvent("r")'
+					strTable[k] = '\nos.queueEvent("y")'
+					k = k + 1
+					strTable[k] = '\nos.pullEvent("y")'
+					k = k + 1
 				end
 				
-				handle:write(str)
-				
 				if i % 1000 == 0 or i == self.info.frame_count then
+					cf.tryYield()
+					
+					handle:write(table.concat(strTable))
+					strTable = {}
+					k = 1
+
 					local str = 'Generated '..tostring(i)..'/'..tostring(self.info.frame_count)..' frames...'
 					self:printProgress(str, cursorX, cursorY)
 				end
+
 				i = i + 1
-				
-				cf.tryYield()
 			end
 			
 			handle:close()
 			
 			cf.tryYield()
+		end
+	end,
+
+	countDown = function(self)
+		local cursorX, cursorY = term.getCursorPos()
+
+		if cfg.countDown > 0 then
+			for i = 1, cfg.countDown do
+				self:printProgress('Playing animation in ' .. tostring(cfg.countDown - i + 1) .. '...', cursorX, cursorY)
+				sleep(1)
+			end
+		else
+			self:printProgress('Playing animation...', cursorX, cursorY)
 		end
 	end,
 
@@ -240,6 +281,7 @@ Animation = {
 	end,
 
 	_playAnimation = function(self, len)
+		self:countDown()
 		for i = 1, len do
 			if cfg.playAnimationBool then
 				self.passedShell.run('/.generatedCodeFiles/'..tostring(i))
@@ -248,9 +290,7 @@ Animation = {
 		cf.tryYield()
 	end,
 
-	playAnimation = function(self, loop)
-		self:printProgress('Playing animation...')
-		
+	playAnimation = function(self, loop)		
 		local len = #fs.list('.generatedCodeFiles')
 
 		if loop and self.info.frame_count > 1 then
