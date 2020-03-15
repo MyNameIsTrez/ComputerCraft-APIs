@@ -27,7 +27,7 @@ Animation = {
 		local startingValues = {
 			passedShell = shell,
 			frameCount,
-			unpackedOptimizedFrames = {},
+			frameStrings = {},
 			structure = https.getStructure(),
 			info,
 		}
@@ -81,15 +81,9 @@ Animation = {
 		return combined
 	end,
 
-	downloadAnimationInfo = function(self, folder, fileName)
-		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. folder .. '/' .. fileName .. '/info.txt'
+	downloadAnimationInfo = function(self, path)
+		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/info.txt'
 		local str = https.get(url)
-
-		local path = folder .. '/' .. fileName
-
-		if not fs.exists(path) then
-			fs.makeDir(path)
-		end
 
 		local handle = io.open(path .. '/info.txt', 'w')
 		handle:write(str)
@@ -98,10 +92,10 @@ Animation = {
 		self.info = self:stringToTable(str)
 	end,
 
-	downloadAnimationFile = function(self, folder, fileName, fileDimensions)
+	downloadAnimationFile = function(self, path, fileDimensions)
 		self:printProgress('Fetching animation file from GitHub...')
 
-		local path = folder .. '/' .. fileName .. '/data'
+		local path = path .. '/data'
 		
 		for i = 1, self.info.data_files do
 			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/' .. i .. '.txt'
@@ -110,51 +104,60 @@ Animation = {
 		end
 	end,
 
-	getSelectedAnimationData = function(self, fileName, fileDimensions, folder)
-		local fileExists = fs.exists(folder .. '/' .. fileName)
+	getSelectedAnimationData = function(self, path, fileDimensions, folder)
+		local fileExists = fs.exists(path)
 
 		if not fileExists then
-			self:downloadAnimationInfo(folder, fileName)
-			self:downloadAnimationFile(folder, fileName, fileDimensions)
+			if not fs.exists(path) then
+				fs.makeDir(path)
+			end
+			
+			self:downloadAnimationInfo(path)
+			self:downloadAnimationFile(path, fileDimensions)
+		else
+			local str = fs.open(path .. '/info.txt', 'r').readAll()
+			self.info = self:stringToTable(str)
 		end
+
+		-- local file = fs.open(path .. '.txt', 'r')
 		
-		local file = fs.open(folder .. '/' .. fileName .. '.txt', 'r')
-		
-		if not file then
-			error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
-		end
+		-- if not file then
+		-- 	error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
+		-- end
 
 		self:printProgress('Opening animation file...')
 
 		cf.tryYield()
 		
 		local cursorX, cursorY = term.getCursorPos()
-		local stringTab = {}
 		local i = 1
 
-		for lineStr in file.readLine do
-			table.insert(stringTab, lineStr)
+		self.frameStrings = {}
 
-			if i % 1000 == 0 then
-				self:printProgress('Gotten '..tostring(i)..' frames...', cursorX, cursorY)
+		for j = 1, self.info.data_files do
+			local path2 = path .. '/data/' .. tostring(j) .. '.txt'
+			local file = fs.open(path2, 'r')
+
+			-- self.frameStrings = {}
+
+			for lineStr in file.readLine do
+				table.insert(self.frameStrings, lineStr)
+
+				if i % 1000 == 0 then
+					self:printProgress('Gotten '..tostring(i)..' frames...', cursorX, cursorY)
+				end
+
+				i = i + 1
+
+				cf.yield()
 			end
-			i = i + 1
-
-			cf.yield()
+			
+			file:close()
+			cf.tryYield()
 		end
 		
 		-- For the final frame.
-		self:printProgress('Gotten '..tostring(i - 2)..' frames...', cursorX, cursorY)
-		
-		file:close()
-		cf.tryYield()
-
-		-- The general information data can be removed, so only the frames are left.
-		table.remove(stringTab, #stringTab)
-		local optimizedFrames = stringTab
-		cf.tryYield()
-		
-		self.unpackedOptimizedFrames = optimizedFrames
+		-- self:printProgress('Gotten '..tostring(i - 2)..' frames...', cursorX, cursorY)
 	end,
 
 	createGeneratedCodeFolder = function(self)
@@ -170,7 +173,7 @@ Animation = {
 	end,
 
 	dataToGeneratedCode = function(self)
-		whileLoop = self.info.frame_count > 1 and cfg.loop
+		-- local whileLoop = self.info.frame_count > 1 and cfg.loop
 		
 		local numberOfNeededFiles = math.ceil(self.info.frame_count / cfg.maxFramesPerGeneratedCodeFile)
 
@@ -194,7 +197,7 @@ Animation = {
 			local maxFrames = frameOffset + frameCountToFile
 
 			for f = minFrames, maxFrames do
-				local str = '\ncf.frameWrite("' .. self.unpackedOptimizedFrames[f] .. '")'
+				local str = '\ncf.frameWrite("' .. self.frameStrings[f] .. '")'
 
 				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
 				if cfg.frameSleeping and cfg.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
@@ -225,7 +228,10 @@ Animation = {
 
 	loadAnimation = function(self, fileName, fileDimensions, folder)
 		if not fileName then error('fileName is nil, you need to enter the file name that you want to load.') end
-		self:getSelectedAnimationData(fileName, fileDimensions, folder)
+
+		local path = folder .. '/' .. fileName
+
+		self:getSelectedAnimationData(path, fileDimensions, folder)
 		cf.tryYield()
 		
 		self:createGeneratedCodeFolder()
