@@ -224,6 +224,7 @@ Animation = {
 					k = k + 1
 					strTable[k] = ')'
 					k = k + 1
+					
 					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
 				else
 					strTable[k] = '\nos.queueEvent("y")'
@@ -252,16 +253,12 @@ Animation = {
 		end
 	end,
 
-	countDown = function(self)
+	countDown = function(self, countDown)
 		local cursorX, cursorY = term.getCursorPos()
 
-		if cfg.countDown > 0 then
-			for i = 1, cfg.countDown do
-				self:printProgress('Playing animation in ' .. tostring(cfg.countDown - i + 1) .. '...', cursorX, cursorY)
-				sleep(1)
-			end
-		else
-			self:printProgress('Playing animation...', cursorX, cursorY)
+		for i = 1, cfg.countDown do
+			self:printProgress('Playing animation in ' .. tostring(cfg.countDown - i + 1) .. '...', cursorX, cursorY)
+			sleep(1)
 		end
 	end,
 
@@ -280,23 +277,30 @@ Animation = {
 		cf.tryYield()
 	end,
 
-	_playAnimation = function(self, len)
-		self:countDown()
+	_playAnimation = function(self, len)		
 		for i = 1, len do
 			if cfg.playAnimationBool then
 				self.passedShell.run('/.generatedCodeFiles/'..tostring(i))
 			end
 		end
+
 		cf.tryYield()
 	end,
 
-	playAnimation = function(self, loop)		
+	playAnimation = function(self, loop)
+		local countDown = cfg.countDown
+		if countDown > 0 then
+			self:countDown(countDown)
+		else
+			self:printProgress('Playing animation...')
+		end
+
 		local len = #fs.list('.generatedCodeFiles')
 
 		if loop and self.info.frame_count > 1 then
 			while true do
 				if cfg.playAnimationBool then
-					self:_playAnimation(len)
+					self:_playAnimation(len, countDown)
 				else
 					sleep(1)
 				end
