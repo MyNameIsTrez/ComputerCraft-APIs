@@ -81,9 +81,16 @@ function getTable(url)
 	print('d6')
 	
 	for line in handle.readLine do
-		--print(line)
+		--if url ~= 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/structure.txt' then
+		--	print(line)
+		--	sleep(5)
+		--end
 		--sleep(0.5)
 		strTable[i] = line
+		--if i > 1 then
+		--	strTable[i] = '\n'
+		--	i = i + 1
+		--end
 		i = i + 1
 	end
 	os.queueEvent('yield')
@@ -104,9 +111,6 @@ function getTable(url)
 	os.queueEvent('yield')
 	os.pullEvent('yield')
 	print('d10')
-
-	print('Sleeping 5s...')
-	sleep(5)
 	
 	return strTable
 end
@@ -160,9 +164,8 @@ function downloadFile(url, folder, fileName)
 	print('d12')
 	
 	for _, str in ipairs(strTable) do
-		print(str)
-		sleep(0.1)
 		handle:write(str)
+		handle:write('\n')
 	end
 	os.queueEvent('yield')
 	os.pullEvent('yield')
