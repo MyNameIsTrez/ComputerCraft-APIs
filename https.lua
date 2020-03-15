@@ -104,6 +104,9 @@ function getTable(url)
 	os.queueEvent('yield')
 	os.pullEvent('yield')
 	print('d10')
+
+	print('Sleeping 5s...')
+	sleep(5)
 	
 	return strTable
 end
@@ -156,7 +159,9 @@ function downloadFile(url, folder, fileName)
 	os.pullEvent('yield')
 	print('d12')
 	
-	for str in ipairs(strTable) do
+	for _, str in ipairs(strTable) do
+		print(str)
+		sleep(0.1)
 		handle:write(str)
 	end
 	os.queueEvent('yield')
