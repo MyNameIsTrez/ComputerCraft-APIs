@@ -53,39 +53,17 @@ local randomQuotaUrlEnd = '&format=plain'
 -- Https ----------
 
 
-function getTable(url)
-	print('url: ' .. tostring(url))
-	os.queueEvent('yield')
-	os.pullEvent('yield')
-	print('d2')
-	
+function getTable(url)	
 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
-	print('d3')
 	os.queueEvent('yield')
 	os.pullEvent('yield')
 	
 	if handle == nil then error('https.get() didn\'t get a response back.') end
-	os.queueEvent('yield')
-	os.pullEvent('yield')
-	print('d4')
 	
 	local strTable = {}
 	local i = 1
-	os.queueEvent('yield')
-	os.pullEvent('yield')
-	print('d5')
-	
-	cf.printTable(handle)
-	os.queueEvent('yield')
-	os.pullEvent('yield')
-	print('d6')
 	
 	for line in handle.readLine do
-		--if url ~= 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/structure.txt' then
-		--	print(line)
-		--	sleep(5)
-		--end
-		--sleep(0.5)
 		strTable[i] = line
 		--if i > 1 then
 		--	strTable[i] = '\n'
@@ -95,22 +73,12 @@ function getTable(url)
 	end
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-	print('d7')
-
-	print('#strTable: ' .. tostring(#strTable))
-	os.queueEvent('yield')
-	os.pullEvent('yield')
-	print('d8')
 	
 	handle.close()
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-	print('d9')
 	
 	if strTable[1] == '404: Not Found' then error('https.get() 404: File not found.', 2) end
-	os.queueEvent('yield')
-	os.pullEvent('yield')
-	print('d10')
 	
 	return strTable
 end
@@ -151,17 +119,12 @@ function downloadFile(url, folder, fileName)
 		fs.makeDir(folder)
 	end
 	
-	print('d1')
-	os.queueEvent('yield')
-	os.pullEvent('yield')
     local strTable = https.getTable(url)
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-	print('d11')
 	local handle = io.open(folder .. '/' .. fileName .. '.txt', 'w')
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-	print('d12')
 	
 	for _, str in ipairs(strTable) do
 		handle:write(str)
@@ -169,12 +132,10 @@ function downloadFile(url, folder, fileName)
 	end
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-	print('d13')
 	
 	handle:close()
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-	print('d14')
 end
 
 function getStructure()

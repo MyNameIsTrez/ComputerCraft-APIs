@@ -97,12 +97,9 @@ Animation = {
 		local path = path .. '/data'
 		
 		for i = 1, self.info.data_files do
-			self:printProgress('Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub...')
-			--self:printProgress('Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub...', cursorX, cursorY)
+			self:printProgress('Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub...', cursorX, cursorY)
 
 			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/' .. i .. '.txt'
-			print('url: ' .. url)
-			
 			https.downloadFile(url, path, i)
 		end
 	end,
@@ -238,30 +235,23 @@ Animation = {
 				if i % 1000 == 0 or i == self.info.frame_count then
 					cf.tryYield()
 					
-					print('#strTable: ' .. tostring(#strTable))
-					-- cf.printTable(strTable)
 					local allAreStrings = true
 					for str in ipairs(strTable) do
 						if type(str) ~= 'string' then
 							allAreStrings = false
-							print(1)
-							print(type(str))
-							print(str)
-							print(2)
 						end
 					end
 					os.queueEvent('yield')
 					os.pullEvent('yield')
-					print('allAreStrings: ' .. tostring(allAreStrings))
-					os.queueEvent('yield')
-					os.pullEvent('yield')
+
 					local str = table.concat(strTable)
 					os.queueEvent('yield')
 					os.pullEvent('yield')
-					print('str: ' .. tostring(str))
+					
 					handle:write(str)
 					os.queueEvent('yield')
 					os.pullEvent('yield')
+
 					strTable = {}
 					k = 1
 
