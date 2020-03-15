@@ -53,26 +53,77 @@ local randomQuotaUrlEnd = '&format=plain'
 -- Https ----------
 
 
-function get(url)
+function getTable(url)
+	print('url: ' .. tostring(url))
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d2')
+	
 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
-	local string = handle.readAll()
+	print('d3')
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	
+	if handle == nil then error('https.get() didn\'t get a response back.') end
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d4')
+	
+	local strTable = {}
+	local i = 1
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d5')
+	
+	cf.printTable(handle)
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d6')
+	
+	for line in handle.readLine do
+		--print(line)
+		--sleep(0.5)
+		strTable[i] = line
+		i = i + 1
+	end
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d7')
+
+	print('#strTable: ' .. tostring(#strTable))
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d8')
+	
 	handle.close()
-	if string == '404: Not Found' then error('https.get() 404: File not found.', 2) end
-	return string
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d9')
+	
+	if strTable[1] == '404: Not Found' then error('https.get() 404: File not found.', 2) end
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d10')
+	
+	return strTable
+end
+
+function get(url)
+	return table.concat(getTable(url))
 end
 
 function post(url, data)
 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '", "body": "' .. json.encode(data) .. '"}' )
-	local string = handle.readAll()
+	local str = handle.readAll()
 	handle.close()
-	return string
+	return str
 end
 
 function request(data)
 	local handle = http.post(httpToHttpsUrl, json.encode(data))
-	local string = handle.readAll()
+	local str = handle.readAll()
 	handle.close()
-	return string
+	return str
 end
 
 
@@ -93,10 +144,29 @@ function downloadFile(url, folder, fileName)
 		fs.makeDir(folder)
 	end
 	
+	print('d1')
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+    local strTable = https.getTable(url)
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d11')
 	local handle = io.open(folder .. '/' .. fileName .. '.txt', 'w')
-    local str = https.get(url)
-	handle:write(str)
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d12')
+	
+	for str in ipairs(strTable) do
+		handle:write(str)
+	end
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d13')
+	
 	handle:close()
+	os.queueEvent('yield')
+	os.pullEvent('yield')
+	print('d14')
 end
 
 function getStructure()
