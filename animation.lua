@@ -83,22 +83,30 @@ Animation = {
 
 	downloadAnimationInfo = function(self, folder, fileName)
 		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. folder .. '/' .. fileName .. '/info.txt'
-
 		local str = https.get(url)
+
+		local path = folder .. '/' .. fileName
+
+		if not fs.exists(path) then
+			fs.makeDir(path)
+		end
+
+		local handle = io.open(path .. '/info.txt', 'w')
+		handle:write(str)
+		handle:close()
 		
 		self.info = self:stringToTable(str)
-		cf.printTable(self.info)
 	end,
 
 	downloadAnimationFile = function(self, folder, fileName, fileDimensions)
 		self:printProgress('Fetching animation file from GitHub...')
 
-		local temp = folder .. '/' .. fileName
+		local path = folder .. '/' .. fileName .. '/data'
 		
 		for i = 1, self.info.data_files do
-			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. temp .. '/' .. i .. '.txt'
+			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/' .. i .. '.txt'
 			
-			https.downloadFile(url, temp, i)
+			https.downloadFile(url, path, i)
 		end
 	end,
 
@@ -140,12 +148,6 @@ Animation = {
 		
 		file:close()
 		cf.tryYield()
-		
-		-- Get the file info, if the file was loaded from a local save.
-		-- if not fileInfo then fileInfo = stringTab[#stringTab] end
-		
-		-- local frameSearch = 'frame_count=(.-),'
-		-- fileInfo:gsub(frameSearch, function(count) self.frameCount = tonumber(count) end)
 
 		-- The general information data can be removed, so only the frames are left.
 		table.remove(stringTab, #stringTab)
@@ -168,15 +170,15 @@ Animation = {
 	end,
 
 	dataToGeneratedCode = function(self)
-		whileLoop = self.frameCount > 1 and cfg.loop
+		whileLoop = self.info.frame_count > 1 and cfg.loop
 		
-		local numberOfNeededFiles = math.ceil(self.frameCount / cfg.maxFramesPerGeneratedCodeFile)
+		local numberOfNeededFiles = math.ceil(self.info.frame_count / cfg.maxFramesPerGeneratedCodeFile)
 
 		local cursorX, cursorY = term.getCursorPos()
 		local i = 1
 
 		local framesToSleep = {}
-		for v = cfg.frameSleepSkipping, self.frameCount, cfg.frameSleepSkipping do
+		for v = cfg.frameSleepSkipping, self.info.frame_count, cfg.frameSleepSkipping do
 			table.insert(framesToSleep, cf.round(v))
 		end
 		local frameSleepSkippingIndex = 1
@@ -186,7 +188,7 @@ Animation = {
 
 			local frameOffset = (generatedCodeFileIndex - 1) * cfg.maxFramesPerGeneratedCodeFile
 
-			local frameCountToFile = math.min(self.frameCount - frameOffset, cfg.maxFramesPerGeneratedCodeFile)
+			local frameCountToFile = math.min(self.info.frame_count - frameOffset, cfg.maxFramesPerGeneratedCodeFile)
 
 			local minFrames = frameOffset + 1
 			local maxFrames = frameOffset + frameCountToFile
@@ -204,8 +206,8 @@ Animation = {
 				
 				handle:write(str)
 				
-				if i % 1000 == 0 or i == self.frameCount then
-					local str = 'Generated '..tostring(i)..'/'..tostring(self.frameCount)..' frames...'
+				if i % 1000 == 0 or i == self.info.frame_count then
+					local str = 'Generated '..tostring(i)..'/'..tostring(self.info.frame_count)..' frames...'
 					self:printProgress(str, cursorX, cursorY)
 				end
 				i = i + 1
@@ -245,7 +247,7 @@ Animation = {
 		
 		local len = #fs.list('.generatedCodeFiles')
 
-		if loop and self.frameCount > 1 then
+		if loop and self.info.frame_count > 1 then
 			while true do
 				if cfg.playAnimationBool then
 					self:_playAnimation(len)
