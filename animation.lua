@@ -95,12 +95,33 @@ Animation = {
 	downloadAnimationFile = function(self, path, fileDimensions)
 		local cursorX, cursorY = term.getCursorPos()
 		local path = path .. '/data'
-		
+
+		local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from GitHub. Calculating ETA...'
+		self:printProgress(str, cursorX, cursorY)
+
 		for i = 1, self.info.data_files do
-			self:printProgress('Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub...', cursorX, cursorY)
+			local timeStart = os.clock()
 
 			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/' .. i .. '.txt'
 			https.downloadFile(url, path, i)
+
+			local timeEnd = os.clock()
+
+			-- Print the ETA.
+			local filesLeft = self.info.data_files - i
+			local secondsLeft = (timeEnd - timeStart) * filesLeft
+			local seconds = math.floor(secondsLeft % 60)
+			local minutes = math.floor(secondsLeft / 60 % 60)
+			local hours   = math.floor(secondsLeft / 3600 % 60)
+
+			local eta = ' ( ' ..
+			(hours   < 10 and '0' or '') .. tostring(hours)   .. ':' ..
+			(minutes < 10 and '0' or '') .. tostring(minutes) .. ':' ..
+			(seconds < 10 and '0' or '') .. tostring(seconds) .. ' )'
+
+			local str = 'Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub.' .. eta .. '           '
+
+			self:printProgress(str, cursorX, cursorY)
 		end
 	end,
 
@@ -144,7 +165,7 @@ Animation = {
 				frameStrings[i] = lineStr
 
 				if i % 1000 == 0 then
-					cf.tryYield()
+					cf.yield()
 					self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 				end
 
