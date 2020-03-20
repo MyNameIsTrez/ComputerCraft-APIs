@@ -119,7 +119,7 @@ function downloadFile(url, folder, fileName)
 		fs.makeDir(folder)
 	end
 	
-    local strTable = https.getTable(url)
+    local strTable = getTable(url)
 	os.queueEvent('yield')
 	os.pullEvent('yield')
 	local handle = io.open(folder .. '/' .. fileName .. '.txt', 'w')
@@ -140,7 +140,7 @@ end
 
 function getStructure()
 	if not structure then
-    	local str = https.get(structureUrl)
+    	local str = get(structureUrl)
     	local fileLines = {}
     	str:gsub(delimiter, function(line) fileLines[#fileLines + 1] = textutils.unserialize(unicodify(line)) end)
 		

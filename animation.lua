@@ -119,6 +119,11 @@ Animation = {
 			(minutes < 10 and '0' or '') .. tostring(minutes) .. ':' ..
 			(seconds < 10 and '0' or '') .. tostring(seconds) .. ' )'
 
+			-- Prevents printing '8/7' for the last frame.
+			if i < self.info.data_files then
+				i = i + 1
+			end
+
 			local str = 'Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub.' .. eta .. '           '
 
 			self:printProgress(str, cursorX, cursorY)
@@ -209,7 +214,7 @@ Animation = {
 		local frameSleepSkippingIndex = 1
 
 		for generatedCodeFileIndex = 1, numberOfNeededFiles do
-			local handle = io.open('.generatedCodeFiles/'..generatedCodeFileIndex, 'w')
+			local handle = io.open('.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
 
 			local frameOffset = (generatedCodeFileIndex - 1) * cfg.maxFramesPerGeneratedCodeFile
 
@@ -253,9 +258,10 @@ Animation = {
 					k = k + 1
 				end
 				
-				if i % 1000 == 0 or i == self.info.frame_count then
+				if i % cfg.maxFramesPerGeneratedCodeFile == 0 or i == self.info.frame_count then
 					cf.tryYield()
 					
+					-- I don't remember why it's necessary to check this. Try removing this later.
 					local allAreStrings = true
 					for str in ipairs(strTable) do
 						if type(str) ~= 'string' then
@@ -297,8 +303,6 @@ Animation = {
 			sleep(1)
 		end
 	end,
-
-	-- CODE EXECUTION --------------------------------------------------------
 
 	loadAnimation = function(self, fileName, fileDimensions, folder)
 		if not fileName then error('fileName is nil, you need to enter the file name that you want to load.') end
