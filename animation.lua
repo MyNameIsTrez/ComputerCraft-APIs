@@ -81,20 +81,20 @@ Animation = {
 		return combined
 	end,
 
-	downloadAnimationInfo = function(self, path)
-		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/info.txt'
+	downloadAnimationInfo = function(self, gitHubPath, folder)
+		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubPath .. '/info.txt'
 		local str = https.get(url)
 
-		local handle = io.open(path .. '/info.txt', 'w')
+		local handle = io.open(folder .. gitHubPath .. '/info.txt', 'w')
 		handle:write(str)
 		handle:close()
 		
 		self.info = self:stringToTable(str)
 	end,
 
-	downloadAnimationFile = function(self, path, fileDimensions)
+	downloadAnimationFile = function(self, gitHubPath, fileDimensions, folder)
 		local cursorX, cursorY = term.getCursorPos()
-		local path = path .. '/data'
+		local gitHubDataPath = gitHubPath .. '/data'
 
 		local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from GitHub. Calculating ETA...'
 		self:printProgress(str, cursorX, cursorY)
@@ -102,8 +102,8 @@ Animation = {
 		for i = 1, self.info.data_files do
 			local timeStart = os.clock()
 
-			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. path .. '/' .. i .. '.txt'
-			https.downloadFile(url, path, i)
+			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubDataPath .. '/' .. i .. '.txt'
+			https.downloadFile(url, folder .. gitHubDataPath, i)
 
 			local timeEnd = os.clock()
 
@@ -130,22 +130,22 @@ Animation = {
 		end
 	end,
 
-	getSelectedAnimationData = function(self, path, fileDimensions, folder)
-		local fileExists = fs.exists(path)
+	getSelectedAnimationData = function(self, fileDimensions, gitHubPath, folder)
+		local fileExists = fs.exists(folder .. gitHubPath)
 
 		if not fileExists then
-			if not fs.exists(path) then
-				fs.makeDir(path)
+			if not fs.exists(folder .. gitHubPath) then
+				fs.makeDir(folder .. gitHubPath)
 			end
 			
-			self:downloadAnimationInfo(path)
-			self:downloadAnimationFile(path, fileDimensions)
+			self:downloadAnimationInfo(gitHubPath, folder)
+			self:downloadAnimationFile(gitHubPath, fileDimensions, folder)
 		else
-			local str = fs.open(path .. '/info.txt', 'r').readAll()
+			local str = fs.open(folder .. gitHubPath .. '/info.txt', 'r').readAll()
 			self.info = self:stringToTable(str)
 		end
 
-		-- local file = fs.open(path .. '.txt', 'r')
+		-- local file = fs.open(gitHubPath .. '.txt', 'r')
 		
 		-- if not file then
 		-- 	error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
@@ -161,7 +161,7 @@ Animation = {
 		frameStrings = {}
 
 		for j = 1, self.info.data_files do
-			local path2 = path .. '/data/' .. tostring(j) .. '.txt'
+			local path2 = folder .. gitHubPath .. '/data/' .. tostring(j) .. '.txt'
 			local file = fs.open(path2, 'r')
 
 			-- self.frameStrings = {}
@@ -304,12 +304,12 @@ Animation = {
 		end
 	end,
 
-	loadAnimation = function(self, fileName, fileDimensions, folder)
+	loadAnimation = function(self, fileName, fileDimensions, gitHubFolder, folder)
 		if not fileName then error('fileName is nil, you need to enter the file name that you want to load.') end
 
-		local path = folder .. '/' .. fileName
+		local gitHubPath = gitHubFolder .. '/' .. fileName
 
-		self:getSelectedAnimationData(path, fileDimensions, folder)
+		self:getSelectedAnimationData(fileDimensions, gitHubPath, folder)
 		cf.tryYield()
 		
 		self:createGeneratedCodeFolder()

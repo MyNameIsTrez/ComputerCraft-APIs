@@ -238,20 +238,27 @@ function valueInTable(tab, search)
 end
 
 -- Get the side of where a peripheral is located.
-function getPeripheralSide()
+function getPeripheralSide(type)
 	for _, side in ipairs(rs.getSides()) do
-		if peripheral.isPresent(side) then
-			return side
+		if type then
+    		if peripheral.getType(side) == type then
+				return side
+			end
+		else
+			if peripheral.isPresent(side) then
+				return side
+			end
 		end
 	end
+	error('Peripheral not found.')
 end
 
 -- Get the wrapped peripheral of a monitor.
 function getMonitor()
 	local monitorSide = getPeripheralSide()
-	if monitorSide then
-		return peripheral.wrap(monitorSide)
-	else
-		error('No monitor found.')
-	end
+	return peripheral.wrap(monitorSide)
+end
+
+function openModem()
+	rednet.open(getPeripheralSide('modem'))
 end

@@ -78,7 +78,7 @@ function getTable(url)
 	os.queueEvent('yield')
 	os.pullEvent('yield')
 	
-	if strTable[1] == '404: Not Found' then error('https.get() 404: File not found.', 2) end
+	if strTable[1] == '404: Not Found' then print(url)error('https.get() 404: File not found.') end
 	
 	return strTable
 end
