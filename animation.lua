@@ -187,19 +187,19 @@ Animation = {
 		self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 	end,
 
-	createGeneratedCodeFolder = function(self)
-		if fs.exists('.generatedCodeFiles') then
-			local names = fs.list('.generatedCodeFiles')
+	createGeneratedCodeFolder = function(self, folder)
+		if fs.exists(folder .. '.generatedCodeFiles') then
+			local names = fs.list(folder .. '.generatedCodeFiles')
 
 			for _, name in pairs(names) do
-				fs.delete('.generatedCodeFiles/'..tostring(name))
+				fs.delete(folder .. '.generatedCodeFiles/'..tostring(name))
 			end
 		else
-			fs.makeDir('.generatedCodeFiles')
+			fs.makeDir(folder .. '.generatedCodeFiles')
 		end
 	end,
 
-	dataToGeneratedCode = function(self)
+	dataToGeneratedCode = function(self, folder)
 		-- local whileLoop = self.info.frame_count > 1 and cfg.loop
 		
 		local numberOfNeededFiles = math.ceil(self.info.frame_count / cfg.maxFramesPerGeneratedCodeFile)
@@ -214,7 +214,7 @@ Animation = {
 		local frameSleepSkippingIndex = 1
 
 		for generatedCodeFileIndex = 1, numberOfNeededFiles do
-			local handle = io.open('.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
+			local handle = io.open(folder .. '.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
 
 			local frameOffset = (generatedCodeFileIndex - 1) * cfg.maxFramesPerGeneratedCodeFile
 
@@ -312,22 +312,22 @@ Animation = {
 		self:getSelectedAnimationData(fileDimensions, gitHubPath, folder)
 		cf.tryYield()
 		
-		self:createGeneratedCodeFolder()
-		self:dataToGeneratedCode()
+		self:createGeneratedCodeFolder(folder)
+		self:dataToGeneratedCode(folder)
 		cf.tryYield()
 	end,
 
-	_playAnimation = function(self, len)		
+	_playAnimation = function(self, len, folder)		
 		for i = 1, len do
 			if cfg.playAnimationBool then
-				self.passedShell.run('/.generatedCodeFiles/'..tostring(i))
+				self.passedShell.run(folder .. '.generatedCodeFiles/' .. tostring(i))
 			end
 		end
 
 		cf.tryYield()
 	end,
 
-	playAnimation = function(self, loop)
+	playAnimation = function(self, loop, folder)
 		local countDown = cfg.countDown
 		if countDown > 0 then
 			self:countDown(countDown)
@@ -335,12 +335,12 @@ Animation = {
 			self:printProgress('Playing animation...')
 		end
 
-		local len = #fs.list('.generatedCodeFiles')
+		local len = #fs.list(folder .. '.generatedCodeFiles')
 
 		if loop and self.info.frame_count > 1 then
 			while true do
 				if cfg.playAnimationBool then
-					self:_playAnimation(len, countDown)
+					self:_playAnimation(len, folder)
 				else
 					sleep(1)
 				end
