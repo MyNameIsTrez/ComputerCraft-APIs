@@ -44,9 +44,7 @@ Animation = {
 			fileName,
 			animationSize,
 
-			frameCount,
-			frameStrings = {},
-			structure = https.getStructure(),
+			-- structure = https.getStructure(),
 			info,
 		}
 		
@@ -204,7 +202,7 @@ Animation = {
 		local cursorX, cursorY = term.getCursorPos()
 		local i = 1
 
-		frameStrings = {}
+		self.frameStrings = {}
 
 		for j = 1, self.info.data_files do
 			local path2 = self.folder .. gitHubPath .. '/data/' .. tostring(j) .. '.txt'
@@ -213,7 +211,7 @@ Animation = {
 			-- self.frameStrings = {}
 
 			for lineStr in file.readLine do
-				frameStrings[i] = lineStr
+				self.frameStrings[i] = lineStr
 
 				if i % 1000 == 0 then
 					cf.yield()
@@ -228,8 +226,6 @@ Animation = {
 			file:close()
 			cf.tryYield()
 		end
-
-		self.frameStrings = frameStrings
 		
 		if self.progressBool then
 			-- For the final frame.
