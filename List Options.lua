@@ -1,8 +1,8 @@
 -- Lists options the user can choose from.
 
 function listOptions(options)
-	cf.printTable(options)
-	print('Enter one of the program names above.')
+	cf.printTable(options, false)
+	print('Enter one of the program names above:')
 	
 	while true do
 		local answer = read()
