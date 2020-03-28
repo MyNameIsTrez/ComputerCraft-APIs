@@ -23,9 +23,22 @@ To get the terminal to fill your entire monitor and to get a custom text color:
 
 Animation = {
 
-	new = function(self, shell)
+	new = function(self, settings)
 		local startingValues = {
-			passedShell = shell,
+			-- Passed settings.
+			passedShell                   = settings.shell,
+			frameSleeping                 = settings.frameSleeping,
+			frameSleep                    = settings.frameSleep,
+			frameSleepSkipping            = settings.frameSleepSkipping,
+			countDown                     = settings.countDown,
+			playAnimationBool             = settings.playAnimationBool,
+			maxFramesPerGeneratedCodeFile = settings.maxFramesPerGeneratedCodeFile,
+			progressBool                  = settings.progressBool,
+			useMonitor                    = settings.useMonitor,
+			loop                          = settings.loop,
+			playArea                      = settings.playArea,
+
+			-- Modified by this class' code later on.
 			frameCount,
 			frameStrings = {},
 			structure = https.getStructure(),
@@ -206,15 +219,13 @@ Animation = {
 	end,
 
 	dataToGeneratedCode = function(self, folder, progressBool)
-		-- local whileLoop = self.info.frame_count > 1 and cfg.loop
-		
-		local numberOfNeededFiles = math.ceil(self.info.frame_count / cfg.maxFramesPerGeneratedCodeFile)
+		local numberOfNeededFiles = math.ceil(self.info.frame_count / self.maxFramesPerGeneratedCodeFile)
 
 		local cursorX, cursorY = term.getCursorPos()
 		local i = 1
 
 		local framesToSleep = {}
-		for v = 1, self.info.frame_count, cfg.frameSleepSkipping do
+		for v = 1, self.info.frame_count, self.frameSleepSkipping do
 			table.insert(framesToSleep, math.floor(v + 0.5))
 		end
 		local frameSleepSkippingIndex = 1
@@ -222,9 +233,9 @@ Animation = {
 		for generatedCodeFileIndex = 1, numberOfNeededFiles do
 			local handle = io.open(folder .. '.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
 
-			local frameOffset = (generatedCodeFileIndex - 1) * cfg.maxFramesPerGeneratedCodeFile
+			local frameOffset = (generatedCodeFileIndex - 1) * self.maxFramesPerGeneratedCodeFile
 
-			local frameCountToFile = math.min(self.info.frame_count - frameOffset, cfg.maxFramesPerGeneratedCodeFile)
+			local frameCountToFile = math.min(self.info.frame_count - frameOffset, self.maxFramesPerGeneratedCodeFile)
 
 			local minFrames = frameOffset + 1
 			local maxFrames = frameOffset + frameCountToFile
@@ -248,10 +259,10 @@ Animation = {
 				k = k + 1
 
 				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
-				if cfg.frameSleeping and cfg.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
+				if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
 					strTable[k] = '\nsleep('
 					k = k + 1
-					strTable[k] = tostring(cfg.frameSleep)
+					strTable[k] = tostring(self.frameSleep)
 					k = k + 1
 					strTable[k] = ')'
 					k = k + 1
@@ -264,7 +275,7 @@ Animation = {
 					k = k + 1
 				end
 				
-				if i % cfg.maxFramesPerGeneratedCodeFile == 0 or i == self.info.frame_count then
+				if i % self.maxFramesPerGeneratedCodeFile == 0 or i == self.info.frame_count then
 					cf.tryYield()
 					
 					-- I don't remember why it's necessary to check this. Try removing this later.
@@ -306,8 +317,8 @@ Animation = {
 	countDown = function(self, countDown)
 		local cursorX, cursorY = term.getCursorPos()
 
-		for i = 1, cfg.countDown do
-			self:printProgress('Playing animation in ' .. tostring(cfg.countDown - i + 1) .. '...', cursorX, cursorY)
+		for i = 1, self.countDown do
+			self:printProgress('Playing animation in ' .. tostring(self.countDown - i + 1) .. '...', cursorX, cursorY)
 			sleep(1)
 		end
 	end,
@@ -327,7 +338,7 @@ Animation = {
 
 	_playAnimation = function(self, len, folder)
 		for i = 1, len do
-			if cfg.playAnimationBool then
+			if self.playAnimationBool then
 				self.passedShell.run(folder .. '.generatedCodeFiles/' .. tostring(i))
 			end
 		end
@@ -337,7 +348,7 @@ Animation = {
 
 	playAnimation = function(self, loop, folder, progressBool)
 		if progressBool then
-			local countDown = cfg.countDown
+			local countDown = self.countDown
 			if countDown > 0 then
 				self:countDown(countDown)
 			else
@@ -349,7 +360,7 @@ Animation = {
 
 		if loop and self.info.frame_count > 1 then
 			while true do
-				if cfg.playAnimationBool then
+				if self.playAnimationBool then
 					self:_playAnimation(len, folder)
 				else
 					sleep(1)
