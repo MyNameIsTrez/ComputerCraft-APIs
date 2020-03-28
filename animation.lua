@@ -34,11 +34,16 @@ Animation = {
 			playAnimationBool             = settings.playAnimationBool,
 			maxFramesPerGeneratedCodeFile = settings.maxFramesPerGeneratedCodeFile,
 			progressBool                  = settings.progressBool,
-			useMonitor                    = settings.useMonitor,
+			-- useMonitor                    = settings.useMonitor,
 			loop                          = settings.loop,
-			playArea                      = settings.playArea,
+			-- playArea                      = settings.playArea,
+			folder                        = settings.folder,
 
-			-- Modified by this class' code later on.
+			-- Initialized by this class' code later on.
+			sizeFolder,
+			fileName,
+			animationSize,
+
 			frameCount,
 			frameStrings = {},
 			structure = https.getStructure(),
@@ -49,12 +54,38 @@ Animation = {
 		return startingValues
 	end,
 
-	setShell = function(self, sl)
-	    self.passedShell = sl
+	setShell = function(self, shl)
+	    self.passedShell = shl
 	end,
 
-	-- FUNCTIONS --------------------------------------------------------
-	
+	-- Asks the user for an animation folder to load.
+	askAnimationFolder = function(self)
+		-- Get the size options.
+		local sizeOptions = fs.list('BackwardsOS/programs/Animation/Animations')
+		-- Ask the size folder.
+		self.sizeFolder = lo.listOptions(sizeOptions)
+		
+		-- Skips the beginning 'size_' part.
+		local sizeStr = cf.split(self.sizeFolder, '_')[2]
+		
+		-- Splits the width and height.
+		local animationSize_ = cf.split(sizeStr, 'x')
+		
+		self.animationSize = { width = animationSize_[1], height = animationSize_[2] }
+		
+		term.clear()
+		term.setCursorPos(1, 1)
+	end,
+
+	-- Asks the user for an animation file to load.
+	askAnimationFile = function(self)
+		local programOptions = fs.list('BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder)
+		self.fileName = lo.listOptions(programOptions)
+		
+		term.clear()
+		term.setCursorPos(1, 1)
+	end,
+
 	printProgress = function(self, str, x, y)
 		-- If the BruteOS API is used, print the message at a different location.
 		if _BRUTEOS then
@@ -94,18 +125,18 @@ Animation = {
 		return combined
 	end,
 
-	downloadAnimationInfo = function(self, gitHubPath, folder)
+	downloadAnimationInfo = function(self, gitHubPath)
 		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubPath .. '/info.txt'
 		local str = https.get(url)
 
-		local handle = io.open(folder .. gitHubPath .. '/info.txt', 'w')
+		local handle = io.open(self.folder .. gitHubPath .. '/info.txt', 'w')
 		handle:write(str)
 		handle:close()
 		
 		self.info = self:stringToTable(str)
 	end,
 
-	downloadAnimationFile = function(self, gitHubPath, fileDimensions, folder)
+	downloadAnimationFile = function(self, gitHubPath)
 		local cursorX, cursorY = term.getCursorPos()
 		local gitHubDataPath = gitHubPath .. '/data'
 
@@ -116,7 +147,7 @@ Animation = {
 			local timeStart = os.clock()
 
 			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubDataPath .. '/' .. i .. '.txt'
-			https.downloadFile(url, folder .. gitHubDataPath, i)
+			https.downloadFile(url, self.folder .. gitHubDataPath, i)
 
 			local timeEnd = os.clock()
 
@@ -143,18 +174,18 @@ Animation = {
 		end
 	end,
 
-	getSelectedAnimationData = function(self, fileDimensions, gitHubPath, folder, progressBool)
-		local fileExists = fs.exists(folder .. gitHubPath)
+	getSelectedAnimationData = function(self, gitHubPath)
+		local fileExists = fs.exists(self.folder .. gitHubPath)
 
 		if not fileExists then
-			if not fs.exists(folder .. gitHubPath) then
-				fs.makeDir(folder .. gitHubPath)
+			if not fs.exists(self.folder .. gitHubPath) then
+				fs.makeDir(self.folder .. gitHubPath)
 			end
 			
-			self:downloadAnimationInfo(gitHubPath, folder)
-			self:downloadAnimationFile(gitHubPath, fileDimensions, folder)
+			self:downloadAnimationInfo(gitHubPath)
+			self:downloadAnimationFile(gitHubPath)
 		else
-			local str = fs.open(folder .. gitHubPath .. '/info.txt', 'r').readAll()
+			local str = fs.open(self.folder .. gitHubPath .. '/info.txt', 'r').readAll()
 			self.info = self:stringToTable(str)
 		end
 
@@ -164,7 +195,7 @@ Animation = {
 		-- 	error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
 		-- end
 
-		if progressBool then
+		if self.progressBool then
 			self:printProgress('Opening data files...')
 		end
 
@@ -176,7 +207,7 @@ Animation = {
 		frameStrings = {}
 
 		for j = 1, self.info.data_files do
-			local path2 = folder .. gitHubPath .. '/data/' .. tostring(j) .. '.txt'
+			local path2 = self.folder .. gitHubPath .. '/data/' .. tostring(j) .. '.txt'
 			local file = fs.open(path2, 'r')
 
 			-- self.frameStrings = {}
@@ -186,7 +217,7 @@ Animation = {
 
 				if i % 1000 == 0 then
 					cf.yield()
-					if progressBool then
+					if self.progressBool then
 						self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 					end
 				end
@@ -200,25 +231,25 @@ Animation = {
 
 		self.frameStrings = frameStrings
 		
-		if progressBool then
+		if self.progressBool then
 			-- For the final frame.
 			self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 		end
 	end,
 
-	createGeneratedCodeFolder = function(self, folder)
-		if fs.exists(folder .. '.generatedCodeFiles') then
-			local names = fs.list(folder .. '.generatedCodeFiles')
+	createGeneratedCodeFolder = function(self)
+		if fs.exists(self.folder .. '.generatedCodeFiles') then
+			local names = fs.list(self.folder .. '.generatedCodeFiles')
 
 			for _, name in pairs(names) do
-				fs.delete(folder .. '.generatedCodeFiles/'..tostring(name))
+				fs.delete(self.folder .. '.generatedCodeFiles/'..tostring(name))
 			end
 		else
-			fs.makeDir(folder .. '.generatedCodeFiles')
+			fs.makeDir(self.folder .. '.generatedCodeFiles')
 		end
 	end,
 
-	dataToGeneratedCode = function(self, folder, progressBool)
+	dataToGeneratedCode = function(self)
 		local numberOfNeededFiles = math.ceil(self.info.frame_count / self.maxFramesPerGeneratedCodeFile)
 
 		local cursorX, cursorY = term.getCursorPos()
@@ -231,7 +262,7 @@ Animation = {
 		local frameSleepSkippingIndex = 1
 
 		for generatedCodeFileIndex = 1, numberOfNeededFiles do
-			local handle = io.open(folder .. '.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
+			local handle = io.open(self.folder .. '.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
 
 			local frameOffset = (generatedCodeFileIndex - 1) * self.maxFramesPerGeneratedCodeFile
 
@@ -299,7 +330,7 @@ Animation = {
 					strTable = {}
 					k = 1
 
-					if progressBool then
+					if self.progressBool then
 						local str = 'Generated '..tostring(i)..'/'..tostring(self.info.frame_count)..' frames...'
 						self:printProgress(str, cursorX, cursorY)
 					end
@@ -314,7 +345,7 @@ Animation = {
 		end
 	end,
 
-	countDown = function(self, countDown)
+	countDown = function(self)
 		local cursorX, cursorY = term.getCursorPos()
 
 		for i = 1, self.countDown do
@@ -323,51 +354,49 @@ Animation = {
 		end
 	end,
 
-	loadAnimation = function(self, fileName, fileDimensions, gitHubFolder, folder, progressBool)
-		if not fileName then error('fileName is nil, you need to enter the file name that you want to load.') end
+	loadAnimation = function(self)
+		local gitHubFolder = 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
+		local gitHubPath = gitHubFolder .. '/' .. self.fileName
 
-		local gitHubPath = gitHubFolder .. '/' .. fileName
-
-		self:getSelectedAnimationData(fileDimensions, gitHubPath, folder, progressBool)
+		self:getSelectedAnimationData(gitHubPath)
 		cf.tryYield()
 		
-		self:createGeneratedCodeFolder(folder)
-		self:dataToGeneratedCode(folder, progressBool)
+		self:createGeneratedCodeFolder()
+		self:dataToGeneratedCode()
 		cf.tryYield()
 	end,
 
-	_playAnimation = function(self, len, folder)
+	_playAnimation = function(self, len)
 		for i = 1, len do
 			if self.playAnimationBool then
-				self.passedShell.run(folder .. '.generatedCodeFiles/' .. tostring(i))
+				self.passedShell.run(self.folder .. '.generatedCodeFiles/' .. tostring(i))
 			end
 		end
 
 		cf.tryYield()
 	end,
 
-	playAnimation = function(self, loop, folder, progressBool)
-		if progressBool then
-			local countDown = self.countDown
-			if countDown > 0 then
-				self:countDown(countDown)
+	playAnimation = function(self)
+		if self.progressBool then
+			if self.countDown > 0 then
+				self:countDown(self.countDown)
 			else
 				self:printProgress('Playing animation...')
 			end
 		end
 
-		local len = #fs.list(folder .. '.generatedCodeFiles')
+		local len = #fs.list(self.folder .. '.generatedCodeFiles')
 
-		if loop and self.info.frame_count > 1 then
+		if self.loop and self.info.frame_count > 1 then
 			while true do
 				if self.playAnimationBool then
-					self:_playAnimation(len, folder)
+					self:_playAnimation(len)
 				else
 					sleep(1)
 				end
 			end
 		else
-			self:_playAnimation(len, folder)
+			self:_playAnimation(len)
 		end
 	end,
 
