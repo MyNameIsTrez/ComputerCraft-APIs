@@ -53,12 +53,19 @@ local randomQuotaUrlEnd = '&format=plain'
 -- Https ----------
 
 
-function getTable(url)	
+function getHandle(url)
 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
 	os.queueEvent('yield')
 	os.pullEvent('yield')
 	
-	if handle == nil then error('https.get() didn\'t get a response back.') end
+	if handle == nil then error('https.getHandle() didn\'t get a response back.') end
+
+	return handle
+end
+
+
+function getTable(url)	
+	local handle = getHandle(url)
 	
 	local strTable = {}
 	local i = 1
