@@ -36,7 +36,7 @@ Animation = {
 			progressBool                  = settings.progressBool,
 			-- useMonitor                    = settings.useMonitor,
 			loop                          = settings.loop,
-			-- playArea                      = settings.playArea,
+			offset                        = settings.offset,
 			folder                        = settings.folder,
 
 			-- Initialized by this class' code later on.
@@ -282,7 +282,15 @@ Animation = {
 				k = k + 1
 				strTable[k] = self.frameStrings[f]
 				k = k + 1
-				strTable[k] = '")'
+				strTable[k] = '",'
+				k = k + 1
+				strTable[k] = tostring(self.offset.x)
+				k = k + 1
+				strTable[k] = ','
+				k = k + 1
+				strTable[k] = tostring(self.offset.y)
+				k = k + 1
+				strTable[k] = ')'
 				k = k + 1
 
 				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope

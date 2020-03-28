@@ -205,34 +205,33 @@ end
 -- Written by Brutal_McLegend.
 -- Writes a frame's string to the screen.
 -- Takes a string.
-function frameWrite( ... )
-    local tmp = { ... };
-    local tArgs = {};
-    local nWidth, nHeight = term.getSize();
-    for i = 1, #tmp do
-        table.insert(tArgs, tostring(tmp[i]));
-    end
-    local tOffsetX, tOffsetY = cfg.playArea.X, cfg.playArea.Y;
+function frameWrite( string, offsetX, offsetY )
+	local offsetX = offsetX or 1
+	local offsetY = offsetY or 1
+
+	local nWidth, _ = term.getSize();
     local sWriteArray = {};
-    local sArgs = table.concat(tArgs);
-    for i in string.gmatch(sArgs, "[^\n]+") do
-        local maxlen = (nWidth - tOffsetX);
+	
+    for i in string.gmatch(string, "[^\n]+") do
+        local maxlen = (nWidth - offsetX);
         if string.len(i) > maxlen then
             local newstr = string.sub(i, 1, maxlen);
             table.insert(sWriteArray, newstr);
         else
             table.insert(sWriteArray, i);
         end
-    end
+	end
+	
     for i = 1, #sWriteArray do
-        term.setCursorPos(tOffsetX, tOffsetY);
+        term.setCursorPos(offsetX, offsetY);
         local x, _ = term.getCursorPos();
         if not (x >= nWidth) then
             term.write(sWriteArray[i]);
-            tOffsetY = tOffsetY + 1;
+            offsetY = offsetY + 1;
         end
-    end
-    term.setCursorPos(1, tOffsetY);
+	end
+	
+    term.setCursorPos(1, offsetY);
 end
 
 --[[
