@@ -202,10 +202,37 @@ function lerp(start, end_, amt)
   return start + extra
 end
 
--- Write a frame's string to the screen.
-function frameWrite(str)
-	term.setCursorPos(cfg.playArea.X, cfg.playArea.Y)
-	write(str)
+-- Written by Brutal_McLegend.
+-- Writes a frame's string to the screen.
+-- Takes a string.
+function frameWrite( ... )
+    local tmp = { ... };
+    local tArgs = {};
+    local nWidth, nHeight = term.getSize();
+    for i = 1, #tmp do
+        table.insert(tArgs, tostring(tmp[i]));
+    end
+    local tOffsetX, tOffsetY = cfg.playArea.X, cfg.playArea.Y;
+    local sWriteArray = {};
+    local sArgs = table.concat(tArgs);
+    for i in string.gmatch(sArgs, "[^\n]+") do
+        local maxlen = (nWidth - tOffsetX);
+        if string.len(i) > maxlen then
+            local newstr = string.sub(i, 1, maxlen);
+            table.insert(sWriteArray, newstr);
+        else
+            table.insert(sWriteArray, i);
+        end
+    end
+    for i = 1, #sWriteArray do
+        term.setCursorPos(tOffsetX, tOffsetY);
+        local x, _ = term.getCursorPos();
+        if not (x >= nWidth) then
+            term.write(sWriteArray[i]);
+            tOffsetY = tOffsetY + 1;
+        end
+    end
+    term.setCursorPos(1, tOffsetY);
 end
 
 --[[
@@ -261,4 +288,13 @@ end
 
 function openModem()
 	rednet.open(getPeripheralSide('modem'))
+end
+
+-- Split a string with a string that separates its parts.
+function split(str, splitter)
+	local tab = {}
+	for word in str:gmatch('%s*([^' .. splitter .. ']+)') do
+    	tab[#tab + 1] = word
+	end
+	return tab
 end
