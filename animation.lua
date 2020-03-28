@@ -130,7 +130,7 @@ Animation = {
 		end
 	end,
 
-	getSelectedAnimationData = function(self, fileDimensions, gitHubPath, folder)
+	getSelectedAnimationData = function(self, fileDimensions, gitHubPath, folder, progressBool)
 		local fileExists = fs.exists(folder .. gitHubPath)
 
 		if not fileExists then
@@ -151,7 +151,9 @@ Animation = {
 		-- 	error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
 		-- end
 
-		self:printProgress('Opening data files...')
+		if progressBool then
+			self:printProgress('Opening data files...')
+		end
 
 		cf.tryYield()
 		
@@ -171,7 +173,9 @@ Animation = {
 
 				if i % 1000 == 0 then
 					cf.yield()
-					self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
+					if progressBool then
+						self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
+					end
 				end
 
 				i = i + 1
@@ -183,8 +187,10 @@ Animation = {
 
 		self.frameStrings = frameStrings
 		
-		-- For the final frame.
-		self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
+		if progressBool then
+			-- For the final frame.
+			self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
+		end
 	end,
 
 	createGeneratedCodeFolder = function(self, folder)
@@ -199,7 +205,7 @@ Animation = {
 		end
 	end,
 
-	dataToGeneratedCode = function(self, folder)
+	dataToGeneratedCode = function(self, folder, progressBool)
 		-- local whileLoop = self.info.frame_count > 1 and cfg.loop
 		
 		local numberOfNeededFiles = math.ceil(self.info.frame_count / cfg.maxFramesPerGeneratedCodeFile)
@@ -282,8 +288,10 @@ Animation = {
 					strTable = {}
 					k = 1
 
-					local str = 'Generated '..tostring(i)..'/'..tostring(self.info.frame_count)..' frames...'
-					self:printProgress(str, cursorX, cursorY)
+					if progressBool then
+						local str = 'Generated '..tostring(i)..'/'..tostring(self.info.frame_count)..' frames...'
+						self:printProgress(str, cursorX, cursorY)
+					end
 				end
 
 				i = i + 1
@@ -304,20 +312,20 @@ Animation = {
 		end
 	end,
 
-	loadAnimation = function(self, fileName, fileDimensions, gitHubFolder, folder)
+	loadAnimation = function(self, fileName, fileDimensions, gitHubFolder, folder, progressBool)
 		if not fileName then error('fileName is nil, you need to enter the file name that you want to load.') end
 
 		local gitHubPath = gitHubFolder .. '/' .. fileName
 
-		self:getSelectedAnimationData(fileDimensions, gitHubPath, folder)
+		self:getSelectedAnimationData(fileDimensions, gitHubPath, folder, progressBool)
 		cf.tryYield()
 		
 		self:createGeneratedCodeFolder(folder)
-		self:dataToGeneratedCode(folder)
+		self:dataToGeneratedCode(folder, progressBool)
 		cf.tryYield()
 	end,
 
-	_playAnimation = function(self, len, folder)		
+	_playAnimation = function(self, len, folder)
 		for i = 1, len do
 			if cfg.playAnimationBool then
 				self.passedShell.run(folder .. '.generatedCodeFiles/' .. tostring(i))
@@ -327,12 +335,14 @@ Animation = {
 		cf.tryYield()
 	end,
 
-	playAnimation = function(self, loop, folder)
-		local countDown = cfg.countDown
-		if countDown > 0 then
-			self:countDown(countDown)
-		else
-			self:printProgress('Playing animation...')
+	playAnimation = function(self, loop, folder, progressBool)
+		if progressBool then
+			local countDown = cfg.countDown
+			if countDown > 0 then
+				self:countDown(countDown)
+			else
+				self:printProgress('Playing animation...')
+			end
 		end
 
 		local len = #fs.list(folder .. '.generatedCodeFiles')
@@ -346,7 +356,7 @@ Animation = {
 				end
 			end
 		else
-			self:_playAnimation(len)
+			self:_playAnimation(len, folder)
 		end
 	end,
 
