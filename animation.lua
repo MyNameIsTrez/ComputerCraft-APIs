@@ -36,15 +36,14 @@ Animation = {
 			progressBool                  = settings.progressBool,
 			-- useMonitor                    = settings.useMonitor,
 			loop                          = settings.loop,
-			offset                        = settings.offset,
 			folder                        = settings.folder,
+			offset                        = settings.offset,
 			animationSize                 = settings.animationSize, -- If not provided, set by self.askAnimationFolder().
 			fileName                      = settings.fileName, -- If not provided, set by self.askAnimationFile().
 
 			-- Initialized by this class' code later on.
 			sizeFolder, -- Used to calculate self.animationSize and self.fileName if self.askAnimationFolder() is called.
-			structure,
-			-- structure = https.getStructure(),
+			structure = https.getStructure(),
 			info,
 		}
 		
@@ -113,7 +112,6 @@ Animation = {
 	askAnimationFolder = function(self)
 		-- Get the size options.
 		local localStructure = fs.list('BackwardsOS/programs/Animation/Animations')
-		self.structure = https.getStructure()
 		-- Ask the size folder name.
 		self.sizeFolder = self:listOptions(self.structure, true, localStructure)
 		
@@ -131,7 +129,9 @@ Animation = {
 
 	-- Asks the user for an animation file to load.
 	askAnimationFile = function(self)
-		local localPrograms = fs.list('BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder)
+		local path = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
+		if not fs.exists(path) then fs.makeDir(path) end
+		local localPrograms = fs.list(path)
 		local programOptions = self.structure[self.sizeFolder]
 		-- Ask the animation file name.
 		self.fileName = self:listOptions(programOptions, false, localPrograms)
@@ -232,17 +232,18 @@ Animation = {
 	end,
 
 	getSelectedAnimationData = function(self, gitHubPath)
-		local fileExists = fs.exists(self.folder .. gitHubPath)
+		local path = self.folder .. gitHubPath
+		local fileExists = fs.exists(path)
 
 		if not fileExists then
-			if not fs.exists(self.folder .. gitHubPath) then
-				fs.makeDir(self.folder .. gitHubPath)
+			if not fs.exists(path) then
+				fs.makeDir(path)
 			end
 			
 			self:downloadAnimationInfo(gitHubPath)
 			self:downloadAnimationFile(gitHubPath)
 		else
-			local str = fs.open(self.folder .. gitHubPath .. '/info.txt', 'r').readAll()
+			local str = fs.open(path .. '/info.txt', 'r').readAll()
 			self.info = self:stringToTable(str)
 		end
 
@@ -264,7 +265,7 @@ Animation = {
 		self.frameStrings = {}
 
 		for j = 1, self.info.data_files do
-			local path2 = self.folder .. gitHubPath .. '/data/' .. tostring(j) .. '.txt'
+			local path2 = path .. '/data/' .. tostring(j) .. '.txt'
 			local file = fs.open(path2, 'r')
 
 			-- self.frameStrings = {}
