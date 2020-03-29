@@ -152,33 +152,6 @@ Animation = {
 		end
 	end,
 
-	stringToTable = function(self, str)
-		local i = 0
-		local keys = {}
-		local keySearch = '[{,](.-)='
-		str:gsub(keySearch, function(key)
-			i = i + 1
-			keys[i] = key
-		end)
-		
-		local j = 1
-		local values = {}
-		local valueSearch = '=(.-)[,}]'
-		str:gsub(valueSearch, function(value)
-			values[j] = tonumber(value)
-			j = j + 1
-		end)
-		
-		local combined = {}
-		for k = 1, i do
-			local key = keys[k]
-			local value = values[k]
-			combined[key] = value
-		end
-
-		return combined
-	end,
-
 	downloadAnimationInfo = function(self, gitHubPath)
 		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubPath .. '/info.txt'
 		local str = https.get(url)
@@ -187,7 +160,7 @@ Animation = {
 		handle:write(str)
 		handle:close()
 		
-		self.info = self:stringToTable(str)
+		self.info = textutils.unserialize(str)
 	end,
 
 	downloadAnimationFile = function(self, gitHubPath)
@@ -244,7 +217,7 @@ Animation = {
 			self:downloadAnimationFile(gitHubPath)
 		else
 			local str = fs.open(path .. '/info.txt', 'r').readAll()
-			self.info = self:stringToTable(str)
+			self.info = textutils.unserialize(str)
 		end
 
 		-- local file = fs.open(gitHubPath .. '.txt', 'r')
