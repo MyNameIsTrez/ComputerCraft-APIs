@@ -36,7 +36,7 @@ local structureUrl = 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage
 local structure
 
 -- Delimiter for getting every line of valuable content inside of a GitHub file.
-local delimiter = '-line">' .. '(.-)' .. '</td>\n      </tr>'
+local delimiter = '-line">' .. '(.-)' .. '</td>'
 
 local IPUrl = 'http://api.ipify.org'
 -- Starts as nil. Call httpGetIP().
@@ -86,12 +86,13 @@ function getTable(url)
 	os.pullEvent('yield')
 	
 	if strTable[1] == '404: Not Found' then print(url)error('https.get() 404: File not found.') end
-	
+
 	return strTable
 end
 
 function get(url)
-	return table.concat(getTable(url))
+	local tab = getTable(url)
+	return table.concat(tab)
 end
 
 function post(url, data)
@@ -147,14 +148,17 @@ end
 
 function getStructure()
 	if not structure then
-    	local str = get(structureUrl)
-    	local fileLines = {}
-    	str:gsub(delimiter, function(line) fileLines[#fileLines + 1] = textutils.unserialize(unicodify(line)) end)
-		
-		local strTab = {}
-		for key, line in ipairs(fileLines) do strTab[#strTab + 1] = line end
-		-- Concat turns the table of strings into a single string, unserialize turns the string into a table.
-		structure = textutils.unserialize(table.concat(strTab))
+		local str = get(structureUrl)
+		local fileLines = {}
+
+		-- For every string inside the delimiter (pattern), process it further.
+		str:gsub(delimiter, function(line)
+			local unicodedLine = unicodify(line) -- Unicodify the string so `&#39;` becomes `'`.
+			fileLines[#fileLines + 1] = unicodedLine
+		end)
+
+		local str2 = table.concat(fileLines) -- Concat turns the table of strings into a single string.
+		structure = textutils.unserialize(str2) -- Unserialize turns str2 into a table.
 	end
 	return structure
 end
