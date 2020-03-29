@@ -24,7 +24,7 @@ To get the terminal to fill your entire monitor and to get a custom text color:
 Animation = {
 
 	new = function(self, settings)
-		local startingValues = {
+		local self = {
 			-- Passed settings.
 			passedShell                   = settings.shell,
 			frameSleeping                 = settings.frameSleeping,
@@ -45,14 +45,23 @@ Animation = {
 			sizeFolder, -- Used to calculate self.animationSize and self.fileName if self.askAnimationFolder() is called.
 			structure = https.getStructure(),
 			info,
+			screenWidth,
+			screenHeight,
 		}
 		
-		setmetatable(startingValues, {__index = self})
-		return startingValues
+		setmetatable(self, {__index = Animation})
+
+		self:getScreenWidthHeight()
+		
+		return self
 	end,
 
 	setShell = function(self, shl)
 	    self.passedShell = shl
+	end,
+
+	getScreenWidthHeight = function(self)
+		self.screenWidth, self.screenHeight = term.getSize()
 	end,
 
 	-- Lists options the user can choose from.
@@ -434,6 +443,31 @@ Animation = {
 			end
 		else
 			self:_playAnimation(len)
+		end
+	end,
+
+	setOffset = function(self, x, y)
+		self.offset = { x = x, y = y }
+	end,
+
+	writeCharCode = function(self, charCode, x, y)
+		local validCharCode = charCode >= 32 and charCode <= 126
+
+		local x, y
+		if not x or not y then
+			x = self.offset.x + 8
+			y = self.offset.y
+		end
+
+		local inCanvas = x >= 1 and y >= 1 and x <= self.screenWidth and y <= self.screenHeight
+		
+		if validCharCode and inCanvas then
+			self:setOffset(x, y)
+
+			self.fileName = 'char_' .. tostring(charCode)
+
+			self:loadAnimation()
+			self:playAnimation()
 		end
 	end,
 
