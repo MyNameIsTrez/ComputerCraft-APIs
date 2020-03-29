@@ -255,8 +255,7 @@ end
 
 -- Return if an element is inside of a table.
 function valueInTable(tab, search)
-	for key, val in pairs(tab) do
-		print(val)
+	for _, val in pairs(tab) do
 		if type(val) == 'table' and val ~= tab then	return valueInTable(val, search) end
 		if val == search then return true end
 	end

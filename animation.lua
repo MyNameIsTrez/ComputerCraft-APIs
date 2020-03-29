@@ -38,12 +38,12 @@ Animation = {
 			loop                          = settings.loop,
 			offset                        = settings.offset,
 			folder                        = settings.folder,
+			animationSize                 = settings.animationSize, -- If not provided, set by self.askAnimationFolder().
+			fileName                      = settings.fileName, -- If not provided, set by self.askAnimationFile().
 
 			-- Initialized by this class' code later on.
-			sizeFolder,
-			fileName,
-			animationSize,
-
+			sizeFolder, -- Used to calculate self.animationSize and self.fileName if self.askAnimationFolder() is called.
+			structure,
 			-- structure = https.getStructure(),
 			info,
 		}
@@ -56,12 +56,66 @@ Animation = {
 	    self.passedShell = shl
 	end,
 
+	-- Lists options the user can choose from.
+	-- If keysStrings is set to 'true', the table is looped with 'pairs()'.
+	listOptions = function(self, cloudOptions, keysStrings, localOptions)
+		cloudOptionsShort = {}
+		if keysStrings then
+			for name, _ in pairs(cloudOptions) do
+				-- a is necessary, because gsub() also returns a second value being the number of substitutions made.
+				local a = name:gsub('size_', '')
+				table.insert(cloudOptionsShort, a)
+			end
+		else
+			for _, name in ipairs(cloudOptions) do
+				local a = name:gsub('size_', '')
+				table.insert(cloudOptionsShort, a)
+			end
+		end
+
+		localOptionsShort = {}
+		for _, name in ipairs(localOptions) do
+			local a = name:gsub('size_', '')
+			table.insert(localOptionsShort, a)
+		end
+
+		for _, name in ipairs(cloudOptionsShort) do
+			if cf.valueInTable(localOptionsShort, name) then
+				write('  ')
+			else
+				write('! ')
+			end
+			print(name)
+		end
+		
+		print()
+		print('Enter one of the above names:')
+		
+		while true do
+			local answer = read()
+			local answerLowerCase = answer:lower()
+
+			for _, option in ipairs(cloudOptionsShort) do
+				if option:lower() == answerLowerCase then
+					if keysStrings then
+						return 'size_' .. answer
+					else
+						return answer
+					end
+				end
+			end
+			
+			print('Invalid program name.') -- Only reached if we haven't returned.
+		end
+	end,
+
 	-- Asks the user for an animation folder to load.
 	askAnimationFolder = function(self)
 		-- Get the size options.
-		local sizeOptions = fs.list('BackwardsOS/programs/Animation/Animations')
-		-- Ask the size folder.
-		self.sizeFolder = lo.listOptions(sizeOptions)
+		local localStructure = fs.list('BackwardsOS/programs/Animation/Animations')
+		self.structure = https.getStructure()
+		-- Ask the size folder name.
+		self.sizeFolder = self:listOptions(self.structure, true, localStructure)
 		
 		-- Skips the beginning 'size_' part.
 		local sizeStr = cf.split(self.sizeFolder, '_')[2]
@@ -77,8 +131,10 @@ Animation = {
 
 	-- Asks the user for an animation file to load.
 	askAnimationFile = function(self)
-		local programOptions = fs.list('BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder)
-		self.fileName = lo.listOptions(programOptions)
+		local localPrograms = fs.list('BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder)
+		local programOptions = self.structure[self.sizeFolder]
+		-- Ask the animation file name.
+		self.fileName = self:listOptions(programOptions, false, localPrograms)
 		
 		term.clear()
 		term.setCursorPos(1, 1)
@@ -138,8 +194,10 @@ Animation = {
 		local cursorX, cursorY = term.getCursorPos()
 		local gitHubDataPath = gitHubPath .. '/data'
 
-		local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from GitHub. Calculating ETA...'
-		self:printProgress(str, cursorX, cursorY)
+		if self.progressBool then
+			local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from GitHub. Calculating ETA...'
+			self:printProgress(str, cursorX, cursorY)
+		end
 
 		for i = 1, self.info.data_files do
 			local timeStart = os.clock()
@@ -166,9 +224,10 @@ Animation = {
 				i = i + 1
 			end
 
-			local str = 'Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub.' .. eta .. '           '
-
-			self:printProgress(str, cursorX, cursorY)
+			if self.progressBool then
+				local str = 'Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub.' .. eta .. '           '
+				self:printProgress(str, cursorX, cursorY)
+			end
 		end
 	end,
 
