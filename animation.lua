@@ -450,19 +450,33 @@ Animation = {
 		self.offset = { x = x, y = y }
 	end,
 
-	writeCharCode = function(self, charCode, x, y)
-		local validCharCode = charCode >= 32 and charCode <= 126
+	addOffset = function(self, x, y)
+		self:setOffset(self.offset.x + x, self.offset.y + y)
+	end,
 
-		local x, y
-		if not x or not y then
-			x = self.offset.x + 8
-			y = self.offset.y
-		end
+	setCharCodeOffset = function(self, x_8, y_8)
+		self:setOffset(1 + x_8 * 8, 1 + y_8 * 8)
+	end,
 
-		local inCanvas = x >= 1 and y >= 1 and x <= self.screenWidth and y <= self.screenHeight
+	addCharCodeOffset = function(self, x_8, y_8)
+		self:addOffset(x_8 * 8, y_8 * 8)
+	end,
+
+	writeCharCode = function(self, charCode, xCharOff, yCharOff)
+		local validCharCode = charCode >= 1 and charCode <= 256
+
+		local x = self.offset.x
+		local y = self.offset.y
+
+		local xCharOffNew = xCharOff or 1
+		local yCharOffNew = yCharOff or 0
+		local xNew = x + xCharOffNew * 8
+		local yNew = y + yCharOffNew * 8
+
+		local inCanvasNew = xNew >= 1 and yNew >= 1 and xNew <= self.screenWidth and yNew <= self.screenHeight
 		
-		if validCharCode and inCanvas then
-			self:setOffset(x, y)
+		if validCharCode and inCanvasNew then
+			self:addCharCodeOffset(xCharOffNew, yCharOffNew)
 
 			self.fileName = 'char_' .. tostring(charCode)
 
