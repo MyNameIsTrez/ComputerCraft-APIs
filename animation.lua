@@ -43,11 +43,14 @@ Animation = {
 
 			-- Initialized by this class' code later on.
 			sizeFolder, -- Used to calculate self.animationSize and self.fileName if self.askAnimationFolder() is called.
-			structure = https.getStructure(),
 			info,
 			screenWidth,
 			screenHeight,
 		}
+		
+		if http then
+			self.structure = https.getStructure(),
+		end
 		
 		setmetatable(self, {__index = Animation})
 
