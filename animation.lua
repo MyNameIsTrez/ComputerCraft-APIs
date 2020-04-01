@@ -232,12 +232,6 @@ Animation = {
 			self.info = textutils.unserialize(str)
 		end
 
-		-- local file = fs.open(gitHubPath .. '.txt', 'r')
-		
-		-- if not file then
-		-- 	error('There was an attempt to load a file name that doesn\'t exist locally AND in the GitHub storage; check if the chosen file name and the file name in the input folder match.')
-		-- end
-
 		if self.progressBool then
 			self:printProgress('Opening data files...')
 		end
