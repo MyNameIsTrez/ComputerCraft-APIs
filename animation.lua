@@ -49,7 +49,7 @@ Animation = {
 		}
 		
 		if http then
-			self.structure = https.getStructure(),
+			self.structure = https.getStructure()
 		end
 		
 		setmetatable(self, {__index = Animation})
