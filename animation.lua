@@ -426,10 +426,10 @@ Animation = {
 		cf.tryYield()
 	end,
 
-	_playAnimation = function(self, len)
+	_playAnimation = function(self, path, len)
 		for i = 1, len do
 			if self.playAnimationBool then
-				self.passedShell.run(self.folder .. 'Timed Animations/' .. tostring(i))
+				self.passedShell.run(path .. tostring(i))
 			end
 		end
 
@@ -445,18 +445,19 @@ Animation = {
 			end
 		end
 
-		local len = #fs.list(self.folder .. 'Timed Animations')
+		local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
+		local len = #fs.list(path)
 
 		if self.loop and self.info.frame_count > 1 then
 			while true do
 				if self.playAnimationBool then
-					self:_playAnimation(len)
+					self:_playAnimation(path, len)
 				else
 					sleep(1)
 				end
 			end
 		else
-			self:_playAnimation(len)
+			self:_playAnimation(path, len)
 		end
 	end,
 
