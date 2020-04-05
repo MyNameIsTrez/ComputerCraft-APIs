@@ -273,14 +273,14 @@ Animation = {
 	end,
 
 	createGeneratedCodeFolder = function(self)
-		if fs.exists(self.folder .. '.generatedCodeFiles') then
-			local names = fs.list(self.folder .. '.generatedCodeFiles')
+		if fs.exists(self.folder .. 'Timed Animations') then
+			local names = fs.list(self.folder .. 'Timed Animations')
 
 			for _, name in pairs(names) do
-				fs.delete(self.folder .. '.generatedCodeFiles/'..tostring(name))
+				fs.delete(self.folder .. 'Timed Animations/'..tostring(name))
 			end
 		else
-			fs.makeDir(self.folder .. '.generatedCodeFiles')
+			fs.makeDir(self.folder .. 'Timed Animations')
 		end
 	end,
 
@@ -297,7 +297,7 @@ Animation = {
 		local frameSleepSkippingIndex = 1
 
 		for generatedCodeFileIndex = 1, numberOfNeededFiles do
-			local handle = io.open(self.folder .. '.generatedCodeFiles/' .. generatedCodeFileIndex, 'w')
+			local handle = io.open(self.folder .. 'Timed Animations/' .. generatedCodeFileIndex, 'w')
 
 			local frameOffset = (generatedCodeFileIndex - 1) * self.maxFramesPerGeneratedCodeFile
 
@@ -412,7 +412,7 @@ Animation = {
 	_playAnimation = function(self, len)
 		for i = 1, len do
 			if self.playAnimationBool then
-				self.passedShell.run(self.folder .. '.generatedCodeFiles/' .. tostring(i))
+				self.passedShell.run(self.folder .. 'Timed Animations/' .. tostring(i))
 			end
 		end
 
@@ -428,7 +428,7 @@ Animation = {
 			end
 		end
 
-		local len = #fs.list(self.folder .. '.generatedCodeFiles')
+		local len = #fs.list(self.folder .. 'Timed Animations')
 
 		if self.loop and self.info.frame_count > 1 then
 			while true do
