@@ -331,8 +331,8 @@ Animation = {
 				strTable[k] = tostring(self.offset.y)
 				k = k + 1
 
-				-- If this isn't the last frame.
-				if f ~= frame_count then
+				-- If this isn't the last frame, when the animation doesn't loop.
+				if not (f == frame_count and self.loop == false) then
 					strTable[k] = ','
 					k = k + 1
 
