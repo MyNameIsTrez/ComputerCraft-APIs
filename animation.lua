@@ -304,12 +304,6 @@ Animation = {
 		local path3 = path2 .. self.fileName .. '/'
 		if not fs.exists(path3) then
 			fs.makeDir(path3)
-		else
-			-- Remove all the old subfiles.
-			local subfiles = fs.list(path3)
-			for _, name in ipairs(subfiles) do
-				fs.delete(path3 .. name)
-			end
 		end
 
 		for subfile = 1, numberOfNeededFiles do
@@ -415,7 +409,12 @@ Animation = {
 		end
 	end,
 
-	loadAnimation = function(self)
+	createTimedAnimation = function(self)
+		local path1 = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
+		if path1 then -- We don't need to recreate the timed animation.
+			return
+		end
+
 		local gitHubFolder = 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
 		local gitHubPath = gitHubFolder .. '/' .. self.fileName
 
@@ -495,7 +494,7 @@ Animation = {
 
 			self.fileName = 'char_' .. tostring(charCode)
 
-			self:loadAnimation()
+			self:createTimedAnimation()
 			self:playAnimation()
 		end
 	end,
