@@ -449,7 +449,7 @@ Animation = {
 		local len = #fs.list(path)
 		print(path)
 		print('len: ' .. tostring(len))
-		sleep(0.1)
+		sleep(1)
 
 		if self.loop and self.info.frame_count > 1 then
 			while true do
