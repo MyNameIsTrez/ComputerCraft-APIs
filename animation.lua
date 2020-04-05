@@ -285,13 +285,14 @@ Animation = {
 	end,
 
 	dataToTimedAnimation = function(self)
-		local numberOfNeededFiles = math.ceil(self.info.frame_count / self.maxFramesPerTimedAnimationFile)
+		local frame_count = self.info.frame_count
+		local numberOfNeededFiles = math.ceil(frame_count / self.maxFramesPerTimedAnimationFile)
 
 		local cursorX, cursorY = term.getCursorPos()
 		local i = 1
 
 		local framesToSleep = {}
-		for v = 1, self.info.frame_count, self.frameSleepSkipping do
+		for v = 1, frame_count, self.frameSleepSkipping do
 			table.insert(framesToSleep, math.floor(v + 0.5))
 		end
 		local frameSleepSkippingIndex = 1
@@ -301,7 +302,7 @@ Animation = {
 
 			local frameOffset = (timedAnimationFileIndex - 1) * self.maxFramesPerTimedAnimationFile
 
-			local frameCountToFile = math.min(self.info.frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
+			local frameCountToFile = math.min(frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
 
 			local minFrames = frameOffset + 1
 			local maxFrames = frameOffset + frameCountToFile
@@ -329,37 +330,28 @@ Animation = {
 				k = k + 1
 				strTable[k] = tostring(self.offset.y)
 				k = k + 1
-				
-				strTable[k] = ','
-				k = k + 1
 
-				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
-				if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
-					-- strTable[k] = '\nsleep('
-					-- k = k + 1
-					-- strTable[k] = tostring(self.frameSleep)
-					-- k = k + 1
-					-- strTable[k] = ')'
-					-- k = k + 1
-					
-					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
-
-					strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
+				-- If this isn't the last frame.
+				if f ~= frame_count then
+					strTable[k] = ','
 					k = k + 1
-				else
-					-- strTable[k] = '\nos.queueEvent("y")'
-					-- k = k + 1
-					-- strTable[k] = '\nos.pullEvent("y")'
-					-- k = k + 1
 
-					strTable[k] = "'yield'"
-					k = k + 1
+					-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
+					if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
+						frameSleepSkippingIndex = frameSleepSkippingIndex + 1
+
+						strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
+						k = k + 1
+					else
+						strTable[k] = "'yield'"
+						k = k + 1
+					end
 				end
 
 				strTable[k] = ')'
 				k = k + 1
 				
-				if i % self.maxFramesPerTimedAnimationFile == 0 or i == self.info.frame_count then
+				if i % self.maxFramesPerTimedAnimationFile == 0 or i == frame_count then
 					cf.tryYield()
 					
 					-- I don't remember why it's necessary to check this. Try removing this later.
@@ -384,7 +376,7 @@ Animation = {
 					k = 1
 
 					if self.progressBool then
-						local str = 'Generated '..tostring(i)..'/'..tostring(self.info.frame_count)..' frames...'
+						local str = 'Generated '..tostring(i)..'/'..tostring(frame_count)..' frames...'
 						self:printProgress(str, cursorX, cursorY)
 					end
 				end
