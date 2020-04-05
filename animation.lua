@@ -329,25 +329,35 @@ Animation = {
 				k = k + 1
 				strTable[k] = tostring(self.offset.y)
 				k = k + 1
-				strTable[k] = ')'
+				
+				strTable[k] = ','
 				k = k + 1
 
 				-- framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
 				if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
-					strTable[k] = '\nsleep('
-					k = k + 1
-					strTable[k] = tostring(self.frameSleep)
-					k = k + 1
-					strTable[k] = ')'
-					k = k + 1
+					-- strTable[k] = '\nsleep('
+					-- k = k + 1
+					-- strTable[k] = tostring(self.frameSleep)
+					-- k = k + 1
+					-- strTable[k] = ')'
+					-- k = k + 1
 					
-					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
-				else
-					strTable[k] = '\nos.queueEvent("y")'
+					-- frameSleepSkippingIndex = frameSleepSkippingIndex + 1
+
+					strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
 					k = k + 1
-					strTable[k] = '\nos.pullEvent("y")'
+				else
+					-- strTable[k] = '\nos.queueEvent("y")'
+					-- k = k + 1
+					-- strTable[k] = '\nos.pullEvent("y")'
+					-- k = k + 1
+
+					strTable[k] = "'yield'"
 					k = k + 1
 				end
+
+				strTable[k] = ')'
+				k = k + 1
 				
 				if i % self.maxFramesPerTimedAnimationFile == 0 or i == self.info.frame_count then
 					cf.tryYield()

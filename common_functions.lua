@@ -204,8 +204,7 @@ end
 
 -- Written by Brutal_McLegend.
 -- Writes a frame's string to the screen.
--- Takes a string.
-function frameWrite( string, offsetX, offsetY )
+function frameWrite(string, offsetX, offsetY, sleepTime)
 	local offsetX = offsetX or 1
 	local offsetY = offsetY or 1
 
@@ -231,7 +230,14 @@ function frameWrite( string, offsetX, offsetY )
         end
 	end
 	
-    term.setCursorPos(1, offsetY);
+	-- term.setCursorPos(1, offsetY);
+
+	if tonumber(sleepTime) == 'number' then
+		sleep(sleepTime)
+	elseif sleepTime == 'yield' then
+		os.queueEvent('yield')
+		os.pullEvent('yield')
+	end
 end
 
 --[[
