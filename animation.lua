@@ -32,7 +32,7 @@ Animation = {
 			frameSleepSkipping            = settings.frameSleepSkipping,
 			countDown                     = settings.countDown,
 			playAnimationBool             = settings.playAnimationBool,
-			maxFramesPerGeneratedCodeFile = settings.maxFramesPerGeneratedCodeFile,
+			maxFramesPerTimedAnimationFile = settings.maxFramesPerTimedAnimationFile,
 			progressBool                  = settings.progressBool,
 			-- useMonitor                    = settings.useMonitor,
 			loop                          = settings.loop,
@@ -272,7 +272,7 @@ Animation = {
 		end
 	end,
 
-	createGeneratedCodeFolder = function(self)
+	createTimedAnimationFolder = function(self)
 		if fs.exists(self.folder .. 'Timed Animations') then
 			local names = fs.list(self.folder .. 'Timed Animations')
 
@@ -284,8 +284,8 @@ Animation = {
 		end
 	end,
 
-	dataToGeneratedCode = function(self)
-		local numberOfNeededFiles = math.ceil(self.info.frame_count / self.maxFramesPerGeneratedCodeFile)
+	dataToTimedAnimation = function(self)
+		local numberOfNeededFiles = math.ceil(self.info.frame_count / self.maxFramesPerTimedAnimationFile)
 
 		local cursorX, cursorY = term.getCursorPos()
 		local i = 1
@@ -296,12 +296,12 @@ Animation = {
 		end
 		local frameSleepSkippingIndex = 1
 
-		for generatedCodeFileIndex = 1, numberOfNeededFiles do
-			local handle = io.open(self.folder .. 'Timed Animations/' .. generatedCodeFileIndex, 'w')
+		for timedAnimationFileIndex = 1, numberOfNeededFiles do
+			local handle = io.open(self.folder .. 'Timed Animations/' .. timedAnimationFileIndex, 'w')
 
-			local frameOffset = (generatedCodeFileIndex - 1) * self.maxFramesPerGeneratedCodeFile
+			local frameOffset = (timedAnimationFileIndex - 1) * self.maxFramesPerTimedAnimationFile
 
-			local frameCountToFile = math.min(self.info.frame_count - frameOffset, self.maxFramesPerGeneratedCodeFile)
+			local frameCountToFile = math.min(self.info.frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
 
 			local minFrames = frameOffset + 1
 			local maxFrames = frameOffset + frameCountToFile
@@ -349,7 +349,7 @@ Animation = {
 					k = k + 1
 				end
 				
-				if i % self.maxFramesPerGeneratedCodeFile == 0 or i == self.info.frame_count then
+				if i % self.maxFramesPerTimedAnimationFile == 0 or i == self.info.frame_count then
 					cf.tryYield()
 					
 					-- I don't remember why it's necessary to check this. Try removing this later.
@@ -404,8 +404,8 @@ Animation = {
 		self:getSelectedAnimationData(gitHubPath)
 		cf.tryYield()
 		
-		self:createGeneratedCodeFolder()
-		self:dataToGeneratedCode()
+		self:createTimedAnimationFolder()
+		self:dataToTimedAnimation()
 		cf.tryYield()
 	end,
 
