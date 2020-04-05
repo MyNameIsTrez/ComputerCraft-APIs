@@ -30,7 +30,7 @@ Animation = {
 			frameSleeping                  = settings.frameSleeping,
 			frameSleep                     = settings.frameSleep,
 			frameSleepSkipping             = settings.frameSleepSkipping,
-			countDown                      = settings.countDown,
+			countdownTime                  = settings.countdownTime,
 			playAnimationBool              = settings.playAnimationBool,
 			maxFramesPerTimedAnimationFile = settings.maxFramesPerTimedAnimationFile,
 			progressBool                   = settings.progressBool,
@@ -400,11 +400,11 @@ Animation = {
 		end
 	end,
 
-	countDown = function(self)
+	countdown = function(self)
 		local cursorX, cursorY = term.getCursorPos()
 
-		for i = 1, self.countDown do
-			self:printProgress('Playing animation in ' .. tostring(self.countDown - i + 1) .. '...', cursorX, cursorY)
+		for i = 1, self.countdownTime do
+			self:printProgress('Playing animation in ' .. tostring(self.countdownTime - i + 1) .. '...', cursorX, cursorY)
 			sleep(1)
 		end
 	end,
@@ -437,8 +437,8 @@ Animation = {
 
 	playAnimation = function(self)
 		if self.progressBool then
-			if self.countDown > 0 then
-				self:countDown()
+			if self.countdownTime > 0 then
+				self:countdown()
 			else
 				self:printProgress('Playing animation...')
 			end
