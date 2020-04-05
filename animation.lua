@@ -342,7 +342,7 @@ Animation = {
 					-- strTable[k] = ')'
 					-- k = k + 1
 					
-					-- frameSleepSkippingIndex = frameSleepSkippingIndex + 1
+					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
 
 					strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
 					k = k + 1
