@@ -345,8 +345,6 @@ Animation = {
 					-- frameSleepSkippingIndex = frameSleepSkippingIndex + 1
 
 					strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
-					print(tostring(self.frameSleep))
-					sleep(5)
 					k = k + 1
 				else
 					-- strTable[k] = '\nos.queueEvent("y")'
