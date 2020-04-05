@@ -447,9 +447,6 @@ Animation = {
 
 		local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 		local len = #fs.list(path)
-		print(path)
-		print('len: ' .. tostring(len))
-		sleep(1)
 
 		if self.loop and self.info.frame_count > 1 then
 			while true do
