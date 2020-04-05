@@ -412,7 +412,7 @@ Animation = {
 	createTimedAnimation = function(self)
 		local path1 = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
 		if fs.exists(path1) then -- We don't need to recreate the timed animation.
-			return
+			break
 		end
 
 		local gitHubFolder = 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
