@@ -26,20 +26,20 @@ Animation = {
 	new = function(self, settings)
 		local self = {
 			-- Passed settings.
-			passedShell                   = settings.shell,
-			frameSleeping                 = settings.frameSleeping,
-			frameSleep                    = settings.frameSleep,
-			frameSleepSkipping            = settings.frameSleepSkipping,
-			countDown                     = settings.countDown,
-			playAnimationBool             = settings.playAnimationBool,
+			passedShell                    = settings.shell,
+			frameSleeping                  = settings.frameSleeping,
+			frameSleep                     = settings.frameSleep,
+			frameSleepSkipping             = settings.frameSleepSkipping,
+			countDown                      = settings.countDown,
+			playAnimationBool              = settings.playAnimationBool,
 			maxFramesPerTimedAnimationFile = settings.maxFramesPerTimedAnimationFile,
-			progressBool                  = settings.progressBool,
-			-- useMonitor                    = settings.useMonitor,
-			loop                          = settings.loop,
-			folder                        = settings.folder,
-			offset                        = settings.offset,
-			animationSize                 = settings.animationSize, -- If not provided, set by self.askAnimationFolder().
-			fileName                      = settings.fileName, -- If not provided, set by self.askAnimationFile().
+			progressBool                   = settings.progressBool,
+			-- useMonitor                     = settings.useMonitor,
+			loop                           = settings.loop,
+			folder                         = settings.folder,
+			offset                         = settings.offset,
+			animationSize                  = settings.animationSize, -- If not provided, set by self.askAnimationFolder().
+			fileName                       = settings.fileName, -- If not provided, set by self.askAnimationFile().
 
 			-- Initialized by this class' code later on.
 			sizeFolder, -- Used to calculate self.animationSize and self.fileName if self.askAnimationFolder() is called.
@@ -345,6 +345,8 @@ Animation = {
 					-- frameSleepSkippingIndex = frameSleepSkippingIndex + 1
 
 					strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
+					print(tostring(self.frameSleep))
+					sleep(5)
 					k = k + 1
 				else
 					-- strTable[k] = '\nos.queueEvent("y")'
