@@ -124,6 +124,7 @@ Animation = {
 	askAnimationFolder = function(self)
 		-- Get the size options.
 		local localStructure = fs.list('BackwardsOS/programs/Animation/Animations')
+
 		-- Ask the size folder name.
 		self.sizeFolder = self:listOptions(self.structure, true, localStructure)
 		
@@ -142,9 +143,14 @@ Animation = {
 	-- Asks the user for an animation file to load.
 	askAnimationFile = function(self)
 		local path = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
-		if not fs.exists(path) then fs.makeDir(path) end
+
+		if not fs.exists(path) then
+			fs.makeDir(path)
+		end
+
 		local localPrograms = fs.list(path)
 		local programOptions = self.structure[self.sizeFolder]
+
 		-- Ask the animation file name.
 		self.fileName = self:listOptions(programOptions, false, localPrograms)
 		
@@ -272,18 +278,6 @@ Animation = {
 		end
 	end,
 
-	createTimedAnimationFolder = function(self)
-		if fs.exists(self.folder .. 'Timed Animations') then
-			local names = fs.list(self.folder .. 'Timed Animations')
-
-			for _, name in pairs(names) do
-				fs.delete(self.folder .. 'Timed Animations/'..tostring(name))
-			end
-		else
-			fs.makeDir(self.folder .. 'Timed Animations')
-		end
-	end,
-
 	dataToTimedAnimation = function(self)
 		local frame_count = self.info.frame_count
 		local numberOfNeededFiles = math.ceil(frame_count / self.maxFramesPerTimedAnimationFile)
@@ -297,10 +291,32 @@ Animation = {
 		end
 		local frameSleepSkippingIndex = 1
 
-		for timedAnimationFileIndex = 1, numberOfNeededFiles do
-			local handle = io.open(self.folder .. 'Timed Animations/' .. timedAnimationFileIndex, 'w')
+		local path1 = self.folder .. 'Timed Animations/'
+		if not fs.exists(path1) then
+			fs.makeDir(path1)
+		end
+		
+		local path2 = path1 .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
+		if not fs.exists(path2) then
+			fs.makeDir(path2)
+		end
 
-			local frameOffset = (timedAnimationFileIndex - 1) * self.maxFramesPerTimedAnimationFile
+		local path3 = path2 .. self.fileName .. '/'
+		if not fs.exists(path3) then
+			fs.makeDir(path3)
+		else
+			-- Remove all the old subfiles.
+			local subfiles = fs.list(path3)
+			for _, name in ipairs(subfiles) do
+				fs.delete(path3 .. name)
+			end
+		end
+
+		for subfile = 1, numberOfNeededFiles do
+			local path4 = path3 .. subfile
+			local handle = io.open(path4, 'w')
+
+			local frameOffset = (subfile - 1) * self.maxFramesPerTimedAnimationFile
 
 			local frameCountToFile = math.min(frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
 
@@ -406,7 +422,6 @@ Animation = {
 		self:getSelectedAnimationData(gitHubPath)
 		cf.tryYield()
 		
-		self:createTimedAnimationFolder()
 		self:dataToTimedAnimation()
 		cf.tryYield()
 	end,
