@@ -438,7 +438,7 @@ Animation = {
 	playAnimation = function(self)
 		if self.progressBool then
 			if self.countDown > 0 then
-				self:countDown(self.countDown)
+				self:countDown()
 			else
 				self:printProgress('Playing animation...')
 			end
