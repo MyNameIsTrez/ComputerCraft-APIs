@@ -205,14 +205,22 @@ end
 -- Written by Brutal_McLegend.
 -- Writes a frame's string to the screen.
 function frameWrite(string, offsetX, offsetY, sleepTime)
-	local offsetX = offsetX or 1
-	local offsetY = offsetY or 1
+	-- If no offsetX or offsetY has been specified,
+	-- use the current cursor position as the top-left corner of the frame.
+	local curX, curY = term.getCursorPos()
+	local offsetX = offsetX or curX
+	local offsetY = offsetY or curY
+
+	-- Saves the top-left corner of the frame.
+	local offsetStartX = offsetX
+	local offsetStartY = offsetY
 
 	local nWidth, _ = term.getSize();
     local sWriteArray = {};
 	
     for i in string.gmatch(string, "[^\n]+") do
         local maxlen = (nWidth - offsetX);
+		
         if string.len(i) > maxlen then
             local newstr = string.sub(i, 1, maxlen);
             table.insert(sWriteArray, newstr);
@@ -224,6 +232,7 @@ function frameWrite(string, offsetX, offsetY, sleepTime)
     for i = 1, #sWriteArray do
         term.setCursorPos(offsetX, offsetY);
         local x, _ = term.getCursorPos();
+
         if not (x >= nWidth) then
             term.write(sWriteArray[i]);
             offsetY = offsetY + 1;
@@ -231,6 +240,9 @@ function frameWrite(string, offsetX, offsetY, sleepTime)
 	end
 	
 	-- term.setCursorPos(1, offsetY);
+
+	-- Reset the cursor position to the top-left corner of the frame.
+	term.setCursorPos(offsetStartX, offsetStartY) -- Not sure if necessary.
 
 	if type(sleepTime) == 'number' then
 		sleep(sleepTime)

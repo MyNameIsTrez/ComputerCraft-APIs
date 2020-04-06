@@ -170,9 +170,15 @@ Animation = {
 		end
 	end,
 
-	downloadAnimationInfo = function(self, gitHubPath)
+	downloadAnimationInfo = function(self, gitHubPath, path)
 		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubPath .. '/info.txt'
 		local str = https.get(url)
+
+		-- If the https.get() above didn't error,
+		-- make sure there's a folder to store the resulting string in.
+		if not fs.exists(path) then
+			fs.makeDir(path)
+		end
 
 		local handle = io.open(self.folder .. gitHubPath .. '/info.txt', 'w')
 		handle:write(str)
@@ -237,12 +243,8 @@ Animation = {
 		local path = self.folder .. gitHubPath
 		local fileExists = fs.exists(path)
 
-		if not fileExists then
-			if not fs.exists(path) then
-				fs.makeDir(path)
-			end
-			
-			self:downloadAnimationInfo(gitHubPath)
+		if not fileExists then			
+			self:downloadAnimationInfo(gitHubPath, path)
 			self:downloadAnimationFile(gitHubPath)
 		else
 			local str = fs.open(path .. '/info.txt', 'r').readAll()
@@ -343,13 +345,7 @@ Animation = {
 				k = k + 1
 				strTable[k] = self.frameStrings[f]
 				k = k + 1
-				strTable[k] = '",'
-				k = k + 1
-				strTable[k] = tostring(self.offset.x)
-				k = k + 1
-				strTable[k] = ','
-				k = k + 1
-				strTable[k] = tostring(self.offset.y)
+				strTable[k] = '",nil,nil'
 				k = k + 1
 
 				-- If this isn't the last frame, when the animation doesn't loop.
@@ -361,7 +357,7 @@ Animation = {
 					if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
 						frameSleepSkippingIndex = frameSleepSkippingIndex + 1
 
-						strTable[k] = tostring(self.frameSleep) -- may not need 'tostring'
+						strTable[k] = tostring(self.frameSleep) -- May not need tostring().
 						k = k + 1
 					else
 						strTable[k] = "'yield'"
@@ -458,11 +454,11 @@ Animation = {
 		local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 		local len = #fs.list(path)
 
-		if not self.info then
-			self:getInfo()
-		end
+		term.setCursorPos(self.offset.x, self.offset.y)
 
-		-- self.info.frame_count is nil at this point, because 'info' needs to be gotten from a new method
+		-- Called because it's necessary to know self.info.frame_count.
+		self:getInfo() -- Seems like this it should be able to call this method less often!!!
+
 		if self.loop and self.info.frame_count > 1 then
 			while true do
 				if self.playAnimationBool then
