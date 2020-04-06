@@ -222,6 +222,17 @@ Animation = {
 		end
 	end,
 
+	getInfo = function(self)
+		-- self:downloadAnimationInfo(gitHubPath)
+		local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+		local str = fs.open(path .. 'info.txt', 'r').readAll()
+		self.info = textutils.unserialize(str)
+	end,
+
+	getFrames = function(self)
+		print(1)
+	end,
+
 	getSelectedAnimationData = function(self, gitHubPath)
 		local path = self.folder .. gitHubPath
 		local fileExists = fs.exists(path)
@@ -447,6 +458,11 @@ Animation = {
 		local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 		local len = #fs.list(path)
 
+		if not self.info then
+			self:getInfo()
+		end
+
+		-- self.info.frame_count is nil at this point, because 'info' needs to be gotten from a new method
 		if self.loop and self.info.frame_count > 1 then
 			while true do
 				if self.playAnimationBool then
