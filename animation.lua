@@ -224,7 +224,7 @@ Animation = {
 
 	getInfo = function(self)
 		-- self:downloadAnimationInfo(gitHubPath)
-		local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+		local path = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 		local str = fs.open(path .. 'info.txt', 'r').readAll()
 		self.info = textutils.unserialize(str)
 	end,
