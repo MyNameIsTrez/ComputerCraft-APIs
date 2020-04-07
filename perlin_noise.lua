@@ -116,6 +116,7 @@ perlin.dot_product = {
     [0xE]=function(x,y,z) return  y - x end,
     [0xF]=function(x,y,z) return -y - z end
 }
+
 function perlin:grad(hash, x, y, z)
     return self.dot_product[bit.band(hash,0xF)](x,y,z) -- Used to be 'bit32.band()'
 end

@@ -1,13 +1,13 @@
-function point(p, fill)
-	term.setCursorPos(p.x, p.y)
-	if (fill) then
-		write(fill)
-	else
-		error("You didn't enter a string for the 'fill' argument in the function 'point(p, fill)'.")
-	end
-	--term.setCursorPos(1, 1)
-end
+function point(pos, fill)
+	term.setCursorPos(pos.x, pos.y)
 	
+	if (fill) then
+		term.write(fill)
+	else
+		error("You didn't enter a string for the 'fill' argument in the function 'shape.point(p, fill)'")
+	end
+end
+
 function circle(center, radius)
 	-- Using radians. -------------------------------------------------------
 	-- Because the text size is 6x9 (multiplied by the GUI Scale), we need this multiplier to make a circular shape.
