@@ -64,20 +64,20 @@ ThreeDee = {
     end,
 	
 	setCubesCorners = function(self, cubesCoords)
-		for i = 1, #cubesCoords do
-			local cC = cubesCoords[i] -- cC means cubeCoords.
+		for cubeIndex = 1, #cubesCoords do
+			local cC = cubesCoords[cubeIndex] -- cC means cubeCoords.
 			
-			self.cubesCorners[i] = {}
+			self.cubesCorners[cubeIndex] = {}
 			
-			self.cubesCorners[i][1] = vector.new(-0.5+cC.x, -0.5+cC.y, -0.5+cC.z)
-			self.cubesCorners[i][2] = vector.new( 0.5+cC.x, -0.5+cC.y, -0.5+cC.z)
-			self.cubesCorners[i][3] = vector.new( 0.5+cC.x,  0.5+cC.y, -0.5+cC.z)
-			self.cubesCorners[i][4] = vector.new(-0.5+cC.x,  0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[cubeIndex][1] = vector.new(-0.5+cC.x, -0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[cubeIndex][2] = vector.new( 0.5+cC.x, -0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[cubeIndex][3] = vector.new( 0.5+cC.x,  0.5+cC.y, -0.5+cC.z)
+			self.cubesCorners[cubeIndex][4] = vector.new(-0.5+cC.x,  0.5+cC.y, -0.5+cC.z)
 			
-			self.cubesCorners[i][5] = vector.new(-0.5+cC.x, -0.5+cC.y,  0.5+cC.z)
-			self.cubesCorners[i][6] = vector.new( 0.5+cC.x, -0.5+cC.y,  0.5+cC.z)
-			self.cubesCorners[i][7] = vector.new( 0.5+cC.x,  0.5+cC.y,  0.5+cC.z)
-			self.cubesCorners[i][8] = vector.new(-0.5+cC.x,  0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[cubeIndex][5] = vector.new(-0.5+cC.x, -0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[cubeIndex][6] = vector.new( 0.5+cC.x, -0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[cubeIndex][7] = vector.new( 0.5+cC.x,  0.5+cC.y,  0.5+cC.z)
+			self.cubesCorners[cubeIndex][8] = vector.new(-0.5+cC.x,  0.5+cC.y,  0.5+cC.z)
 		end
 	end,
 	
@@ -100,12 +100,12 @@ ThreeDee = {
 			{ 0, 0, 1 }
 		}
 		
-		for i = 1, #self.cubesCorners do
-			self.projectedCubes[i] = {}
-			local cubeCorners = self.cubesCorners[i]
+		for cubeIndex = 1, #self.cubesCorners do
+			self.projectedCubes[cubeIndex] = {}
+			local cubeCorners = self.cubesCorners[cubeIndex]
 			
-			for j = 1, #cubeCorners do
-				local v = cubeCorners[j]
+			for cornerIndex = 1, #cubeCorners do
+				local v = cubeCorners[cornerIndex]
 				local m = matrix.vecToMat(v)
 				
 				local rotated
@@ -130,16 +130,17 @@ ThreeDee = {
 				projectedVector.y = self.centerY + projectedVector.y * 100
 				--projectedVector.z = projectedVector.z -- Not sure if this belongs here.
 				
-				self.projectedCubes[i][j] = projectedVector
+				self.projectedCubes[cubeIndex][cornerIndex] = projectedVector
 			end
 			
-			local projectedCube = self.projectedCubes[i]
-			self.cubesCullFlags[i] = {}
+			local projectedCube = self.projectedCubes[cubeIndex]
+			self.cubesCullFlags[cubeIndex] = {}
 			
-			for j = 1, 6 do
-				self.cubesCullFlags[i][j] = {}
-				for k = 1, 2 do
-					local triangle = self.fillConnections[j][k]
+			for sideIndex = 1, 6 do
+				self.cubesCullFlags[cubeIndex][sideIndex] = {}
+
+				for triangleIndex = 1, 2 do
+					local triangle = self.fillConnections[sideIndex][triangleIndex]
 					local ai, bi, ci = triangle[1], triangle[2], triangle[3]
 					local v0, v1, v2 = projectedCube[ai], projectedCube[bi], projectedCube[ci]
 					
@@ -147,35 +148,42 @@ ThreeDee = {
 					local a = v1:sub(v0)
 					local b = v2:sub(v0)
 					local notNormalizedNormal = a:cross(b)
+
 					write('notNormalizedNormal: ')
 					print(notNormalizedNormal)
+
 					write('v0: ')
 					print(v0)
+
 					local cull = notNormalizedNormal:dot(v0)
+
 					write('cull: ')
 					print(cull)
-					self.cubesCullFlags[i][j][k] = cull >= 0
+					print()
+
+					self.cubesCullFlags[cubeIndex][sideIndex][triangleIndex] = cull >= 0
 				end
 			end
 		end
+
 		cf.printTable(self.cubesCullFlags)
 	end,
 	
 	drawFill = function(self)
-		for i = 1, #self.cubesCullFlags do
-			local projectedCube = self.projectedCubes[i]
-			for j = 1, 6 do
-				for k = 1, 2 do
-					local cull = self.cubesCullFlags[i][j][k]
+		for cubeIndex = 1, #self.cubesCullFlags do
+			local projectedCube = self.projectedCubes[cubeIndex]
+			for sideIndex = 1, 6 do
+				for triangleIndex = 1, 2 do
+					local cull = self.cubesCullFlags[cubeIndex][sideIndex][triangleIndex]
 					if not cull then
-						local triangle = self.fillConnections[j][k]
+						local triangle = self.fillConnections[sideIndex][triangleIndex]
 						local ai, bi, ci = triangle[1], triangle[2], triangle[3]
 						local vertices = {
 							projectedCube[ai],
 							projectedCube[bi],
 							projectedCube[ci]
 						}
-						local char = self.chars[j * 2 + k]
+						local char = self.chars[sideIndex * 2 + triangleIndex]
 						self:drawFilledTriangle(vertices, char)
 					end
 				end
