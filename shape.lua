@@ -1,10 +1,10 @@
-function point(pos, fill)
+function point(pos, char)
 	term.setCursorPos(pos.x, pos.y)
 	
-	if (fill) then
-		term.write(fill)
+	if (char) then
+		term.write(char)
 	else
-		error("You didn't enter a string for the 'fill' argument in the function 'shape.point(p, fill)'")
+		error("You didn't enter a string for the 'char' argument in the function 'shape.point(pos, char)'")
 	end
 end
 
