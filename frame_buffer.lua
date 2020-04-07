@@ -102,7 +102,7 @@ FrameBuffer = {
 			end
 		end
 		term.setCursorPos(self.startX, self.startY)
-		write(table.concat(strTab))
+		term.write(table.concat(strTab))
 
 		-- Clear the buffer.
 		-- Maybe faster to copy an empty table instead, but I think that needs recursion.

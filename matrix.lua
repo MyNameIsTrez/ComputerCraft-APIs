@@ -29,7 +29,7 @@ function matPrint(m)
 	
 	for i = 1, rows do
 		for j = 1, cols do
-			write(tostring(m[i][j]) .. ' ')
+			term.write(tostring(m[i][j]) .. ' ')
 		end
 		print()
 	end

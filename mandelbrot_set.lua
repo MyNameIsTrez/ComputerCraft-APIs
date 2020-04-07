@@ -64,13 +64,13 @@ Mandelbrot = {
 	getNextFrame = function(self)
 		self.zoom = self.zoom * self.zoomMultiplier
 		term.setCursorPos(1, 1)
-		write(tostring(self.zoom)..'      ')
+		term.write(tostring(self.zoom)..'      ')
 		return self:getCurrentFrame()
 	end,
 
 	drawFrame = function(self, frame)
 		term.setCursorPos(self.x1, self.y1)
-		write(frame)
+		term.write(frame)
 		cf.yield()
 	end
 

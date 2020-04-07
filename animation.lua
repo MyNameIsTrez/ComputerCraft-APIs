@@ -92,9 +92,9 @@ Animation = {
 
 		for _, name in ipairs(cloudOptionsShort) do
 			if cf.valueInTable(localOptionsShort, name) then
-				write('  ')
+				term.write('  ')
 			else
-				write('! ')
+				term.write('! ')
 			end
 			print(name)
 		end

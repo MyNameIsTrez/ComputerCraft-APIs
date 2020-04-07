@@ -8,7 +8,7 @@ API to draw 3D objects.
 
 REQUIREMENTS
 	* matrix: https://pastebin.com/9g8zvPpX -- Matrix multiplications and vector to matrix conversion.
-	* framebuffer: https://pastebin.com/83q6p4Sp -- write() replacement, by drawing the entire screen with only one write() call for every frame.
+	* framebuffer: https://pastebin.com/83q6p4Sp -- term.write() replacement, by drawing the entire screen with only one term.write() call for every frame.
 
 ]]--
 
