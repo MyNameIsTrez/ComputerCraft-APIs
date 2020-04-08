@@ -9,7 +9,7 @@ function point(pos, char)
 end
 
 function circle(center, radius)
-	-- Using radians. -------------------------------------------------------
+	-- Using radians.
 	-- Because the text size is 6x9 (multiplied by the GUI Scale), we need this multiplier to make a circular shape.
 	local x_fix = 1.5
 	
@@ -23,12 +23,12 @@ function circle(center, radius)
 		point(p, "#")
 	end
 end
-	
+
 function dist(a, b)
 	return math.sqrt(math.pow(a, 2) + math.pow(b, 2))
 end
-	
-function line(p1, p2, icon)
+
+function line(p1, p2, icon, exact)
 	local x_diff = p2.x - p1.x
 	local y_diff = p2.y - p1.y
 	local distance = dist(x_diff, y_diff)
@@ -41,12 +41,15 @@ function line(p1, p2, icon)
 		point(vector.new(p1.x + x, p1.y + y), icon)
 	end
 	
-	point(p2, icon)
+	if not exact then
+		point(p2, icon)
+	end
 end
-	
+
 function rectangle(p1, p2)
 	local x_diff = p2.x - p1.x
 	local y_diff = p2.y - p1.y
+	
 	local p = {
 		{ -- Top-left.
 			x = p1.x,
@@ -70,38 +73,4 @@ function rectangle(p1, p2)
 	line(p[2], p[3]) -- Right.
 	line(p[3], p[4]) -- Bottom.
 	line(p[4], p[1]) -- Left.
-end
-	
-function main()
-	local p = {
-		{ -- Middle of the screen.
-			x = w / 2,
-			y = h / 2 + 1
-		},
-		{ -- Top-right.
-			x = w / 4,
-			y = h / 4
-		},
-		{ -- Bottom-left.
-			x = w / 4 * 3,
-			y = h / 4 * 3
-		},
-		{
-			x = 1,
-			y = 1,
-		},
-		{
-			x = w-1,
-			y = h-1
-		}
-	}
-	
-	clear()
-	local max = 24 -- Fullscreen mode.
-	-- local max = 23 -- Windowed mode.
-	for i = max, 0, -1 do
-		circle(p[1], i)
-		os.queueEvent("randomEvent")
-		os.pullEvent("randomEvent")
-	end
 end

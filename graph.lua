@@ -44,6 +44,7 @@ Graph = {
 		end
 	end,
 
+	-- This should ideally be done with a single term.write(str) call.
 	show = function(self)
 		for col = 1, #self.data do
 			local number = self.data[col]
@@ -51,16 +52,27 @@ Graph = {
 			local w = self.colWidth
 			local h = number * self.maxHeight
 
-			for sub = 0, w - 1 do
-				local x = self.xBottomLeft + (col - 1) * w + sub
+			local x = self.xBottomLeft + (col - 1) * w
 
-				for _h = 0, h, -1 do
-					local y = self.yBottomLeft + _h
-					
-					term.setCursorPos(x, y)
-					term.write(self.char)
+			local strTab = {}
+			local i = 1
+			
+			for _h = h, 0 do -- h is negative, so starting from the top.
+				for sub = 1, w do
+					strTab[i] = self.char
+					i = i + 1
 				end
+
+				strTab[i] = '\n'
+				i = i + 1
 			end
+
+			local str = table.concat(strTab)
+			
+			local y = self.yBottomLeft + h
+
+			term.setCursorPos(x, y)
+			cf.frameWrite(str)
 		end
 	end,
 
