@@ -1,4 +1,4 @@
--- Based on my Simple Graph P5.js program:
+-- Based on my 'Simple Graph' P5.js program:
 -- https://editor.p5js.org/MyNameIsTrez/sketches/nmEaU0Dn
 
 Graph = {
