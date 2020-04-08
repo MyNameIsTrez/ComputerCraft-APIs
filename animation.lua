@@ -25,7 +25,7 @@ Animation = {
 
 	new = function(self, settings)
 		local self = {
-			-- Passed settings.
+			-- Assign passed settings.
 			passedShell                    = settings.shell,
 			frameSleeping                  = settings.frameSleeping,
 			frameSleep                     = settings.frameSleep,
