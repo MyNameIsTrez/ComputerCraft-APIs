@@ -54,7 +54,7 @@ Simulation = {
 					shape.point(vector.new(x, y), self.wallIcon)
 				end
 			end
-			cf.yield()
+			cf.tryYield()
 		end
 
 		for x, _ in pairs(self.nodes) do
@@ -143,7 +143,7 @@ Simulation = {
 				end
 				
 				if self.turboSpeed then
-					cf.yield()
+					cf.tryYield()
 				else
 					sleep(self.sleepTime)
 				end
@@ -250,7 +250,7 @@ Entity = {
 				sleep(100)
 				return
 			end
-			cf.yield()
+			cf.tryYield()
 		end
 	end,
 

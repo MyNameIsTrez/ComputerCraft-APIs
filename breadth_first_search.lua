@@ -105,7 +105,7 @@ Entity = {
 				sleep(100)
 				return
 			end
-			cf.yield()
+			cf.tryYield()
 		end
 	end,
 

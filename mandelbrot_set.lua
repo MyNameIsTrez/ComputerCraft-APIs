@@ -55,9 +55,9 @@ Mandelbrot = {
 				table.insert(stringTab, char)
 			end
 			table.insert(stringTab, '\n')
-			cf.yield()
+			cf.tryYield()
 		end
-		cf.yield()
+		cf.tryYield()
 		return table.concat(stringTab) -- Converts table to a string.
 	end,
 
@@ -71,7 +71,7 @@ Mandelbrot = {
 	drawFrame = function(self, frame)
 		term.setCursorPos(self.x1, self.y1)
 		term.write(frame)
-		cf.yield()
+		cf.tryYield()
 	end
 
 }

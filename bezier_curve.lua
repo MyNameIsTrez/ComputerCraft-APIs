@@ -64,7 +64,7 @@ function getBezierPoints(args)
         args.t = args.t + args.tStep
 		
 		if args.turboSpeed then
-			cf.yield()
+			cf.tryYield()
 		else
 			sleep(args.sleepTime)
 		end

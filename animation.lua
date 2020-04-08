@@ -273,6 +273,7 @@ Animation = {
 
 				if i % 1000 == 0 then
 					cf.yield()
+					
 					if self.progressBool then
 						self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 					end
