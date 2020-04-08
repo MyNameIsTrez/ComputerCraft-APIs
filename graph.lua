@@ -51,14 +51,15 @@ Graph = {
 			local w = self.colWidth
 			local h = number * self.maxHeight
 
-			for sub = 0, self.colWidth - 1 do
-				local x1 = self.xBottomLeft + (col - 1) * self.colWidth + sub
-				local y1 = self.yBottomLeft
+			for sub = 0, w - 1 do
+				local x = self.xBottomLeft + (col - 1) * w + sub
 
-				local pos1 = vector.new(x1, y1)
-				local pos2 = vector.new(x1 + 1, y1 + h)
-
-				shape.line(pos1, pos2, self.char, true)
+				for _h = 0, h, -1 do
+					local y = self.yBottomLeft + _h
+					
+					term.setCursorPos(x, y)
+					term.write(self.char)
+				end
 			end
 		end
 	end,
