@@ -31,8 +31,12 @@ function randomFloat(min, max)
 end
 
 -- Pythagorean theorem.
-function pythagoras(a, b)
-	return math.sqrt(a^2 + b^2)
+function pythagoras(x1, y1, x2, y2)
+	if x2 and y2 then
+		return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
+	else
+		return math.sqrt(x1^2 + y1^2)
+	end
 end
 
 -- Rounds a number to a specified number of decimals.
@@ -313,4 +317,8 @@ function split(str, splitter)
     	tab[#tab + 1] = word
 	end
 	return tab
+end
+
+function vectorRandom2D()
+	return vector.new(math.random(), math.random())
 end
