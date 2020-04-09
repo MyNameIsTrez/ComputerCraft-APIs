@@ -28,7 +28,7 @@ function dist(a, b)
 	return math.sqrt(math.pow(a, 2) + math.pow(b, 2))
 end
 
-function line(p1, p2, icon, exact)
+function line(p1, p2, char, exact)
 	local x_diff = p2.x - p1.x
 	local y_diff = p2.y - p1.y
 	local distance = dist(x_diff, y_diff)
@@ -38,11 +38,11 @@ function line(p1, p2, icon, exact)
 	for i = 0, distance do
 		local x = i * step_x
 		local y = i * step_y
-		point(vector.new(p1.x + x, p1.y + y), icon)
+		point(vector.new(p1.x + x, p1.y + y), char)
 	end
 	
 	if not exact then
-		point(p2, icon)
+		point(p2, char)
 	end
 end
 

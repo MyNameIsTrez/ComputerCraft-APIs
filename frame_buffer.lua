@@ -58,13 +58,14 @@ FrameBuffer = {
 	
 	writeChar = function(self, x, y, char)
 		local x, y = math.floor(x + 0.5), math.floor(y + 0.5)
-        -- Might need <= instead of < .
+
+        -- Might need <= instead of <
         if y >= self.startY and y < self.canvasHeight + self.startY and x >= self.startX and x < self.canvasWidth + self.startX then
             self.buffer[y][x] = char
         end
     end,
 	
-	writeLine = function(self, x1, y1, x2, y2, char)
+	writeLine = function(self, x1, y1, x2, y2, char, exact)
   		local x_diff = x2 - x1
   		local y_diff = y2 - y1
 		
@@ -73,10 +74,16 @@ FrameBuffer = {
   		local step_y = y_diff / distance
 		
   		for i = 0, distance do
-    		local x = i * step_x
-    		local y = i * step_y
-			self:writeChar(x1 + x, y1 + y, char)
+    		local _x = i * step_x
+    		local _y = i * step_y
+			local x = x1 + _x
+			local y = y1 + _y
+			self:writeChar(x, y, char)
   		end
+	
+		if not exact then
+			self:writeChar(x2, y2, char)
+		end
 	end,
 	
 	writeRect = function(self, x1, y1, x2, y2, char, fill)
@@ -102,7 +109,7 @@ FrameBuffer = {
 			end
 		end
 		term.setCursorPos(self.startX, self.startY)
-		term.write(table.concat(strTab))
+		write(table.concat(strTab))
 
 		-- Clear the buffer.
 		-- Maybe faster to copy an empty table instead, but I think that needs recursion.

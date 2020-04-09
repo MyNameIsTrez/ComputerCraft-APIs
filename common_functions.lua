@@ -320,5 +320,5 @@ function split(str, splitter)
 end
 
 function vectorRandom2D()
-	return vector.new(math.random(), math.random())
+	return vector.new(math.random() * 2 - 1, math.random() * 2 - 1)
 end

@@ -15,7 +15,6 @@ Connections = {
 
 			pointCountMult            = s.pointCountMult,
 			maxConnectionDistMult     = s.maxConnectionDistMult,
-			distMult                  = s.distMult,
 			connectionWeightAlphaMult = s.connectionWeightAlphaMult,
 			maxFPS                    = s.maxFPS,
 			pointMinVel               = s.pointMinVel,
@@ -24,9 +23,14 @@ Connections = {
 			-- Extra.
 			screenPixelCountSqrt = screenPixelCountSqrt,
 			pointCount           = math.floor(screenPixelCountSqrt * s.pointCountMult),
+			-- '0.25' shouldn't be hardcoded here in the future.
 			maxConnectionDist    = math.floor(s.maxConnectionDistMult * math.pow(screenPixelCountSqrt, 0.25)),
 
 			points = {},
+
+			-- The '- 1' is necessary for the '\n' character at the end of each line.
+			-- Not sure if this is the best place to put the '- 1', though.
+			framebuffer = fb.FrameBuffer.new(s.offset.x, s.offset.y, s.size.width - 1, s.size.height),
 		}
 
 		setmetatable(self, {__index = Connections})
@@ -52,8 +56,10 @@ Connections = {
 
 		for _, point in ipairs(self.points) do
 			point:generateConnections(self.pointCount, self.points, self.maxConnectionDist)
-			point:showConnections(self.points, self.maxConnectionDist, self.connectionWeightAlphaMult)
+			point:showConnections(self.points, self.maxConnectionDist, self.connectionWeightAlphaMult, self.framebuffer)
 		end
+
+		self.framebuffer:draw()
 	end,
 
 }
@@ -112,7 +118,7 @@ Point = {
 		end
 	end,
 
-	showConnections = function(self, points, maxConnectionDist, connectionWeightAlphaMult)
+	showConnections = function(self, points, maxConnectionDist, connectionWeightAlphaMult, framebuffer)
 		for _, otherIndex in ipairs(self.connections) do
 			local other = points[otherIndex]
 
@@ -124,7 +130,7 @@ Point = {
 
 				local char = dithering.getClosestChar(cf.clamp(alpha * connectionWeightAlphaMult, 0, 1))
 
-				shape.line(self.pos, other.pos, char)
+				framebuffer:writeLine(self.pos.x, self.pos.y, other.pos.x, other.pos.y, char)
 			end
 		end
 	end,
