@@ -123,7 +123,7 @@ Animation = {
 	-- Asks the user for an animation folder to load.
 	askAnimationFolder = function(self)
 		-- Get the size options.
-		local localStructure = fs.list('BackwardsOS/programs/Animation/Animations')
+		local localStructure = fs.list('BackwardsOS/programs/Animation/animations')
 
 		-- Ask the size folder name.
 		self.sizeFolder = self:listOptions(self.structure, true, localStructure)
@@ -142,7 +142,7 @@ Animation = {
 
 	-- Asks the user for an animation file to load.
 	askAnimationFile = function(self)
-		local path = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
+		local path = 'BackwardsOS/programs/Animation/animations/' .. self.sizeFolder
 
 		if not fs.exists(path) then
 			fs.makeDir(path)
@@ -230,7 +230,7 @@ Animation = {
 
 	getInfo = function(self)
 		-- self:downloadAnimationInfo(gitHubPath)
-		local path = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+		local path = self.folder .. 'animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 		local str = fs.open(path .. 'info.txt', 'r').readAll()
 		self.info = textutils.unserialize(str)
 	end,
@@ -423,7 +423,7 @@ Animation = {
 			return
 		end
 
-		local gitHubFolder = 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
+		local gitHubFolder = 'animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
 		local gitHubPath = gitHubFolder .. '/' .. self.fileName
 
 		self:getSelectedAnimationData(gitHubPath)
