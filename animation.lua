@@ -6,7 +6,7 @@
 REQUIREMENTS
     * Common Functions (cf): https://pastebin.com/p9tSSWcB -- Provides cf.tryYield().
 	* JSON (json): https://pastebin.com/4nRg9CHU - Provides converting a Lua table into a JavaScript object for the HTTPS API.
-	* HTTPS (https): https://pastebin.com/iyBc3BWj - Gets the animation files from a GitHub storage repository.
+	* HTTPS (https): https://pastebin.com/iyBc3BWj - Gets the animation files from a server's storage.
 	(Optional) BruteOS: <<<ADD PASTEBIN LINK HERE>>> -- Will use the BruteOS to print progress while loading animations.
 
 The default terminal ratio is 25:9.
@@ -49,7 +49,14 @@ Animation = {
 		}
 		
 		if http then
-			self.structure = https.getStorageStructure()
+			--self.structure = https.getStorageStructure()
+			self.structure = {
+				size_30x30 = {
+					"ten_years_later",
+					"takeout",
+					"wavetro_logo",
+				}
+			}
 		end
 		
 		setmetatable(self, {__index = Animation})
@@ -189,7 +196,7 @@ Animation = {
 		local cursorX, cursorY = term.getCursorPos()
 
 		if self.progressBool then
-			local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from GitHub. Calculating ETA...'
+			local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from server. Calculating ETA...'
 			self:printProgress(str, cursorX, cursorY)
 		end
 
@@ -221,7 +228,7 @@ Animation = {
 			end
 
 			if self.progressBool then
-				local str = 'Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from GitHub.' .. eta .. '           '
+				local str = 'Fetching animation file ' .. tostring(i) .. '/' .. tostring(self.info.data_files) .. ' from server.' .. eta .. '           '
 				self:printProgress(str, cursorX, cursorY)
 			end
 		end
