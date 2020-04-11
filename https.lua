@@ -65,8 +65,7 @@ function getHandle(url)
 	return handle
 end
 
-
-function getTable(url)	
+function getTable(url)
 	local handle = getHandle(url)
 	
 	local strTable = {}
@@ -119,12 +118,40 @@ function getStorageData(url)
 	return http.get('http://joppekoers.nl:1337/' .. url).readAll()
 end
 
+function getHTTPHandle(url)
+	local handle = http.get(url)
+	cf.yield()
+	
+	if handle == nil then error('https.getHTTPHandle() didn\'t get a response back.') end
+
+	return handle
+end
+
+function getHTTPTable(url)
+	local handle = getHTTPHandle(url)
+	
+	local strTable = {}
+	local i = 1
+	for line in handle.readLine do
+		strTable[i] = line
+		i = i + 1
+	end
+	cf.yield()
+	
+	handle.close()
+	cf.yield()
+	
+	if strTable[1] == '404: Not Found' then print(url)error('https.get() 404: File not found.') end
+
+	return strTable
+end
+
 function downloadStorageFile(url, folder, name)
 	if not fs.exists(folder) then
 		fs.makeDir(folder)
 	end
 	
-    local strTable = getTable(url)
+    local strTable = getHTTPTable('http://joppekoers.nl:1337/' .. url)
 	cf.yield()
 
 	local handle = io.open(folder .. '/' .. name .. '.txt', 'w')

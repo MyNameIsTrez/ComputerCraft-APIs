@@ -130,7 +130,11 @@ Animation = {
 	-- Asks the user for an animation folder to load.
 	askAnimationFolder = function(self)
 		-- Get the size options.
-		local localStructure = fs.list('BackwardsOS/programs/Animation/Animations')
+		local path = 'BackwardsOS/programs/Animation/Animations'
+		if not fs.exists(path) then
+			fs.makeDir(path)
+		end
+		local localStructure = fs.list(path)
 
 		-- Ask the size folder name.
 		self.sizeFolder = self:listOptions(self.structure, true, localStructure)
@@ -206,7 +210,7 @@ Animation = {
 			local url    = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/data/' .. tostring(i) .. '.txt'
 			local folder = path .. '/data'
 			local name   = i
-			https.downloadStorageData(url, folder, name)
+			https.downloadStorageFile(url, folder, name)
 
 			local timeEnd = os.clock()
 
