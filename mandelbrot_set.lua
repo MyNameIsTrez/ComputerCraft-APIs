@@ -70,7 +70,7 @@ Mandelbrot = {
 
 	drawFrame = function(self, frame)
 		term.setCursorPos(self.x1, self.y1)
-		term.write(frame)
+		write(frame)
 		cf.tryYield()
 	end
 
