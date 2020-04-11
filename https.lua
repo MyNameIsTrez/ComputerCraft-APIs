@@ -45,6 +45,9 @@ local IP
 local randomQuotaUrlStart = 'http://www.random.org/quota/?ip='
 local randomQuotaUrlEnd = '&format=plain'
 
+-- Set by calling getStorageStructure().
+local storageStructure
+
 
 --------------------------------------------------
 -- FUNCTIONS
@@ -55,8 +58,7 @@ local randomQuotaUrlEnd = '&format=plain'
 
 function getHandle(url)
 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
 	
 	if handle == nil then error('https.getHandle() didn\'t get a response back.') end
 
@@ -69,21 +71,14 @@ function getTable(url)
 	
 	local strTable = {}
 	local i = 1
-	
 	for line in handle.readLine do
 		strTable[i] = line
-		--if i > 1 then
-		--	strTable[i] = '\n'
-		--	i = i + 1
-		--end
 		i = i + 1
 	end
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
 	
 	handle.close()
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
 	
 	if strTable[1] == '404: Not Found' then print(url)error('https.get() 404: File not found.') end
 
@@ -110,7 +105,45 @@ function request(data)
 end
 
 
--- GitHub ----------
+-- Joppe's file storage server ----------
+
+
+function getStorageStructure()
+	if not storageStructure then
+		storageStructure = json.parseArray(http.get('http://joppekoers.nl:1337').readAll())
+	end
+	return storageStructure
+end
+
+function getStorageData(url)
+	return http.get('http://joppekoers.nl:1337/' .. url).readAll()
+end
+
+function downloadStorageFile(url, folder, name)
+	if not fs.exists(folder) then
+		fs.makeDir(folder)
+	end
+	
+    local strTable = getTable(url)
+	cf.yield()
+
+	local handle = io.open(folder .. '/' .. name .. '.txt', 'w')
+	cf.yield()
+	
+	for _, str in ipairs(strTable) do
+		handle:write(str)
+		handle:write('\n')
+	end
+	cf.yield()
+	
+	handle:close()
+	cf.yield()
+end
+
+
+--[[
+
+-- GitHub (not used) ----------
 
 
 -- Called when getting the structure.
@@ -128,22 +161,19 @@ function downloadFile(url, folder, fileName)
 	end
 	
     local strTable = getTable(url)
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
+
 	local handle = io.open(folder .. '/' .. fileName .. '.txt', 'w')
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
 	
 	for _, str in ipairs(strTable) do
 		handle:write(str)
 		handle:write('\n')
 	end
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
 	
 	handle:close()
-	os.queueEvent('yield')
-	os.pullEvent('yield')
+	cf.yield()
 end
 
 function getStructure()
@@ -162,6 +192,9 @@ function getStructure()
 	end
 	return structure
 end
+
+]]--
+
 
 function httpGetIP()
 	if not IP then

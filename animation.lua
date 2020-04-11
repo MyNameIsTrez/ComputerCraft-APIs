@@ -1,13 +1,13 @@
 -- README --------------------------------------------------------
 
 --[[
--- Program used to create and preview dithered animations/images.
+-- This is a project for viewing regular video and image files in ASCII within Minecraft's ComputerCraft mod.
 
 REQUIREMENTS
     * Common Functions (cf): https://pastebin.com/p9tSSWcB -- Provides cf.tryYield().
 	* JSON (json): https://pastebin.com/4nRg9CHU - Provides converting a Lua table into a JavaScript object for the HTTPS API.
 	* HTTPS (https): https://pastebin.com/iyBc3BWj - Gets the animation files from a GitHub storage repository.
-	(Optional) BruteOS: <<<ADD PASTEBIN LINK HERE>>> -- Will use the BruteOS to print progress in loading animations.
+	(Optional) BruteOS: <<<ADD PASTEBIN LINK HERE>>> -- Will use the BruteOS to print progress while loading animations.
 
 The default terminal ratio is 25:9.
 To get the terminal to fill your entire monitor and to get a custom text color:
@@ -25,7 +25,7 @@ Animation = {
 
 	new = function(self, settings)
 		local self = {
-			-- Assign passed settings.
+			-- Passed settings.
 			passedShell                    = settings.shell,
 			frameSleeping                  = settings.frameSleeping,
 			frameSleep                     = settings.frameSleep,
@@ -49,7 +49,7 @@ Animation = {
 		}
 		
 		if http then
-			self.structure = https.getStructure()
+			self.structure = https.getStorageStructure()
 		end
 		
 		setmetatable(self, {__index = Animation})
@@ -123,7 +123,7 @@ Animation = {
 	-- Asks the user for an animation folder to load.
 	askAnimationFolder = function(self)
 		-- Get the size options.
-		local localStructure = fs.list('BackwardsOS/programs/Animation/animations')
+		local localStructure = fs.list('BackwardsOS/programs/Animation/Animations')
 
 		-- Ask the size folder name.
 		self.sizeFolder = self:listOptions(self.structure, true, localStructure)
@@ -142,7 +142,7 @@ Animation = {
 
 	-- Asks the user for an animation file to load.
 	askAnimationFile = function(self)
-		local path = 'BackwardsOS/programs/Animation/animations/' .. self.sizeFolder
+		local path = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
 
 		if not fs.exists(path) then
 			fs.makeDir(path)
@@ -170,26 +170,23 @@ Animation = {
 		end
 	end,
 
-	downloadAnimationInfo = function(self, gitHubPath, path)
-		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubPath .. '/info.txt'
-		local str = https.get(url)
+	downloadAnimationInfo = function(self, path)
+		local url = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/info.txt'
+		local str = https.getStorageData(url)
 
-		-- If the https.get() above didn't error,
-		-- make sure there's a folder to store the resulting string in.
 		if not fs.exists(path) then
 			fs.makeDir(path)
 		end
 
-		local handle = io.open(self.folder .. gitHubPath .. '/info.txt', 'w')
+		local handle = io.open(self.folder .. 'Animations/' .. url, 'w')
 		handle:write(str)
 		handle:close()
 		
 		self.info = textutils.unserialize(str)
 	end,
 
-	downloadAnimationFile = function(self, gitHubPath)
+	downloadAnimationFile = function(self, path)
 		local cursorX, cursorY = term.getCursorPos()
-		local gitHubDataPath = gitHubPath .. '/data'
 
 		if self.progressBool then
 			local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from GitHub. Calculating ETA...'
@@ -199,8 +196,10 @@ Animation = {
 		for i = 1, self.info.data_files do
 			local timeStart = os.clock()
 
-			local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-Data-Storage/master/' .. gitHubDataPath .. '/' .. i .. '.txt'
-			https.downloadFile(url, self.folder .. gitHubDataPath, i)
+			local url    = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/data/' .. tostring(i) .. '.txt'
+			local folder = path .. '/data'
+			local name   = i
+			https.downloadStorageData(url, folder, name)
 
 			local timeEnd = os.clock()
 
@@ -228,24 +227,19 @@ Animation = {
 		end
 	end,
 
-	getInfo = function(self)
-		-- self:downloadAnimationInfo(gitHubPath)
-		local path = self.folder .. 'animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+	getInfo = function(self, path)
+		local path = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 		local str = fs.open(path .. 'info.txt', 'r').readAll()
 		self.info = textutils.unserialize(str)
 	end,
 
-	getFrames = function(self)
-		print(1)
-	end,
-
-	getSelectedAnimationData = function(self, gitHubPath)
-		local path = self.folder .. gitHubPath
+	getSelectedAnimationData = function(self)
+		local path = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
 		local fileExists = fs.exists(path)
 
 		if not fileExists then			
-			self:downloadAnimationInfo(gitHubPath, path)
-			self:downloadAnimationFile(gitHubPath)
+			self:downloadAnimationInfo(path)
+			self:downloadAnimationFile(path)
 		else
 			local str = fs.open(path .. '/info.txt', 'r').readAll()
 			self.info = textutils.unserialize(str)
@@ -273,7 +267,6 @@ Animation = {
 
 				if i % 1000 == 0 then
 					cf.yield()
-					
 					if self.progressBool then
 						self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 					end
@@ -423,10 +416,7 @@ Animation = {
 			return
 		end
 
-		local gitHubFolder = 'animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
-		local gitHubPath = gitHubFolder .. '/' .. self.fileName
-
-		self:getSelectedAnimationData(gitHubPath)
+		self:getSelectedAnimationData()
 		cf.tryYield()
 		
 		self:dataToTimedAnimation()
@@ -458,7 +448,7 @@ Animation = {
 		term.setCursorPos(self.offset.x, self.offset.y)
 
 		-- Called because it's necessary to know self.info.frame_count.
-		self:getInfo() -- Seems like this it should be able to call this method less often!!!
+		self:getInfo() -- Seems like it should be possible to call this method less often !!!
 
 		if self.loop and self.info.frame_count > 1 then
 			while true do
