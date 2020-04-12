@@ -55,6 +55,8 @@ Animation = {
 					"ten_years_later",
 					"takeout",
 					"wavetro_logo",
+					"gamestore",
+					"spanish_class"
 				}
 			}
 		end
@@ -79,12 +81,14 @@ Animation = {
 	listOptions = function(self, cloudOptions, keysStrings, localOptions)
 		cloudOptionsShort = {}
 		if keysStrings then
+			-- Folders.
 			for name, _ in pairs(cloudOptions) do
 				-- a is necessary, because gsub() also returns a second value being the number of substitutions made.
 				local a = name:gsub('size_', '')
 				table.insert(cloudOptionsShort, a)
 			end
 		else
+			-- Files.
 			for _, name in ipairs(cloudOptions) do
 				local a = name:gsub('size_', '')
 				table.insert(cloudOptionsShort, a)
