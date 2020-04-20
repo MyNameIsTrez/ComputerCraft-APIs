@@ -1,7 +1,7 @@
 -- BackwardsOS
 
 
---useBackwardsOS = true
+useBackwardsOS = true
 
 -- Power this side with a redstone signal to disable starting BackwardsOS.lua.
 disableSide = 'right'

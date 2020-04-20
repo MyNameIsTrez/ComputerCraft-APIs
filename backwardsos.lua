@@ -45,11 +45,12 @@ function importAPIs()
 		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/' .. API.id .. '.lua'
 
 		local handleHttps = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
-		local str = handleHttps.readAll()
 
 		if not handleHttps then
 			error('Downloading file failed!')
 		end
+		
+		local str = handleHttps.readAll()
 
 		local handleFile = io.open(pathAPI, 'w')
 		handleFile:write(str)
@@ -72,37 +73,60 @@ function loadAPIs()
 	end
 end
 
-if not rs.getInput(cfg.disableSide) then
-	if not fs.exists(cfgPath) then
-		local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/backwardsos_cfg.lua'
+function downloadCfg()
+	term.write("Downloading cfg from GitHub...")
+
+	local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/backwardsos_cfg.lua'
+
+	local handleHttps = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
+
+	if not handleHttps then
+		error('Downloading file failed!')
 	end
 
-	os.loadAPI(cfgPath)
+	local str = handleHttps.readAll()
 
-	if cfg.redownloadAPIsOnStartup and http then
-		importAPIs()
-	end
+	local handleFile = io.open('cfg', 'w')
+	handleFile:write(str)
+	handleFile:close()
+	
+	print(' Downloaded!')
+end
 
-	loadAPIs()
 
-	term.clear()
-	term.setCursorPos(1, 1)
+if not fs.exists(cfgPath) then
+	downloadCfg()
+end
 
-	if cfg.useMonitor then
-		term.redirect(cf.getMonitor())
-	end
+os.loadAPI(cfgPath)
 
-	local options = fs.list('BackwardsOS/programs')
-	local program = lo.listOptions(options)
+if not cfg.useBackwardsOS or rs.getInput(cfg.disableSide) then
+	return
+end
 
-	term.clear()
-	term.setCursorPos(1, 1)
+if cfg.redownloadAPIsOnStartup and http then
+	importAPIs()
+end
 
-	local path = 'BackwardsOS/programs/' .. program .. '/' ..program .. '.lua'
+loadAPIs()
 
-	if fs.exists(path) then
-		shell.run(path)
-	else
-		error("Program '" .. tostring(program) .. "' not found.")
-	end
+term.clear()
+term.setCursorPos(1, 1)
+
+if cfg.useMonitor then
+	term.redirect(cf.getMonitor())
+end
+
+local options = fs.list('BackwardsOS/programs')
+local program = lo.listOptions(options)
+
+term.clear()
+term.setCursorPos(1, 1)
+
+local path = 'BackwardsOS/programs/' .. program .. '/' ..program .. '.lua'
+
+if fs.exists(path) then
+	shell.run(path)
+else
+	error("Program '" .. tostring(program) .. "' not found.")
 end
