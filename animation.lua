@@ -49,16 +49,16 @@ Animation = {
 		}
 		
 		if http then
-			--self.structure = https.getStorageStructure()
-			self.structure = {
-				size_30x30 = {
-					"ten_years_later",
-					"takeout",
-					"wavetro_logo",
-					"gamestore",
-					"spanish_class"
-				}
-			}
+			self.structure = https.getStorageStructure()
+			-- self.structure = {
+			-- 	size_30x30 = {
+			-- 		"ten_years_later",
+			-- 		"takeout",
+			-- 		"wavetro_logo",
+			-- 		"gamestore",
+			-- 		"spanish_class"
+			-- 	}
+			-- }
 		end
 		
 		setmetatable(self, {__index = Animation})

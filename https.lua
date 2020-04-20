@@ -109,7 +109,7 @@ end
 
 function getStorageStructure()
 	if not storageStructure then
-		storageStructure = json.parseArray(http.get('http://joppekoers.nl:1337').readAll())
+		storageStructure = json.parseObject(http.get('http://joppekoers.nl:1337').readAll())
 	end
 	return storageStructure
 end

@@ -86,7 +86,7 @@ function downloadCfg()
 
 	local str = handleHttps.readAll()
 
-	local handleFile = io.open('cfg', 'w')
+	local handleFile = io.open(cfgPath, 'w')
 	handleFile:write(str)
 	handleFile:close()
 	
@@ -117,7 +117,13 @@ if cfg.useMonitor then
 	term.redirect(cf.getMonitor())
 end
 
-local options = fs.list('BackwardsOS/programs')
+local programsPath = 'BackwardsOS/programs'
+
+if not fs.exists(programsPath) then
+	fs.makeDir(programsPath)
+end
+
+local options = fs.list(programsPath)
 local program = lo.listOptions(options)
 
 term.clear()
