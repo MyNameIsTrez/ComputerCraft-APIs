@@ -176,7 +176,7 @@ function printTable(tab, recursive, depth)
 	
 	-- Print the keys and values, with extra spaces so the values line up.
 	for key, value in pairs(tab) do
-		yield() -- Need to yield, as the next bit of code can be recursive.
+		tryYield() -- Need to yield, as the next bit of code can be recursive.
 		
 		local spacingCount = longestKey - #tostring(key) -- How many spaces are added between the key and value.
 		print(
