@@ -1,17 +1,38 @@
-movement = {
+Movement = {
     pos = vector.new(0, 0, 0),
     dir = "N"
 }
 
-function movement:new(pos, dir)
-    setmetatable({}, movement)
+function Movement:new(pos, dir)
+    setmetatable({}, Movement)
     self.pos = pos
     self.dir = dir
     return self
 end
 
-function movement:forward()
-    if turtle.forward() == true then
+function Movement:forward(times)
+    times = times or 1
+    for i = 1, times do
+        if turtle.forward() then
+            if self.dir == "N" then
+                self.pos.y = self.pos.y - 1
+            elseif self.dir == "S" then
+                self.pos.y = self.pos.y + 1
+            elseif self.dir == "E" then
+                self.pos.x = self.pos.x + 1
+            elseif self.dir == "W" then
+                self.pos.x = self.pos.x - 1
+            end
+        end
+    end
+end
+function Movement:attackForward(times)
+    times = times or 1
+    for i = 1, times do
+        while not turtle.forward() do
+            turtle.attack()
+            sleep(1)
+        end
         if self.dir == "N" then
             self.pos.y = self.pos.y - 1
         elseif self.dir == "S" then
@@ -21,171 +42,184 @@ function movement:forward()
         elseif self.dir == "W" then
             self.pos.x = self.pos.x - 1
         end
-        return true
-    else
-        return false
-    end
-end
-function movement:goForward()
-    while turtle.forward() == false do
-        turtle.attack()
-        sleep(1)
-    end
-    if self.dir == "N" then
-        self.pos.y = self.pos.y - 1
-    elseif self.dir == "S" then
-        self.pos.y = self.pos.y + 1
-    elseif self.dir == "E" then
-        self.pos.x = self.pos.x + 1
-    elseif self.dir == "W" then
-        self.pos.x = self.pos.x - 1
     end
     return true
 end
-function movement:digForward()
-    while turtle.forward() == false do
-        turtle.dig()
-    end
-    if self.dir == "N" then
-        self.pos.y = self.pos.y - 1
-    elseif self.dir == "S" then
-        self.pos.y = self.pos.y + 1
-    elseif self.dir == "E" then
-        self.pos.x = self.pos.x + 1
-    elseif self.dir == "W" then
-        self.pos.x = self.pos.x - 1
-    end
-    return true
-end
-
-function movement:back()
-    if turtle.back() == true then
-        if self.dir == "N" then
-            self.pos.y = self.pos.y + 1
-        elseif self.dir == "S" then
-            self.pos.y = self.pos.y - 1
-        elseif self.dir == "E" then
-            self.pos.x = self.pos.x - 1
-        elseif self.dir == "W" then
-            self.pos.x = self.pos.x + 1
+function Movement:digForward(times)
+    times = times or 1
+    for i = 1, times do
+        while not turtle.forward() do
+            turtle.dig()
+            sleep(1)
         end
-        return true
-    else
-        return false
+        if self.dir == "N" then
+            self.pos.y = self.pos.y - 1
+        elseif self.dir == "S" then
+            self.pos.y = self.pos.y + 1
+        elseif self.dir == "E" then
+            self.pos.x = self.pos.x + 1
+        elseif self.dir == "W" then
+            self.pos.x = self.pos.x - 1
+        end
     end
+    return true
 end
-function movement:goBack()
-    while turtle.back() == false do
-        turtle.turnLeft()
-        turtle.turnLeft()
-        turtle.attack()
-        turtle.attack()
-        turtle.turnLeft()
-        turtle.turnLeft()
-        sleep(1)
-    end
-
-    if self.dir == "N" then
-        self.pos.y = self.pos.y - 1
-    elseif self.dir == "S" then
-        self.pos.y = self.pos.y + 1
-    elseif self.dir == "E" then
-        self.pos.x = self.pos.x + 1
-    elseif self.dir == "W" then
-        self.pos.x = self.pos.x - 1
+function Movement:digAttackForward(times)
+    times = times or 1
+    for i = 1, times do
+        while not turtle.forward() do
+            turtle.dig()
+            turtle.attack()
+            turtle.attack()
+            sleep(1)
+        end
+        if self.dir == "N" then
+            self.pos.y = self.pos.y - 1
+        elseif self.dir == "S" then
+            self.pos.y = self.pos.y + 1
+        elseif self.dir == "E" then
+            self.pos.x = self.pos.x + 1
+        elseif self.dir == "W" then
+            self.pos.x = self.pos.x - 1
+        end
     end
     return true
 end
 
-function movement:up()
-    if turtle.up() == true then
+function Movement:back(times)
+    times = times or 1
+    for i = 1, times do
+        if turtle.back() then
+            if self.dir == "N" then
+                self.pos.y = self.pos.y + 1
+            elseif self.dir == "S" then
+                self.pos.y = self.pos.y - 1
+            elseif self.dir == "E" then
+                self.pos.x = self.pos.x - 1
+            elseif self.dir == "W" then
+                self.pos.x = self.pos.x + 1
+            end
+        end
+    end
+end
+function Movement:attackBack(times)
+    times = times or 1
+    for i = 1, times do
+        while not turtle.back() do
+            self.left(2)
+            turtle.attack()
+            turtle.attack()
+            self.left(2)
+            sleep(1)
+        end
+
+        if self.dir == "N" then
+            self.pos.y = self.pos.y - 1
+        elseif self.dir == "S" then
+            self.pos.y = self.pos.y + 1
+        elseif self.dir == "E" then
+            self.pos.x = self.pos.x + 1
+        elseif self.dir == "W" then
+            self.pos.x = self.pos.x - 1
+        end
+    end
+    return true
+end
+
+function Movement:up()
+    if turtle.up() then
         self.pos.z = self.pos.z + 1
         return true
     else
         return false
     end
 end
-function movement:goUp()
-    while turtle.up() == false do
+function Movement:goUp()
+    while not turtle.up() do
         sleep(1)
     end
     self.pos.z = self.pos.z + 1
     return true
 end
-function movement:digUp()
-    while turtle.up() == false do
+function Movement:digUp()
+    while not turtle.up() do
         turtle.digUp()
     end
     self.pos.z = self.pos + 1
     return true
 end
 
-function movement:down()
-    if turtle.down() == true then
+function Movement:down()
+    if turtle.down() then
         self.pos.z = self.pos.z - 1
         return true
     else
         return false
     end
 end
-function movement:down()
-    while turtle.down() == false do
+function Movement:down()
+    while not turtle.down() do
         sleep(1)
     end
     self.pos.z = self.pos.z - 1
     return true
 end
-function movement:digDown()
-    while turtle.down() == false do
+function Movement:digDown()
+    while not turtle.down() do
         turtle.digDown()
     end
     self.pos.z = self.pos.z - 1
     return true
 end
 
-function movement:left(times)
+function Movement:left(times)
+    times = times or 1
     for i = 1,times do 
-        if self.turnLeft() == false then
+        if turtle.turnLeft() then
+            if self.dir == "N" then
+                self.dir = "W"
+            elseif self.dir == "W" then
+                self.dir = "S"
+            elseif self.dir == "S" then
+                self.dir = "E"
+            elseif self.dir == "E" then
+                self.dir = "N"
+            end
             i = i - 1
         end
     end
 end
-function movement:turnLeft()
-    turtle.turnLeft()
-    if self.dir == "N" then
-        self.dir = "W"
-    elseif self.dir == "W" then
-        self.dir = "S"
-    elseif self.dir == "S" then
-        self.dir = "E"
-    elseif self.dir == "E" then
-        self.dir = "N"
-    end
-    return true
-end
-
-function movement:right(times)
+function Movement:right(times)
+    times = times or 1
     for i = 1,times do
-        if self.turnRight() == false then
+        if turtle.turnRight() then
+            if self.dir == "N" then
+                self.dir = "E"
+            elseif self.dir == "E" then
+                self.dir = "S"
+            elseif self.dir == "S" then
+                self.dir = "W"
+            elseif self.dir == "W" then
+                self.dir = "N"
+            end
             i = i - 1
         end
     end
 end
-function movement:turnRight()
-    turtle.turnRight()
-    if self.dir == "N" then
-        self.dir = "E"
-    elseif self.dir == "E" then
-        self.dir = "S"
-    elseif self.dir == "S" then
-        self.dir = "W"
-    elseif self.dir == "W" then
-        self.dir = "N"
+function Movement:uTurn(side)
+    side = side or "left"
+    if side == "right" then
+        self.right()
+        self.forward()
+        self.right()
+    else
+        self.left()
+        self.forward()
+        self.left()
     end
-    return true
 end
 
-function movement:readPos()
+function Movement:readData()
     if not fs.exists("data/position") then
         self.createData();
     else
@@ -198,7 +232,7 @@ function movement:readPos()
         return true
     end
 end
-function movement:savePos()
+function Movement:saveData()
     if not fs.exists("data/position") then
         self.createData()
     else
@@ -211,7 +245,7 @@ function movement:savePos()
         return true
     end
 end
-function movement:createData()
+function Movement:createData()
     io.write("(Save) Couldn't find the data/position file, make one? Y/N")
     answer = io.read()
     if answer:lower() == "y" then
