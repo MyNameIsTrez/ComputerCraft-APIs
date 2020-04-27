@@ -11,6 +11,7 @@ function Movement:new(pos, dir)
 end
 
 function Movement:forward(times)
+    print(self)
     times = times or 1
     for i = 1, times do
         if turtle.forward() then
@@ -25,6 +26,7 @@ function Movement:forward(times)
             end
         end
     end
+    print(self)
 end
 function Movement:attackForward(times)
     times = times or 1
@@ -106,10 +108,10 @@ function Movement:attackBack(times)
     times = times or 1
     for i = 1, times do
         while not turtle.back() do
-            self.left(2)
+            self:left(2)
             turtle.attack()
             turtle.attack()
-            self.left(2)
+            self:left(2)
             sleep(1)
         end
 
@@ -209,19 +211,19 @@ end
 function Movement:uTurn(side)
     side = side or "left"
     if side == "right" then
-        self.right()
-        self.forward()
-        self.right()
+        self:right()
+        self:forward()
+        self:right()
     else
-        self.left()
-        self.forward()
-        self.left()
+        self:left()
+        self:forward()
+        self:left()
     end
 end
 
 function Movement:readData()
     if not fs.exists("data/position") then
-        self.createData();
+        self:createData();
     else
         local h = fs.open("data/position", "r")
         self.pos.x = tonumber(h.readLine())
@@ -234,7 +236,7 @@ function Movement:readData()
 end
 function Movement:saveData()
     if not fs.exists("data/position") then
-        self.createData()
+        self:createData()
     else
         local h = fs.open("data/position", "w")
         h.writeLine(self.pos.x)
