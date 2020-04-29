@@ -1,9 +1,9 @@
 -- Edit
-local seedName	  = 'minecraft:wheat_seeds'
-local length	  = 16
-local width		  = 16
-local maxDrops	  = 1 + 3
-local maxGrowth   = 7
+local seedName  = 'minecraft:wheat_seeds'
+local length	= 16
+local width	    = 13
+local maxDrops  = 1 + 3
+local maxGrowth = 7
 
 -- Don't edit
 local dumpFreq	  = math.floor(64 / maxDrops)
@@ -32,7 +32,7 @@ function getFreeSlots()
 end
 
 function dump()
-	if getFreeSlots < 2 then
+	if getFreeSlots() < 2 then
 		turtle.select(enderChestSlot)
 		turtle.place()
 		for i = 1, 16 do
@@ -47,7 +47,6 @@ function dump()
 end
 
 function run()
-	turtle.select(seedSlot)
 	for w = 1, width do
 		for l = 1, length do
 			if (w * l + l) % dumpFreq == 0 then
@@ -57,18 +56,22 @@ function run()
 			-- Break fully grown crops.
 			local cropBelow, crop = turtle.inspectDown()
 			
-			-- Try to till dirt/harvest crop.
-			turtle.digDown()
+			-- Till dirt.
+			if not cropBelow then
+				turtle.digDown()
+			end
 
-			-- If harvested crop.
+			-- If harvestable crop, harvest it.
 			if cropBelow and crop.metadata == maxGrowth then
+				turtle.digDown()
 				searchSeeds = true
 			end
 			
 			-- When there are no seeds to place.
 			if searchSeeds and not turtle.placeDown() and not cropBelow then
-				if getSlot(seedName) then
-					turtle.select(i)
+				local slot = getSlot(seedName)
+				if slot then
+					turtle.select(slot)
 				else
 					-- Don't try finding seeds this run.
 					searchSeeds = false
@@ -95,9 +98,11 @@ end
 
 local enderChestSlot = getSlot('EnderStorage:enderChest')
 local seedSlot = getSlot(seedName)
+turtle.select(seedSlot)
 
 while true do
 	term.clear()
+	term.setCursorPos(1, 1)
 	print('Running...')
 	run()
 	print('Sleeping 60 seconds...')
