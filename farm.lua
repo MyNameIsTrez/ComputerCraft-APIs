@@ -1,6 +1,6 @@
 -- Edit
 local seedName  = 'minecraft:wheat_seeds'
-local length	= 16
+local length	= 96
 local width	    = 13
 local maxDrops  = 1 + 3
 local maxGrowth = 7
@@ -8,6 +8,8 @@ local maxGrowth = 7
 -- Don't edit
 local dumpFreq	  = math.floor(64 / maxDrops)
 local searchSeeds = true
+local enderChestSlot
+local seedSlot
 
 function getSlot(name)
 	if type(name) ~= 'string' then error("getSlot expects a string for 'name'! Got: " .. type(name)) end
@@ -18,7 +20,7 @@ function getSlot(name)
 			return i
 		end
 	end
-	return false
+	return nil
 end
 
 function getFreeSlots()
@@ -34,15 +36,21 @@ end
 function dump()
 	if getFreeSlots() < 2 then
 		turtle.select(enderChestSlot)
-		turtle.place()
+		turtle.placeUp()
 		for i = 1, 16 do
 			if i ~= enderChestSlot and i ~= seedSlot then
 				turtle.select(i)
-				turtle.drop(i)
+				turtle.dropUp()
 			end
 		end
 		turtle.select(enderChestSlot)
-		turtle.dig()
+		turtle.digUp()
+		if seedSlot then
+			turtle.select(seedSlot)
+		else
+			-- Select a slot that isn't the ender chest slot.
+			turtle.select((enderChestSlot + 1) % 16)
+		end
 	end
 end
 
@@ -68,12 +76,13 @@ function run()
 			end
 			
 			-- When there are no seeds to place.
-			if searchSeeds and not turtle.placeDown() and not cropBelow then
-				local slot = getSlot(seedName)
-				if slot then
-					turtle.select(slot)
+			if searchSeeds and not turtle.placeDown() then
+				local seedSlot = getSlot(seedName)
+				if seedSlot then
+					turtle.select(seedSlot)
+					turtle.placeDown()
 				else
-					-- Don't try finding seeds this run.
+					-- Don't try finding seeds this run, unless a crop will be harvested.
 					searchSeeds = false
 				end
 			end
@@ -83,22 +92,47 @@ function run()
 			end
 		end
 		
-		-- u-turn
-		if w % 2 ~= 0 then
-			turtle.turnRight()
-			turtle.forward()
-			turtle.turnRight()
+		if w ~= width then
+			-- u-turn
+			if w % 2 ~= 0 then
+				turtle.turnRight()
+				turtle.forward()
+				turtle.turnRight()
+			else
+				turtle.turnLeft()
+				turtle.forward()
+				turtle.turnLeft()
+			end
 		else
-			turtle.turnLeft()
-			turtle.forward()
-			turtle.turnLeft()
+			-- Head back.
+			if w % 2 ~= 0 then
+				turtle.turnRight()
+				turtle.turnRight()
+				for _ = 1, length - 1 do
+					turtle.forward()
+				end
+			end
+
+			turtle.turnRight()
+			for _ = 1, width - 1 do
+				turtle.forward()
+			end
+			turtle.turnRight()
 		end
 	end
 end
 
-local enderChestSlot = getSlot('EnderStorage:enderChest')
-local seedSlot = getSlot(seedName)
-turtle.select(seedSlot)
+enderChestSlot = getSlot('EnderStorage:enderChest')
+
+if not enderChestSlot then
+	error('You need to insert an ender chest!')
+end
+
+seedSlot = getSlot(seedName)
+
+if seedSlot then
+	turtle.select(seedSlot)
+end
 
 while true do
 	term.clear()
