@@ -1,6 +1,6 @@
 -- Edit
-local interfaceStackCount = 6
-local sleepTime = 5
+local interfaceStackCount = 7
+local sleepTime = 30
 local interfaceDeactivationTime = 1
 
 local reactorSide = 'front'
