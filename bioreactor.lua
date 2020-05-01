@@ -1,7 +1,7 @@
 -- Edit
-local interfaceStackCount = 7
+local fuelTypes = 7
 local sleepTime = 30
-local interfaceDeactivationTime = 1
+local interfaceDeactivationWait = 1
 
 local reactorSide = 'front'
 local invertedToggleBusSide = 'bottom'
@@ -39,15 +39,15 @@ end
 
 function suckInterface()
 	rs.setOutput(invertedToggleBusSide, true)
-	sleep(interfaceDeactivationTime)
-	for _ = 1, interfaceStackCount do
+	sleep(interfaceDeactivationWait)
+	for _ = 1, fuelTypes do
 		turtle.suckDown()
 	end
 	rs.setOutput(invertedToggleBusSide, false)
 end
 
 function dropReactor()
-	for i = 1, interfaceStackCount do
+	for i = 1, fuelTypes do
 		turtle.select(i)
 		turtle.drop()
 	end
@@ -62,7 +62,7 @@ while true do
 	term.setCursorPos(1, 1)
 
 	reactorEmpty = getReactorEmpty()
-	interfaceFull = getInterfaceFull(interfaceStackCount)
+	interfaceFull = getInterfaceFull(fuelTypes)
 
 	print('reactorEmpty: ' .. tostring(reactorEmpty))
 	print('interfaceFull: ' .. tostring(interfaceFull))
