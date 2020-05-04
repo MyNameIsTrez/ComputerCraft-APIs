@@ -1,7 +1,9 @@
 -- Configurable.
 local dir = 1
+local stackSize = 64
 
 -- Not configurable.
+local placed = 0
 
 -- Common Functions
 if not fs.exists("cf") then
@@ -67,16 +69,23 @@ print("Going to:")
 for z, _ in ipairs(zx_tab) do
 	term.setCursorPos(1, 5)
 	print("z: " .. z .. "        ")
-    mvmt:goToZ(z)
-    for i = 1, #zx_tab[z] do
+	
+	mvmt:goToZ(z)
+	for i = 1, #zx_tab[z] do
+		placed = placed + 1
+		if placed % stackSize == 1 then
+			turtle.select(math.ceil(placed / stackSize))
+		end
 		local x = zx_tab[z][i]
 		local y = zy_tab[z][i]
-        term.setCursorPos(1, 1)
-		print("Blocks left: " .. 1 .. "        ")
+		
+		term.setCursorPos(1, 1)
+		print("Blocks placed: " .. placed .. "        ")
 		term.setCursorPos(1, 3)
 		print("x: " .. x .. "        ")
 		print("y: " .. y .. "        ")
-        mvmt:goToX(x)
+		
+		mvmt:goToX(x)
 		mvmt:goToY(y)
 		turtle.placeDown()
 	end
