@@ -1,103 +1,91 @@
 -- Configurable.
 local dir = 1
+local sleepTime = 3
 
 -- Not configurable.
 
 -- Common Functions
-if not fs.exists('cf') then
-	shell.run('pastebin', 'get', 'p9tSSWcB', 'cf')
+if not fs.exists("cf") then
+    shell.run("pastebin", "get", "p9tSSWcB", "cf")
 end
-os.loadAPI('cf')
+os.loadAPI("cf")
 
 -- Movement
-if not fs.exists('movementApi') then
-    shell.run('pastebin', 'get', 'yykL6u8N', 'movementApi')
+if not fs.exists("movementApi") then
+    shell.run("pastebin", "get", "yykL6u8N", "movementApi")
 end
-os.loadAPI('movementApi')
+os.loadAPI("movementApi")
 
-local mvmt = movementApi.Movement:new(vector.new(), 'e')
+local mvmt = movementApi.Movement:new(vector.new(), "e")
 
-local dataHandle = fs.open('data', 'r')
+local dataHandle = fs.open("data", "r")
 local dataStr = dataHandle.readAll()
 local data = textutils.unserialize(dataStr)
 
-function shallow_copy(t)
-	local t2 = {}
-	for k,v in pairs(t) do
-		t2[k] = v
-	end
-	return t2
+function copy(obj)
+    if type(obj) ~= "table" then
+        return obj
+    end
+    local res = {}
+    for k, v in pairs(obj) do
+        res[copy(k)] = copy(v)
+    end
+    return res
 end
 
-local x = shallow_copy(data.x)
-local y = shallow_copy(data.y)
-local z = shallow_copy(data.z)
+local x_tab = copy(data.x)
+local y_tab = copy(data.y)
+local z_tab_temp = copy(data.z)
 
-if not (#x == #y and #y == #z) then
-	error("The number of provided x, y and z coordinates don't match!")
+-- Adding 1 to the z_tab_temp values so they will always be greater than 0.
+-- This can be applied above to replace copy(data.z).
+local z_tab = {}
+for _, z in ipairs(z_tab_temp) do
+	z_tab[#z_tab + 1] = z + 1
+end
+
+local zx_tab = {}
+for i = 1, #x_tab do
+	local z = z_tab[i]
+	if type(zx_tab[z]) ~= 'table' then
+		zx_tab[z] = {}
+	end
+	local x = x_tab[i]
+	zx_tab[z][#zx_tab[z] + 1] = x
+end
+
+local zy_tab = {}
+for i = 1, #y_tab do
+	local z = z_tab[i]
+	if type(zy_tab[z]) ~= 'table' then
+		zy_tab[z] = {}
+	end
+	local y = y_tab[i]
+	zy_tab[z][#zy_tab[z] + 1] = y
+end
+
+if not (#x_tab == #y_tab and #y_tab == #z_tab) then
+    error("The number of provided x, y and z coordinates don't match!")
 end
 
 term.clear()
+term.setCursorPos(1, 2)
+print("Going to:")
 
-for i = 1, #x do
-	term.setCursorPos(1, 1)
-	print('Blocks left: ' .. #x - i + 1 .. '        ')
-	-- mvmt:goTo(vector.new(x[i], y[i], z[i] + 1))
-	-- mvmt:goTo(vector.new(x[i], z[i], y[i] + 1))
-	-- mvmt:goTo(vector.new(y[i], x[i], z[i] + 1))
-	mvmt:goTo(vector.new(y[i], z[i], x[i] + 1)) -- <--
-	-- mvmt:goTo(vector.new(z[i], x[i], y[i] + 1))
-	-- mvmt:goTo(vector.new(z[i], y[i], x[i] + 1)) -- <--
-	turtle.placeDown()
-end
-
-for i = 1, #z do
-	mvmt:goToZ(z[i] + 1)
-	for j = 1, #x do
-		term.setCursorPos(1, 1)
-		print('Blocks left: ' .. #x - j + 1 .. '        ')
-
-		mvmt:goToX(x[j])
-		mvmt:goToY(y[j])
+for z, _ in ipairs(zx_tab) do
+	term.setCursorPos(1, 5)
+	print("z: " .. z .. "        ")
+    mvmt:goToZ(z)
+    for i = 1, #zx_tab[z] do
+		local x = zx_tab[z][i]
+		local y = zy_tab[z][i]
+        term.setCursorPos(1, 1)
+		print("Blocks left: " .. 1 .. "        ")
+		term.setCursorPos(1, 3)
+		print("x: " .. x .. "        ")
+		print("y: " .. y .. "        ")
+        mvmt:goToX(x)
+		mvmt:goToY(y)
 		turtle.placeDown()
 	end
 end
-
--- local place
-
--- mvmt:up()
-
--- for layer = 1, layers do
--- 	for row = 1, rows do
--- 		for col = 1, cols do
--- 			if layer % 2 == 1 then
--- 				place = data[col][row][layer].place
--- 			else
--- 				place = data[col][rows - row + 1][layer].place
--- 			end
-
--- 			if place then turtle.placeDown() end
-
--- 			if col ~= cols then mvmt:forward() end
--- 		end
-
--- 		if row ~= rows then
--- 			if rows % 2 == 0 and layer % 2 == 0 then
--- 				if row % 2 == dir then
--- 					mvmt:uTurn('left')
--- 				else
--- 					mvmt:uTurn('right')
--- 				end
--- 			else
--- 				if row % 2 == dir then
--- 					mvmt:uTurn('right')
--- 				else
--- 					mvmt:uTurn('left')
--- 				end
--- 			end
--- 		end
--- 	end
-
--- 	mvmt:up()
--- 	mvmt:left(2)
--- end
