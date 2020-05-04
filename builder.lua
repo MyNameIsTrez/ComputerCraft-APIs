@@ -35,14 +35,7 @@ end
 
 local x_tab = copy(data.x)
 local y_tab = copy(data.y)
-local z_tab_temp = copy(data.z)
-
--- Adding 1 to the z_tab_temp values so they will always be greater than 0.
--- This can be applied above to replace copy(data.z).
-local z_tab = {}
-for _, z in ipairs(z_tab_temp) do
-	z_tab[#z_tab + 1] = z + 1
-end
+local z_tab = copy(data.z)
 
 local zx_tab = {}
 for i = 1, #x_tab do

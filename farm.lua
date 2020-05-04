@@ -4,6 +4,7 @@ local length	= 96
 local width	    = 13
 local maxDrops  = 1 + 3
 local maxGrowth = 7
+local sleepTime = 0
 
 -- Don't edit
 local dumpFreq	  = math.floor(64 / maxDrops)
@@ -139,6 +140,6 @@ while true do
 	term.setCursorPos(1, 1)
 	print('Running...')
 	run()
-	print('Sleeping 60 seconds...')
-	sleep(60)
+	print('Sleeping ' .. sleepTime .. ' seconds...')
+	sleep(sleepTime)
 end
