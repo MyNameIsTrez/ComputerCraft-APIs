@@ -1,6 +1,5 @@
 -- Configurable.
 local dir = 1
-local sleepTime = 3
 
 -- Not configurable.
 
