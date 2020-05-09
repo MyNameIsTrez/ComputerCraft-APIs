@@ -2,6 +2,8 @@
 -- Made by GitHub user benbiti:
 -- https://github.com/benbiti/lua-lzstring
 
+-- Edited for ComputerCraft by MyNameIsTrez.
+
 _M = { _VERSION = "0.1" }
 
 --local bit = require("bit")
@@ -32,7 +34,6 @@ function funcBase64(a)
 end
 
 function _M.compressToBase64(inputStr)
-
     if not inputStr or inputStr =='' then
         return '' 
     end
@@ -73,7 +74,7 @@ function get_char_value(context, bitsPerChar)
     end
     
     if bitsPerChar == 15 or bitsPerChar == 16 then
-        return utf8.byte(context, 0, 1)
+        return string.byte(context, 0, 1)
     end
 end
 
@@ -82,10 +83,10 @@ function defunc_Base64(inputStr, index)
 end
 
 function _M.decompressFromBase64(inputStr)
-    if not inputStr then
-      return ''
-    end
-  
+	if not inputStr then
+		return ''
+	end
+	
     if inputStr == '' then
         return nil
     end
@@ -93,19 +94,19 @@ function _M.decompressFromBase64(inputStr)
 end
 
 function funcUTF16(a)
-    return utf8.char(a+32)
+    return string.char(a+32)
 end
 
 function _M.compressToUTF16(input)
-  if not input or input == '' then
-      return ''
-  end
-  
-  return _compress(input, 15, funcUTF16)
+	if not input or input == '' then
+		return ''
+	end
+	
+	return _compress(input, 15, funcUTF16)
 end
 
 function defunc_UTF16(inputStr, index)
-    return utf8.byte(inputStr, index+1, index +1 ) -32
+    return string.byte(inputStr, index+1, index +1 ) -32
 end
 
 function _M.decompressFromUTF16(compressedStr)
@@ -124,10 +125,10 @@ function defunc_URI(inputStr, index)
 end
 
 function _M.compressToEncodeURIComponent(input)
-  if not input then
-      return ''
-  end
-  return _compress(input, 6, funcURI) 
+	if not input then
+		return ''
+	end
+	return _compress(input, 6, funcURI) 
 end
 
 function _M.decompressFromEncodedURIComponent(inputStr)
@@ -144,15 +145,15 @@ function _M.decompressFromEncodedURIComponent(inputStr)
 end
 
 function _M.compress(input)
-  if not input or input == '' then
-      return ''
-  end
-  
-  return _compress(input, 16, fc)
+	if not input or input == '' then
+		return ''
+	end
+	
+	return _compress(input, 16, fc)
 end
 
 function defunc(inputStr, index)
-    return utf8.byte(inputStr, index+1, index +1)
+    return string.byte(inputStr, index+1, index +1)
 end
 
 function _M.decompress(inputStr)
@@ -168,13 +169,12 @@ function _M.decompress(inputStr)
 end
 
 function get_uncompressed_length(context, bitsPerChar)
-    
     if bitsPerChar == 6 then
         length = string.len(context)
     end
 
-    if bitsPerChar == 15 or bitsPerChar == 16 then
-        length =utf8.len(context)
+	if bitsPerChar == 15 or bitsPerChar == 16 then
+		length = string.len(context)
     end
     
     return length
@@ -182,7 +182,7 @@ end
 
 function get_char_from_uncompressed(context, bitsPerChar, i)
     if bitsPerChar == 15 or bitsPerChar == 16 then
-        context_c =  utf8.sub(context, i+1, i+1)
+        context_c = string.sub(context, i+1, i+1)
     else
         context_c = string.char(string.byte(context, i+1))
     end
@@ -212,7 +212,6 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
     local ii
 
     for i=0, length -1,1 do
-
         context_c = get_char_from_uncompressed(uncompressedStr, bitsPerChar, i)
         if not context_dictionary[context_c] then
             context_dictionary[context_c] = context_dictSize
@@ -249,13 +248,13 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                         else
                             context_data_position = context_data_position + 1
                         end
-                        value = bit.arshift(value, 1)
+                        value = cf.barshift(value, 1)
                     end
 
                 else
                     value = 1
                     for i=0,context_numBits-1,1 do
-                        context_data_val = bit.bor(bit.lshift(context_data_val, 1), value)
+                        context_data_val = bit.bor(bit.blshift(context_data_val, 1), value)
                         if context_data_position == bitsPerChar - 1 then
                             context_data_position = 0
                             context_data = context_data..getCharFromInt(context_data_val)
@@ -266,9 +265,9 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                         value = 0
                     end
 
-                     value = get_char_value(context_w, bitsPerChar)
+                    value = get_char_value(context_w, bitsPerChar)
                     for i=0,16-1,1 do
-                        context_data_val = bit.bor(bit.lshift(context_data_val, 1), bit.band(value, 1))
+                        context_data_val = bit.bor(bit.blshift(context_data_val, 1), bit.band(value, 1))
                         if context_data_position == bitsPerChar -1 then
                             context_data_position = 0
                             context_data = context_data..getCharFromInt(context_data_val)
@@ -276,7 +275,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                         else
                             context_data_position = context_data_position + 1
                         end
-                        value = bit.arshift(value, 1)
+                        value = cf.barshift(value, 1)
                     end
 
                 end
@@ -291,7 +290,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
             else
                 value = context_dictionary[context_w]
                 for i=0,context_numBits-1,1 do
-                    context_data_val = bit.bor(bit.lshift(context_data_val, 1), bit.band(value, 1))
+                    context_data_val = bit.bor(bit.blshift(context_data_val, 1), bit.band(value, 1))
                     if context_data_position == bitsPerChar -1 then
                         context_data_position = 0
                         context_data = context_data..getCharFromInt(context_data_val)
@@ -299,7 +298,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                     else
                         context_data_position = context_data_position + 1
                     end
-                    value = bit.arshift(value, 1)
+                    value = cf.barshift(value, 1)
                 end
 
             end
@@ -314,15 +313,15 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
             context_dictSize = context_dictSize + 1
             context_w = context_c
 
-      end  
+    	end  
     end
 
-     -- Output the code for w.
+    -- Output the code for w.
     if context_w and context_wc ~= '' then
         if context_dictionaryToCreate[context_w] then
             if get_char_value(context_w, bitsPerChar) < 256 then
                 for i=0,context_numBits-1,1 do
-                    context_data_val = bit.lshift(context_data_val, 1)
+                    context_data_val = bit.blshift(context_data_val, 1)
                     if context_data_position == bitsPerChar - 1 then
                         context_data_position = 0
                         context_data = context_data..getCharFromInt(context_data_val)
@@ -335,7 +334,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                 value = get_char_value(context_w , bitsPerChar)
 
                 for i=0, 8-1, 1 do
-                    context_data_val = bit.bor(bit.lshift(context_data_val, 1), bit.band(value, 1))
+                    context_data_val = bit.bor(bit.blshift(context_data_val, 1), bit.band(value, 1))
                     if context_data_position == bitsPerChar -1 then
                         context_data_position = 0
                         context_data = context_data..getCharFromInt(context_data_val)
@@ -343,12 +342,12 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                     else
                         context_data_position = context_data_position + 1
                     end
-                    value = bit.arshift(value, 1)
+                    value = cf.barshift(value, 1)
                 end
             else
                 value = 1
                 for i=0,context_numBits-1,1 do
-                    context_data_val = bit.bor(bit.lshift(context_data_val, 1), value)
+                    context_data_val = bit.bor(bit.blshift(context_data_val, 1), value)
                     if context_data_position == bitsPerChar - 1 then
                         context_data_position = 0
                         context_data = context_data..getCharFromInt(context_data_val)
@@ -361,7 +360,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
 
                 value = get_char_value(context_w , bitsPerChar)
                 for i=0,16-1,1 do
-                    context_data_val = bit.bor(bit.lshift(context_data_val, 1), bit.band(value, 1))
+                    context_data_val = bit.bor(bit.blshift(context_data_val, 1), bit.band(value, 1))
                     if context_data_position == bitsPerChar -1 then
                         context_data_position = 0
                         context_data = context_data..getCharFromInt(context_data_val)
@@ -369,7 +368,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                     else
                         context_data_position = context_data_position + 1
                     end
-                    value = bit.arshift(value, 1)
+                    value = cf.barshift(value, 1)
                 end
             end
 
@@ -382,7 +381,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
         else
             value = context_dictionary[context_w]
             for i=0,context_numBits-1,1 do
-                context_data_val = bit.bor(bit.lshift(context_data_val, 1), bit.band(value, 1))
+                context_data_val = bit.bor(bit.blshift(context_data_val, 1), bit.band(value, 1))
                 if context_data_position == bitsPerChar -1 then
                     context_data_position = 0
                     context_data = context_data..getCharFromInt(context_data_val)
@@ -390,7 +389,7 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
                 else
                     context_data_position = context_data_position + 1
                 end
-                value = bit.arshift(value, 1)
+                value = cf.barshift(value, 1)
             end
         end
         context_enlargeIn = context_enlargeIn - 1
@@ -400,23 +399,26 @@ function _compress(uncompressedStr, bitsPerChar, getCharFromInt)
         end
     end
 
-        -- Mark the end of the stream
-        value = 2
-        for i=0,context_numBits-1,1 do
-            context_data_val = bit.bor(bit.lshift(context_data_val, 1), bit.band(value, 1))
-            if context_data_position == bitsPerChar -1 then
-                context_data_position = 0
-                context_data = context_data..getCharFromInt(context_data_val)
-                context_data_val = 0
-            else
-                context_data_position = context_data_position + 1
-            end
-            value = bit.arshift(value, 1)
-        end
+	-- Mark the end of the stream
+	value = 2
+	for i=0,context_numBits-1,1 do
+		context_data_val = bit.bor(bit.blshift(context_data_val, 1), bit.band(value, 1))
+		if context_data_position == bitsPerChar -1 then
+			context_data_position = 0
+			print('getCharFromInt: ' .. tostring(getCharFromInt))
+			print(getCharFromInt(97))
+			print('context_data_val: ' .. tostring(context_data_val))
+			context_data = context_data..getCharFromInt(context_data_val)
+			context_data_val = 0
+		else
+			context_data_position = context_data_position + 1
+		end
+		value = cf.barshift(value, 1)
+	end
 
     --Flush the last char
     while 1 == 1 do
-        context_data_val = bit.lshift(context_data_val, 1)
+        context_data_val = bit.blshift(context_data_val, 1)
         if context_data_position == bitsPerChar - 1 then
             context_data = context_data..getCharFromInt(context_data_val)
             break
@@ -441,7 +443,7 @@ function DecData:new(o, val, position, index)
     self.val = val or ''
     self.position = position or 0
     self.index = index or 0
-   setmetatable(o, self)
+    setmetatable(o, self)
     return o
 end
 
@@ -471,37 +473,35 @@ end
 
 function f(i, resetValue)
     if resetValue == 16384 or resetValue == 32768 then
-        return utf8.char(i)
+        return string.char(i)
     else
         if i >= 256 then
-              
-        local high = bit.rshift(i, 8)
-        local low = bit.band(i, 0xff)
-        return  string.char(high)..string.char(low)
+			local high = bit.rshift(i, 8)
+			local low = bit.band(i, 0xff)
+			return  string.char(high)..string.char(low)
         else
-       return string.char(i)
+			return string.char(i)
         end
     end
-      
 end
 
 function fc(i)
-    return utf8.char(i)
+    return string.char(i)
 end
 
 function get_char_int(context, bitsPerChar)
     if bitsPerChar == 6 then
         return string.byte(context)
     end
-      
+    
     if bitsPerChar == 15 or bitsPerChar == 16 then
-        return utf8.byte(context,0 ,1)
+        return string.byte(context,0 ,1)
     end
 end
 
 function def_get_char_value(context, resetValue)
     if resetValue == 16384 or resetValue == 32768 then
-        value = utf8.char(utf8.byte(context, 0,  1 ))
+        value = string.char(string.byte(context, 0,  1 ))
     else
         value = string.char(string.byte(context,1))
     end
@@ -511,7 +511,7 @@ end
 function get_compressed_length(context, resetValue)
 
     if resetValue == 16384 or resetValue == 32768 then
-        length = utf8.len(context)
+        length = string.len(context)
     else
         length = string.len(context)
     end
@@ -519,7 +519,6 @@ function get_compressed_length(context, resetValue)
 end
 
 function _decompress(inputStr, resetValue, getNextValue)
- 
     local length = get_compressed_length(inputStr, resetValue)
     local dictionary = {}
     local next=0
@@ -564,7 +563,7 @@ function _decompress(inputStr, resetValue, getNextValue)
         else
             bits = bit.bor(bits, 0)
         end
-        power = bit.lshift(power, 1)
+        power = bit.blshift(power, 1)
     end
 
     next = bits
@@ -587,7 +586,7 @@ function _decompress(inputStr, resetValue, getNextValue)
             else
                 bits = bit.bor(bits, 0)
             end
-            power = bit.lshift(power, 1)
+            power = bit.blshift(power, 1)
         end
         c = f(bits, resetValue)
     elseif next == 1 then
@@ -608,7 +607,7 @@ function _decompress(inputStr, resetValue, getNextValue)
             else
                 bits = bit.bor(bits, 0)
             end
-            power = bit.lshift(power, 1) 
+            power = bit.blshift(power, 1) 
         end
         c = f(bits,resetValue)
     elseif next == 2 then
@@ -644,7 +643,7 @@ function _decompress(inputStr, resetValue, getNextValue)
             else
                 bits = bit.bor(bits, 0)
             end
-            power = bit.lshift(power, 1)
+            power = bit.blshift(power, 1)
         end
         -- TODO: very strange here, c above is as char/string, here further is a int, rename "c" in the switch as "cc"
         local cc = bits
@@ -665,7 +664,7 @@ function _decompress(inputStr, resetValue, getNextValue)
                 else
                     bits = bit.bor(bits, 0)
                 end
-                power = bit.lshift(power, 1)
+                power = bit.blshift(power, 1)
             end
 
             dictionary[dictSize] = f(bits, resetValue)
@@ -690,7 +689,7 @@ function _decompress(inputStr, resetValue, getNextValue)
                 else
                     bits = bit.bor(bits, 0)
                 end
-                power = bit.lshift(power, 1)
+                power = bit.blshift(power, 1)
             end
             
             dictionary[dictSize] = f(bits, resetValue)
@@ -701,7 +700,6 @@ function _decompress(inputStr, resetValue, getNextValue)
         elseif cc == 2 then
             local decomString=''
             for key,value in pairs(result) do
-                --print("key is",key, "value=",value)
                 decomString=decomString..value
             end
             return decomString

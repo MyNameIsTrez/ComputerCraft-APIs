@@ -175,7 +175,7 @@ end
 -- n is between 0 and 1, both inclusive.
 function getClosestChar(n)
 	if n < 0 or n > 1 then
-		error("getClosestChar expected a float between 0 and 1, both inclusive, 2")
+		error("getClosestChar expected a float between 0 and 1, both inclusive, but got: " .. tostring(n), 2)
 	end
 	
 	local floatIndex = n * getHighestIndex()

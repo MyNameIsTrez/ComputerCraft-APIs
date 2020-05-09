@@ -258,19 +258,22 @@ end
 
 --[[
 Arithmetic right shift (>>)
-The arithmetic right shift is exactly like the logical right shift, except instead of padding with zero, it pads with the most significant bit. This is because the most significant bit is the sign bit, or the bit that distinguishes positive and negative numbers. By padding with the most significant bit, the arithmetic right shift is sign-preserving.
+The arithmetic right shift is exactly like the logical right shift, except instead of padding with zero,
+it pads with the most significant bit. This is because the most significant bit is the sign bit,
+or the bit that distinguishes positive and negative numbers. By padding with the most significant bit,
+the arithmetic right shift is sign-preserving.
 ]]--
 function barshift(n, bits)
 	if n < 0 then
 		n = n and bit.brshift(-1, 1)
-		printTable(bit.tobits(n))
+		-- printTable(bit.tobits(n))
 		n = bit.brshift(n, bits)
-		printTable(bit.tobits(n))
+		-- printTable(bit.tobits(n))
 		n = n or bit.blshift(1, 31)
-		printTable(bit.tobits(n))
+		-- printTable(bit.tobits(n))
 	else
 		n = bit.brshift(n, bits)
-		printTable(bit.tobits(n))
+		-- printTable(bit.tobits(n))
 	end
 	return n
 end
