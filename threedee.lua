@@ -149,23 +149,23 @@ ThreeDee = {
 					local b = v2:sub(v0)
 					local notNormalizedNormal = a:cross(b)
 
-					print('notNormalizedNormal: ' .. tostring(notNormalizedNormal))
+					-- print('notNormalizedNormal: ' .. tostring(notNormalizedNormal))
 
-					print('v0: ' .. tostring(v0))
+					-- print('v0: ' .. tostring(v0))
 
 					local cull = notNormalizedNormal:dot(v0)
 
-					print('cull: ' .. tostring(cull))
-					print()
+					-- print('cull: ' .. tostring(cull))
+					-- print()
 
-					self.cubesCullFlags[cubeIndex][sideIndex][triangleIndex] = cull >= 0
-					--self.cubesCullFlags[cubeIndex][sideIndex][triangleIndex] = false
+					-- self.cubesCullFlags[cubeIndex][sideIndex][triangleIndex] = cull >= 0
+					self.cubesCullFlags[cubeIndex][sideIndex][triangleIndex] = false
 				end
 			end
 		end
 
-		cf.printTable(self.cubesCullFlags)
-		sleep(0.1)
+		-- cf.printTable(self.cubesCullFlags)
+		-- sleep(0.1)
 	end,
 	
 	drawFill = function(self)

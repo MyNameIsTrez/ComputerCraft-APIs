@@ -26,6 +26,8 @@ function Voronoi:createPoints()
 end
 
 function Voronoi:drawPixels()
+	local yieldCounter = 0
+	local yieldFreq = 1 / self.pointCount * 100000
 	local charTable = {}
 	for y = 1, self.height do
 		for x = 1, self.width do
@@ -43,9 +45,11 @@ function Voronoi:drawPixels()
 			end
 			term.setCursorPos(x, y)
 			table.insert(charTable, char)
+			yieldCounter = yieldCounter + 1
+			-- Circumvents default crash after 5s.
+			if yieldCounter % yieldFreq == 0 then cf.tryYield() end
 		end
 		if y ~= self.height then table.insert(charTable, "\n") end
-		cf.tryYield() -- Circumvents default crash after 5s.
 	end
 	term.setCursorPos(1, 1)
 	local str = table.concat(charTable) -- Concatenates all characters into a single string.
