@@ -287,7 +287,7 @@ end
 
 function Animation:dataToTimedAnimation()
 	local frame_count = self.info.frame_count
-	local numberOfNeededFiles = math.ceil(frame_count / self.maxFramesPerTimedAnimationFile)
+	local neededFilesCount = math.ceil(frame_count / self.maxFramesPerTimedAnimationFile)
 
 	local cursorX, cursorY = term.getCursorPos()
 	local i = 1
@@ -313,7 +313,7 @@ function Animation:dataToTimedAnimation()
 		fs.makeDir(path3)
 	end
 
-	for subfile = 1, numberOfNeededFiles do
+	for subfile = 1, neededFilesCount do
 		local path4 = path3 .. subfile
 		local handle = io.open(path4, 'w')
 
