@@ -48,17 +48,12 @@ Animation = {
 			screenHeight,
 		}
 		
-		if http then
+		if http and not settings.useHardcodedStorageStructure then
 			self.structure = https.getStorageStructure()
-			-- self.structure = {
-			-- 	size_30x30 = {
-			-- 		"ten_years_later",
-			-- 		"takeout",
-			-- 		"wavetro_logo",
-			-- 		"gamestore",
-			-- 		"spanish_class"
-			-- 	}
-			-- }
+		elseif settings.useHardcodedStorageStructure then
+			self.structure = settings.hardcodedStorageStructure
+		else
+			error("The settings/lack of HTTP connection didn't allow loading of the structure locally/from HTTP.")
 		end
 		
 		setmetatable(self, {__index = Animation})
