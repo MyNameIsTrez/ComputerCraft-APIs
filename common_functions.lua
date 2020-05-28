@@ -250,9 +250,8 @@ function frameWrite(string, offsetX, offsetY, sleepTime)
 
 	if type(sleepTime) == 'number' then
 		sleep(sleepTime)
-	elseif sleepTime == 'yield' then
-		os.queueEvent('yield')
-		os.pullEvent('yield')
+	elseif sleepTime == 'tryYield' then
+		tryYield()
 	end
 end
 

@@ -132,9 +132,9 @@ function Animation:askAnimationFolder()
 	local sizeStr = cf.split(self.sizeFolder, '_')[2]
 	
 	-- Splits the width and height.
-	local animationSize_ = cf.split(sizeStr, 'x')
+	local _animationSize = cf.split(sizeStr, 'x')
 	
-	self.animationSize = { width = animationSize_[1], height = animationSize_[2] }
+	self.animationSize = { width = _animationSize[1], height = _animationSize[2] }
 	
 	term.clear()
 	term.setCursorPos(1, 1)
@@ -286,14 +286,14 @@ function Animation:getSelectedAnimationData()
 end
 
 function Animation:dataToTimedAnimation()
-	local frame_count = self.info.frame_count
-	local neededFilesCount = math.ceil(frame_count / self.maxFramesPerTimedAnimationFile)
+	local frameCount = self.info.frame_count
+	local neededFilesCount = math.ceil(frameCount / self.maxFramesPerTimedAnimationFile)
 
 	local cursorX, cursorY = term.getCursorPos()
 	local i = 1
 
 	local framesToSleep = {}
-	for v = 1, frame_count, self.frameSleepSkipping do
+	for v = 1, frameCount, self.frameSleepSkipping do
 		table.insert(framesToSleep, math.floor(v + 0.5))
 	end
 	local frameSleepSkippingIndex = 1
@@ -319,7 +319,7 @@ function Animation:dataToTimedAnimation()
 
 		local frameOffset = (subfile - 1) * self.maxFramesPerTimedAnimationFile
 
-		local frameCountToFile = math.min(frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
+		local frameCountToFile = math.min(frameCount - frameOffset, self.maxFramesPerTimedAnimationFile)
 
 		local minFrames = frameOffset + 1
 		local maxFrames = frameOffset + frameCountToFile
@@ -343,7 +343,7 @@ function Animation:dataToTimedAnimation()
 			k = k + 1
 
 			-- If this isn't the last frame, when the animation doesn't loop.
-			if not (f == frame_count and self.loop == false) then
+			if not (f == frameCount and self.loop == false) then
 				strTable[k] = ','
 				k = k + 1
 
@@ -354,7 +354,7 @@ function Animation:dataToTimedAnimation()
 					strTable[k] = tostring(self.frameSleep) -- May not need tostring().
 					k = k + 1
 				else
-					strTable[k] = "'yield'"
+					strTable[k] = "'tryYield'"
 					k = k + 1
 				end
 			end
@@ -362,7 +362,7 @@ function Animation:dataToTimedAnimation()
 			strTable[k] = ')'
 			k = k + 1
 			
-			if i % self.maxFramesPerTimedAnimationFile == 0 or i == frame_count then
+			if i % self.maxFramesPerTimedAnimationFile == 0 or i == frameCount then
 				cf.tryYield()
 				
 				-- I don't remember why it's necessary to check this. Try removing this later.
@@ -387,7 +387,7 @@ function Animation:dataToTimedAnimation()
 				k = 1
 
 				if self.progressBool then
-					local str = 'Generated '..tostring(i)..'/'..tostring(frame_count)..' frames...'
+					local str = 'Generated '..tostring(i)..'/'..tostring(frameCount)..' frames...'
 					self:printProgress(str, cursorX, cursorY)
 				end
 			end
