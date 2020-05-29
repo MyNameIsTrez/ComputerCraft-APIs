@@ -324,3 +324,9 @@ end
 function vectorRandom2D()
 	return vector.new(math.random() * 2 - 1, math.random() * 2 - 1)
 end
+
+function getKeys(tab)
+	local keys = {}
+	for k, _ in pairs(tab) do table.insert(keys, k) end
+	return keys
+end
