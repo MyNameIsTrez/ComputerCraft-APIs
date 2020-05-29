@@ -119,11 +119,11 @@ end
 -- Asks the user for an animation folder to load.
 function Animation:askAnimationFolder()
 	-- Get the size options.
-	local path = 'BackwardsOS/programs/Animation/Animations'
-	if not fs.exists(path) then
-		fs.makeDir(path)
+	local pathAnimations = 'BackwardsOS/programs/Animation/Animations'
+	if not fs.exists(pathAnimations) then
+		fs.makeDir(pathAnimations)
 	end
-	local localStructure = fs.list(path)
+	local localStructure = fs.list(pathAnimations)
 
 	-- Ask the size folder name.
 	self.sizeFolder = self:listOptions(self.structure, true, localStructure)
@@ -142,13 +142,13 @@ end
 
 -- Asks the user for an animation file to load.
 function Animation:askAnimationFile()
-	local path = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
+	local pathSize = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
 
-	if not fs.exists(path) then
-		fs.makeDir(path)
+	if not fs.exists(pathSize) then
+		fs.makeDir(pathSize)
 	end
 
-	local localPrograms = fs.list(path)
+	local localPrograms = fs.list(pathSize)
 	local programOptions = self.structure[self.sizeFolder]
 
 	-- Ask the animation file name.
@@ -170,12 +170,12 @@ function Animation:printProgress(str, x, y)
 	end
 end
 
-function Animation:downloadAnimationInfo(path)
+function Animation:downloadAnimationInfo(pathFile)
 	local url = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/info.txt'
 	local str = https.getStorageData(url)
 
-	if not fs.exists(path) then
-		fs.makeDir(path)
+	if not fs.exists(pathFile) then
+		fs.makeDir(pathFile)
 	end
 
 	local handle = io.open(self.folder .. 'Animations/' .. url, 'w')
@@ -185,7 +185,7 @@ function Animation:downloadAnimationInfo(path)
 	self.info = textutils.unserialize(str)
 end
 
-function Animation:downloadAnimationFile(path)
+function Animation:downloadAnimationFile(pathFile)
 	local cursorX, cursorY = term.getCursorPos()
 
 	if self.progressBool then
@@ -197,7 +197,7 @@ function Animation:downloadAnimationFile(path)
 		local timeStart = os.clock()
 
 		local url    = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/data/' .. tostring(i) .. '.txt'
-		local folder = path .. '/data'
+		local folder = pathFile .. '/data'
 		local name   = i
 		https.downloadStorageFile(url, folder, name)
 
@@ -227,21 +227,21 @@ function Animation:downloadAnimationFile(path)
 	end
 end
 
-function Animation:getInfo(path)
-	local path = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
-	local str = fs.open(path .. 'info.txt', 'r').readAll()
+function Animation:getInfo()
+	local pathFile = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+	local str = fs.open(pathFile .. 'info.txt', 'r').readAll()
 	self.info = textutils.unserialize(str)
 end
 
 function Animation:getSelectedAnimationData()
-	local path = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
-	local fileExists = fs.exists(path)
+	local pathFile = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
+	local fileExists = fs.exists(pathFile)
 
 	if not fileExists then			
-		self:downloadAnimationInfo(path)
-		self:downloadAnimationFile(path)
+		self:downloadAnimationInfo(pathFile)
+		self:downloadAnimationFile(pathFile)
 	else
-		local str = fs.open(path .. '/info.txt', 'r').readAll()
+		local str = fs.open(pathFile .. '/info.txt', 'r').readAll()
 		self.info = textutils.unserialize(str)
 	end
 
@@ -257,10 +257,8 @@ function Animation:getSelectedAnimationData()
 	self.frameStrings = {}
 
 	for j = 1, self.info.data_files do
-		local path2 = path .. '/data/' .. tostring(j) .. '.txt'
-		local file = fs.open(path2, 'r')
-
-		-- self.frameStrings = {}
+		local pathDataFile = pathFile .. '/data/' .. tostring(j) .. '.txt'
+		local file = fs.open(pathDataFile, 'r')
 
 		for lineStr in file.readLine do
 			self.frameStrings[i] = lineStr
@@ -287,7 +285,6 @@ end
 
 function Animation:dataToTimedAnimation()
 	local frameCount = self.info.frame_count
-	local neededFilesCount = math.ceil(frameCount / self.maxFramesPerTimedAnimationFile)
 
 	local cursorX, cursorY = term.getCursorPos()
 	local i = 1
@@ -298,22 +295,25 @@ function Animation:dataToTimedAnimation()
 	end
 	local frameSleepSkippingIndex = 1
 
+	-- Create Timed Animations folder.
 	local path1 = self.folder .. 'Timed Animations/'
 	if not fs.exists(path1) then
 		fs.makeDir(path1)
 	end
 	
-	local path2 = path1 .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
-	if not fs.exists(path2) then
-		fs.makeDir(path2)
+	-- Create size folder.
+	local pathSize = path1 .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
+	if not fs.exists(pathSize) then
+		fs.makeDir(pathSize)
 	end
 
-	local path3 = path2 .. self.fileName .. '/'
+	-- Create fileName folder.
+	local path3 = pathSize .. self.fileName .. '/'
 	if not fs.exists(path3) then
 		fs.makeDir(path3)
 	end
 
-	for subfile = 1, neededFilesCount do
+	for subfile = 1, self.info.data_files do
 		local path4 = path3 .. subfile
 		local handle = io.open(path4, 'w')
 
@@ -441,8 +441,8 @@ function Animation:playAnimation()
 		end
 	end
 
-	local path = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
-	local len = #fs.list(path)
+	local pathFile = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+	local len = #fs.list(pathFile)
 
 	term.setCursorPos(self.offset.x, self.offset.y)
 
@@ -452,13 +452,13 @@ function Animation:playAnimation()
 	if self.loop and self.info.frame_count > 1 then
 		while true do
 			if self.playAnimationBool then
-				self:_playAnimation(path, len)
+				self:_playAnimation(pathFile, len)
 			else
 				sleep(1)
 			end
 		end
 	else
-		self:_playAnimation(path, len)
+		self:_playAnimation(pathFile, len)
 	end
 end
 
