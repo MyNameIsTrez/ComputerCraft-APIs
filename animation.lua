@@ -234,16 +234,44 @@ function Animation:getInfo()
 end
 
 function Animation:getSelectedAnimationData()
-	local pathFile = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
-	local fileExists = fs.exists(pathFile)
+	-- Create table of frame indices to sleep at.
+	local framesToSleep = {}
+	for v = 1, frameCount, self.frameSleepSkipping do
+		table.insert(framesToSleep, math.floor(v + 0.5))
+	end
+	local frameSleepSkippingIndex = 1
 
-	if not fileExists then			
-		self:downloadAnimationInfo(pathFile)
-		self:downloadAnimationFile(pathFile)
+	-- Create Timed Animations folder.
+	local pathTimedAnimations = self.folder .. 'Timed Animations/'
+	if not fs.exists(pathTimedAnimations) then
+		fs.makeDir(pathTimedAnimations)
+	end
+	
+	-- Create size folder.
+	local pathTimedAnimationsSize = pathTimedAnimations .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
+	if not fs.exists(pathTimedAnimationsSize) then
+		fs.makeDir(pathTimedAnimationsSize)
+	end
+
+	-- Create fileName folder.
+	local pathTimedAnimationsFile = pathTimedAnimationsSize .. self.fileName .. '/'
+	if not fs.exists(pathTimedAnimationsFile) then
+		fs.makeDir(pathTimedAnimationsFile)
+	end
+
+
+	local pathAnimationsFile = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
+	local pathAnimationsInfo = pathAnimationsFile .. '/info.txt'
+
+	if not fs.exists(pathAnimationsFile) then			
+		self:downloadAnimationInfo(pathAnimationsFile)
+		self:downloadAnimationFile(pathAnimationsFile)
 	else
-		local str = fs.open(pathFile .. '/info.txt', 'r').readAll()
+		local str = fs.open(pathAnimationsInfo, 'r').readAll()
 		self.info = textutils.unserialize(str)
 	end
+
+	local frameCount = self.info.frame_count
 
 	if self.progressBool then
 		self:printProgress('Opening data files...')
@@ -254,82 +282,27 @@ function Animation:getSelectedAnimationData()
 	local cursorX, cursorY = term.getCursorPos()
 	local i = 1
 
-	self.frameStrings = {}
+	-- self.frameStrings = {}
 
-	for j = 1, self.info.data_files do
-		local pathDataFile = pathFile .. '/data/' .. tostring(j) .. '.txt'
-		local file = fs.open(pathDataFile, 'r')
+	-- local dataFileIndex = 1
 
-		for lineStr in file.readLine do
-			self.frameStrings[i] = lineStr
+	for dataFileIndex = 1, self.info.data_files do
+		local pathData = pathTimedAnimationsFile .. dataFileIndex
+		local dataHandle = io.open(pathData, 'w')
 
-			if i % 1000 == 0 then
-				cf.yield()
-				if self.progressBool then
-					self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
-				end
-			end
-
-			i = i + 1
-		end
-		
-		file:close()
-		cf.tryYield()
-	end
-	
-	if self.progressBool then
-		-- For the final frame.
-		self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
-	end
-end
-
-function Animation:dataToTimedAnimation()
-	local frameCount = self.info.frame_count
-
-	local cursorX, cursorY = term.getCursorPos()
-	local i = 1
-
-	local framesToSleep = {}
-	for v = 1, frameCount, self.frameSleepSkipping do
-		table.insert(framesToSleep, math.floor(v + 0.5))
-	end
-	local frameSleepSkippingIndex = 1
-
-	-- Create Timed Animations folder.
-	local path1 = self.folder .. 'Timed Animations/'
-	if not fs.exists(path1) then
-		fs.makeDir(path1)
-	end
-	
-	-- Create size folder.
-	local pathSize = path1 .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
-	if not fs.exists(pathSize) then
-		fs.makeDir(pathSize)
-	end
-
-	-- Create fileName folder.
-	local path3 = pathSize .. self.fileName .. '/'
-	if not fs.exists(path3) then
-		fs.makeDir(path3)
-	end
-
-	for subfile = 1, self.info.data_files do
-		local path4 = path3 .. subfile
-		local handle = io.open(path4, 'w')
-
-		local frameOffset = (subfile - 1) * self.maxFramesPerTimedAnimationFile
+		local frameOffset = (dataFileIndex - 1) * self.maxFramesPerTimedAnimationFile
 
 		local frameCountToFile = math.min(frameCount - frameOffset, self.maxFramesPerTimedAnimationFile)
 
 		local minFrames = frameOffset + 1
 		local maxFrames = frameOffset + frameCountToFile
 
-		-- I expect handle:write() to be an expensive operation, so that's why I chose to only write to it every 1000 frames.
+		-- I expect dataHandle:write() to be an expensive operation, so that's why I chose to only write to it every 1000 frames.
 		local strTable = {}
 		local k = 1
 
 		for f = minFrames, maxFrames do
-			-- Prevents the first line of each generated code file being empty.
+			-- 'k > 1' Prevents the first line of each generated code file being empty.
 			if k > 1 then
 				strTable[k] = '\n'
 				k = k + 1
@@ -337,6 +310,7 @@ function Animation:dataToTimedAnimation()
 			
 			strTable[k] = 'cf.frameWrite("'
 			k = k + 1
+			-- strTable[k] = self.frameStrings[f]
 			strTable[k] = self.frameStrings[f]
 			k = k + 1
 			strTable[k] = '",nil,nil'
@@ -379,7 +353,7 @@ function Animation:dataToTimedAnimation()
 				os.queueEvent('yield')
 				os.pullEvent('yield')
 				
-				handle:write(str)
+				dataHandle:write(str)
 				os.queueEvent('yield')
 				os.pullEvent('yield')
 
@@ -395,9 +369,56 @@ function Animation:dataToTimedAnimation()
 			i = i + 1
 		end
 		
-		handle:close()
+		dataHandle:close()
 		
 		cf.tryYield()
+
+
+
+
+
+
+
+
+
+
+		local pathDataFile = pathAnimationsFile .. '/data/' .. tostring(dataFileIndex) .. '.txt'
+		local file = fs.open(pathDataFile, 'r')
+
+		for lineStr in file.readLine do
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			-- self.frameStrings[i] = lineStr
+
+			if i % 1000 == 0 then
+				cf.yield()
+				if self.progressBool then
+					self:printProgress('Gotten ' .. tostring(i) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
+				end
+			end
+
+			i = i + 1
+		end
+		
+		file:close()
+		cf.tryYield()
+	end
+	
+	if self.progressBool then
+		-- For the final frame.
+		self:printProgress('Gotten ' .. tostring(self.info.frame_count) .. '/' .. tostring(self.info.frame_count) .. ' data frames...', cursorX, cursorY)
 	end
 end
 
@@ -411,16 +432,14 @@ function Animation:countdown()
 end
 
 function Animation:createTimedAnimation()
-	local path1 = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
-	if fs.exists(path1) then -- We don't need to recreate the timed animation.
-		return
+	local pathFile = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
+	if not fs.exists(pathFile) then -- Don't want to recreate a timed animation.
+		self:getSelectedAnimationData()
+		cf.tryYield()
+		
+		-- self:dataToTimedAnimation()
+		-- cf.tryYield()
 	end
-
-	self:getSelectedAnimationData()
-	cf.tryYield()
-	
-	self:dataToTimedAnimation()
-	cf.tryYield()
 end
 
 function Animation:_playAnimation(path, len)
@@ -447,7 +466,7 @@ function Animation:playAnimation()
 	term.setCursorPos(self.offset.x, self.offset.y)
 
 	-- Called because it's necessary to know self.info.frame_count.
-	self:getInfo() -- Seems like it should be possible to call this method less often !!!
+	self:getInfo() -- TODO: Should be possible to call this method less often.
 
 	if self.loop and self.info.frame_count > 1 then
 		while true do
