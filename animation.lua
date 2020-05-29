@@ -36,8 +36,9 @@ function Animation:new(settings)
 	self.loop                           = settings.loop
 	self.folder                         = settings.folder
 	self.offset                         = settings.offset
-	self.animationSize                  = settings.animationSize -- If not provided, set by self.askAnimationFolder().
-	self.fileName                       = settings.fileName -- If not provided, set by self.askAnimationFile().
+	self.animationSize                  = settings.animationSize -- If not provided, set by self.askFolder().
+	self.fileName                       = settings.fileName -- If not provided, set by self.askFile().
+	self.useCloud						= settings.useCloud
 
 	self:initStructure()
 	self:getScreenWidthHeight()
@@ -50,23 +51,32 @@ function Animation:initStructure()
 	self.structure = {}
 
 	-- Add local structure.
-	local pathLocalAnimations = 'BackwardsOS/programs/Animation/Animations/'
+	local pathLocalAnimations = "BackwardsOS/programs/Animation/Animations/"
 	if fs.exists(pathLocalAnimations) then
-		for _, size in ipairs(fs.list(pathLocalAnimations)) do
-			if not self.structure[size] then self.structure[size] = {} end
-			local pathLocalFiles = pathLocalAnimations .. size
-			local localFiles = fs.list(pathLocalFiles)
-			for _, file in ipairs(localFiles) do table.insert(self.structure[size], file) end
+		for _, charType in ipairs(fs.list(pathLocalAnimations)) do
+			local pathLocalCharType = pathLocalAnimations .. charType .. "/"
+			if not self.structure[charType] then self.structure[charType] = {} end
+			if fs.exists(pathLocalCharType) then
+				for _, size in ipairs(fs.list(pathLocalCharType)) do
+					local pathLocalFiles = pathLocalCharType .. size
+					if not self.structure[charType][size] then self.structure[charType][size] = {} end
+					local localFiles = fs.list(pathLocalFiles)
+					for _, file in ipairs(localFiles) do table.insert(self.structure[charType][size], file) end
+				end
+			end
 		end
 	end
 
 	-- Add cloud structure.
-	if http then
-		self.cloudStructure = https.getStorageStructure()
-		if self.cloudStructure then
-			for size, _ in pairs(self.cloudStructure) do
-				if not self.structure[size] then self.structure[size] = {} end
-				for _, file in ipairs(self.cloudStructure[size]) do table.insert(self.structure[size], file) end
+	if self.useCloud and http then
+		local cloudStructure = https.getStorageStructure()
+		if cloudStructure then
+			for charType, _ in pairs(cloudStructure) do
+				if not self.structure[charType] then self.structure[charType] = {} end
+				for size, _ in pairs(cloudStructure[charType]) do
+					if not self.structure[charType][size] then self.structure[charType][size] = {} end
+					for _, file in ipairs(cloudStructure[size]) do table.insert(self.structure[charType][size], file) end
+				end
 			end
 		end
 	end
@@ -85,13 +95,19 @@ end
 function Animation:getLocalStructure()
 	if not self.localStructure then
 		self.localStructure = {}
-		local pathLocalAnimations = 'BackwardsOS/programs/Animation/Animations/'
+		local pathLocalAnimations = "BackwardsOS/programs/Animation/Animations/"
 		if fs.exists(pathLocalAnimations) then
-			for _, size in ipairs(fs.list(pathLocalAnimations)) do
-				self.localStructure[size] = {}
-				local pathLocalFiles = pathLocalAnimations .. size
-				local localFiles = fs.list(pathLocalFiles)
-				for _, file in ipairs(localFiles) do table.insert(self.localStructure[size], file) end
+			for _, charType in ipairs(fs.list(pathLocalAnimations)) do
+				local pathLocalCharType = pathLocalAnimations .. charType .. "/"
+				if not self.localStructure[charType] then self.localStructure[charType] = {} end
+				if fs.exists(pathLocalCharType) then
+					for _, size in ipairs(fs.list(pathLocalCharType)) do
+						local pathLocalFiles = pathLocalCharType .. size
+						if not self.localStructure[charType][size] then self.localStructure[charType][size] = {} end
+						local localFiles = fs.list(pathLocalFiles)
+						for _, file in ipairs(localFiles) do table.insert(self.localStructure[charType][size], file) end
+					end
+				end
 			end
 		end
 	end
@@ -100,13 +116,34 @@ end
 
 -- Lists options the user can choose from.
 -- If keysStrings is set to 'true', the table is looped with 'pairs()'.
-function Animation:listOptions(folders)
+function Animation:listOptions(askType)
 	local localStructure = self:getLocalStructure()
 	print()
 
-	if folders then
-		for size, _ in pairs(self.structure) do
-			if localStructure[size] ~= nil then
+	if askType == "charType" then
+		for charType, _ in pairs(self.structure) do
+			if localStructure[charType] ~= nil then
+				term.write('  ')
+			else
+				term.write('! ')
+			end
+			print(charType)
+		end
+		
+		print('\nEnter one of the above char types:')
+		
+		while true do
+			local answerLowerCase = read():lower()
+			for charType, _ in pairs(self.structure) do
+				if charType:lower() == answerLowerCase then
+					return charType
+				end
+			end
+			print('Invalid program name.') -- Only reached when we haven't returned.
+		end
+	elseif askType == "size" then
+		for size, _ in pairs(self.structure[self.charType]) do
+			if localStructure[self.charType][size] ~= nil then
 				term.write('  ')
 			else
 				term.write('! ')
@@ -119,16 +156,16 @@ function Animation:listOptions(folders)
 		
 		while true do
 			local answerLowerCase = read():lower()
-			for size, _ in pairs(self.structure) do
+			for size, _ in pairs(self.structure[self.charType]) do
 				if size:gsub('size_', ''):lower() == answerLowerCase then
 					return size
 				end
 			end
 			print('Invalid program name.') -- Only reached when we haven't returned.
 		end
-	else
-		for _, name in pairs(self.structure[self.sizeFolder]) do
-			if localStructure[self.sizeFolder] ~= nil and cf.valueInTable(localStructure[self.sizeFolder], name) then
+	elseif askType == "file" then
+		for _, name in pairs(self.structure[self.charType][self.sizeFolder]) do
+			if localStructure[self.charType][self.sizeFolder] ~= nil and cf.valueInTable(localStructure[self.charType][self.sizeFolder], name) then
 				term.write('  ')
 			else
 				term.write('! ')
@@ -140,7 +177,7 @@ function Animation:listOptions(folders)
 		
 		while true do
 			local answerLowerCase = read():lower()
-			for _, name in pairs(self.structure[self.sizeFolder]) do
+			for _, name in pairs(self.structure[self.charType][self.sizeFolder]) do
 				if name:lower() == answerLowerCase then
 					return name
 				end
@@ -150,19 +187,26 @@ function Animation:listOptions(folders)
 	end
 end
 
-function Animation:askAnimationFolder()
-	local pathAnimations = 'BackwardsOS/programs/Animation/Animations'
+function Animation:askCharType()
+	local pathCharType = 'BackwardsOS/programs/Animation/Animations'
+	if not fs.exists(pathCharType) then fs.makeDir(pathCharType) end
+	self.charType = self:listOptions("charType")
+	cf.clearTerm()
+end
+
+function Animation:askFolder()
+	local pathAnimations = 'BackwardsOS/programs/Animation/Animations/' .. self.charType
 	if not fs.exists(pathAnimations) then fs.makeDir(pathAnimations) end
-	self.sizeFolder = self:listOptions(true)
+	self.sizeFolder = self:listOptions("size")
 	local _animationSize = cf.split(self.sizeFolder:gsub('size_', ''), 'x')
 	self.animationSize = { width = _animationSize[1], height = _animationSize[2] }
 	cf.clearTerm()
 end
 
-function Animation:askAnimationFile()
-	local pathSize = 'BackwardsOS/programs/Animation/Animations/' .. self.sizeFolder
+function Animation:askFile()
+	local pathSize = 'BackwardsOS/programs/Animation/Animations/' .. self.charType .. '/' .. self.sizeFolder
 	if not fs.exists(pathSize) then fs.makeDir(pathSize) end
-	self.fileName = self:listOptions(false)
+	self.fileName = self:listOptions("file")
 	cf.clearTerm()
 end
 
@@ -234,7 +278,7 @@ function Animation:downloadAnimationFile(pathFile)
 end
 
 function Animation:getInfo()
-	local pathFile = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+	local pathFile = self.folder .. 'Animations/' .. self.charType .. '/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 	local str = fs.open(pathFile .. 'info.txt', 'r').readAll()
 	self.info = textutils.unserialize(str)
 end
@@ -243,16 +287,20 @@ function Animation:getSelectedAnimationData()
 	-- Create Timed Animations folder.
 	local pathTimedAnimations = self.folder .. 'Timed Animations/'
 	if not fs.exists(pathTimedAnimations) then fs.makeDir(pathTimedAnimations) end
+
+	-- Create charType folder.
+	local pathTimedAnimationsCharType = pathTimedAnimations .. self.charType .. '/'
+	if not fs.exists(pathTimedAnimationsCharType) then fs.makeDir(pathTimedAnimationsCharType) end
 	
 	-- Create size folder.
-	local pathTimedAnimationsSize = pathTimedAnimations .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
+	local pathTimedAnimationsSize = pathTimedAnimationsCharType .. 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/'
 	if not fs.exists(pathTimedAnimationsSize) then fs.makeDir(pathTimedAnimationsSize) end
 
 	-- Create fileName folder.
 	local pathTimedAnimationsFile = pathTimedAnimationsSize .. self.fileName .. '/'
 	if not fs.exists(pathTimedAnimationsFile) then fs.makeDir(pathTimedAnimationsFile) end
 
-	local pathAnimationsFile = self.folder .. 'Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
+	local pathAnimationsFile = self.folder .. 'Animations/' .. self.charType .. '/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName
 	local pathAnimationsInfo = pathAnimationsFile .. '/info.txt'
 
 	if not fs.exists(pathAnimationsFile) then			
@@ -464,7 +512,7 @@ function Animation:playAnimation()
 		end
 	end
 
-	local pathFile = self.folder .. 'Timed Animations/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
+	local pathFile = self.folder .. 'Timed Animations/' .. self.charType .. '/size_' .. self.animationSize.width .. 'x' .. self.animationSize.height .. '/' .. self.fileName .. '/'
 	local len = #fs.list(pathFile)
 
 	term.setCursorPos(self.offset.x, self.offset.y)
