@@ -77,7 +77,11 @@ function Animation:initStructure()
 				if not self.structure[charType] then self.structure[charType] = {} end
 				for size, _ in pairs(cloudStructure[charType]) do
 					if not self.structure[charType][size] then self.structure[charType][size] = {} end
-					for _, file in ipairs(cloudStructure[charType][size]) do table.insert(self.structure[charType][size], file) end
+					for _, file in ipairs(cloudStructure[charType][size]) do
+						if not cf.valueInTable(self.structure[charType][size], file) then
+							table.insert(self.structure[charType][size], file)
+						end
+					end
 				end
 			end
 		end
