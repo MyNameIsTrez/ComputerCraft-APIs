@@ -79,7 +79,10 @@ function getTable(url)
 	handle.close()
 	cf.yield()
 	
-	if strTable[1] == '404: Not Found' then print(url)error('https.get() 404: File not found.') end
+	if strTable[1] == '404: Not Found' then
+		print(url)
+		error('https.get() 404: File not found.')
+	end
 
 	return strTable
 end
@@ -141,7 +144,10 @@ function getHTTPTable(url)
 	handle.close()
 	cf.yield()
 	
-	if strTable[1] == '404: Not Found' then print(url)error('https.get() 404: File not found.') end
+	if strTable[1] == '404: Not Found' then
+		print(url)
+		error('https.get() 404: File not found.')
+	end
 
 	return strTable
 end
@@ -154,7 +160,7 @@ function downloadStorageFile(url, folder, name)
     local strTable = getHTTPTable('http://joppekoers.nl:1337/' .. url)
 	cf.yield()
 
-	local handle = io.open(folder .. '/' .. name .. '.txt', 'w')
+	local handle = io.open(cf.pathJoin(folder, name), 'w')
 	cf.yield()
 	
 	for _, str in ipairs(strTable) do

@@ -330,3 +330,15 @@ function getKeys(tab)
 	for k, _ in pairs(tab) do table.insert(keys, k) end
 	return keys
 end
+
+function pathJoin(...)
+	local path
+	for _, string in ipairs(arg) do
+		if path == nil then
+			path = string
+		else
+			path = path .. "/" .. string
+		end
+	end
+	return path
+end
