@@ -342,3 +342,13 @@ function pathJoin(...)
 	end
 	return path
 end
+
+function matchBetween(str, startStr, endStr)
+	local tab = {}
+	local i = 1
+	for capture in str:gmatch(startStr .. "(.-)" .. endStr) do
+		tab[i] = capture
+		i = i + 1
+	end
+	return tab
+end
