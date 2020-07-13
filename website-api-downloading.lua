@@ -1,6 +1,6 @@
 local APIs = {
-	{ ID = "p9tSSWcB", name = "cf"},       -- Common Functions (Debugging)
-	{ ID = "DhrVLESZ", name = "lualzw"}, -- string compression
+	{ ID = "p9tSSWcB", name = "cf"},      -- Common Functions (debugging)
+	{ ID = "DhrVLESZ", name = "lualzw"},  -- string compression
 	{ ID = "GSRpTU2e", name = "json"},
 	{ ID = "Yxn2x5Nt", name = "website"},
 	{ ID = "BNB3wjQQ", name = "startup"},
