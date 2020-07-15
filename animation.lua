@@ -242,11 +242,11 @@ function Animation:downloadAnimationFile(pathFile)
 	local cursorX, cursorY = term.getCursorPos()
 
 	if self.progressBool then
-		local str = 'Fetching animation file 1/' .. tostring(self.info.data_files) .. ' from server. Calculating ETA...'
+		local str = 'Fetching animation file 1/' .. tostring(self.info.frame_files_count) .. ' from server. Calculating ETA...'
 		self:printProgress(str, cursorX, cursorY)
 	end
 
-	for i = 1, self.info.data_files do
+	for i = 1, self.info.frame_files_count do
 		local timeStart = os.clock()
 
 		local pathData = cf.pathJoin(pathFile, 'data')
@@ -259,7 +259,7 @@ function Animation:downloadAnimationFile(pathFile)
 		local timeEnd = os.clock()
 
 		-- Print the ETA.
-		local filesLeft = self.info.data_files - i
+		local filesLeft = self.info.frame_files_count - i
 		local secondsLeft = (timeEnd - timeStart) * filesLeft
 		local seconds = math.floor(secondsLeft % 60)
 		local minutes = math.floor(secondsLeft / 60 % 60)
@@ -271,7 +271,7 @@ function Animation:downloadAnimationFile(pathFile)
 		(seconds < 10 and '0' or '') .. tostring(seconds) .. ' )'
 
 		if self.progressBool then
-			local str = 'Fetching animation file ' .. tostring(i < self.info.data_files and i + 1 or i) .. '/' .. tostring(self.info.data_files) .. ' from server.' .. eta .. '           '
+			local str = 'Fetching animation file ' .. tostring(i < self.info.frame_files_count and i + 1 or i) .. '/' .. tostring(self.info.frame_files_count) .. ' from server.' .. eta .. '           '
 			self:printProgress(str, cursorX, cursorY)
 		end
 	end
@@ -327,7 +327,7 @@ function Animation:getSelectedAnimationData()
 	local cursorX, cursorY = term.getCursorPos()
 	local i = 1
 
-	for dataFileIndex = 1, self.info.data_files do
+	for dataFileIndex = 1, self.info.frame_files_count do
 		local dataWriteHandle = io.open(cf.pathJoin(pathTimedAnimationsFile, dataFileIndex), 'w')
 
 		local frameOffset = (dataFileIndex - 1) * self.maxFramesPerTimedAnimationFile
