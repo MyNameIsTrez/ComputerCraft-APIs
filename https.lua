@@ -23,30 +23,27 @@ REQUIREMENTS
 -- General variables
 
 
--- ComputerCraft version 1.33 and below doesn't have access to HTTPS URLs.
--- This website transforms http requests from ComputerCraft into https requests to circumvent this issue.
-local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
+-- -- ComputerCraft version 1.33 and below doesn't have access to HTTPS URLs.
+-- -- This website transforms http requests from ComputerCraft into https requests to circumvent this issue.
+-- local httpToHttpsUrl = 'http://request.mariusvanwijk.nl/'
 
 
--- GitHub variables
+-- -- GitHub variables
 
--- A URL containing the structure of the folders and files inside of the ComputerCraft data storage repository.
-local structureUrl = 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/structure.txt'
--- Starts as nil. Call getStructure(). Will hold the file and folder structure of the GitHub repository.
-local structure
+-- -- A URL containing the structure of the folders and files inside of the ComputerCraft data storage repository.
+-- local structureUrl = 'https://github.com/MyNameIsTrez/ComputerCraft-Data-Storage/blob/master/structure.txt'
+-- -- Starts as nil. Call getStructure(). Will hold the file and folder structure of the GitHub repository.
+-- local structure
 
--- Delimiter for getting every line of valuable content inside of a GitHub file.
-local delimiter = '-line">' .. '(.-)' .. '</td>'
+-- -- Delimiter for getting every line of valuable content inside of a GitHub file.
+-- local delimiter = '-line">' .. '(.-)' .. '</td>'
 
-local IPUrl = 'http://api.ipify.org'
--- Starts as nil. Call httpGetIP().
-local IP
+-- local IPUrl = 'http://api.ipify.org'
+-- -- Starts as nil. Call httpGetIP().
+-- local IP
 
-local randomQuotaUrlStart = 'http://www.random.org/quota/?ip='
-local randomQuotaUrlEnd = '&format=plain'
-
--- Set by calling getStorageStructure().
-local storageStructure
+-- local randomQuotaUrlStart = 'http://www.random.org/quota/?ip='
+-- local randomQuotaUrlEnd = '&format=plain'
 
 
 --------------------------------------------------
@@ -56,122 +53,111 @@ local storageStructure
 -- Https ----------
 
 
-function getHandle(url)
-	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
-	cf.yield()
+-- function getHandle(url)
+-- 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
+-- 	cf.yield()
 	
-	if handle == nil then error('https.getHandle() didn\'t get a response back.') end
+-- 	if handle == nil then error('https.getHandle() didn\'t get a response back.') end
 
-	return handle
-end
+-- 	return handle
+-- end
 
-function getTable(url)
-	local handle = getHandle(url)
+-- function getTable(url)
+-- 	local handle = getHandle(url)
 	
-	local strTable = {}
-	local i = 1
-	for line in handle.readLine do
-		strTable[i] = line
-		i = i + 1
-	end
-	cf.yield()
+-- 	local strTable = {}
+-- 	local i = 1
+-- 	for line in handle.readLine do
+-- 		strTable[i] = line
+-- 		i = i + 1
+-- 	end
+-- 	cf.yield()
 	
-	handle.close()
-	cf.yield()
+-- 	handle.close()
+-- 	cf.yield()
 	
-	if strTable[1] == '404: Not Found' then
-		print(url)
-		error('https.get() 404: File not found.')
-	end
+-- 	if strTable[1] == '404: Not Found' then
+-- 		print(url)
+-- 		error('https.get() 404: File not found.')
+-- 	end
 
-	return strTable
-end
+-- 	return strTable
+-- end
 
-function get(url)
-	local tab = getTable(url)
-	return table.concat(tab)
-end
+-- function get(url)
+-- 	local tab = getTable(url)
+-- 	return table.concat(tab)
+-- end
 
-function post(url, data)
-	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '", "body": "' .. json.encode(data) .. '"}' )
-	local str = handle.readAll()
-	handle.close()
-	return str
-end
+-- function post(url, data)
+-- 	local handle = http.post(httpToHttpsUrl, '{"url": "' .. url .. '", "body": "' .. json.encode(data) .. '"}' )
+-- 	local str = handle.readAll()
+-- 	handle.close()
+-- 	return str
+-- end
 
-function request(data)
-	local handle = http.post(httpToHttpsUrl, json.encode(data))
-	local str = handle.readAll()
-	handle.close()
-	return str
-end
-
-
--- Joppe's file storage server ----------
+-- function request(data)
+-- 	local handle = http.post(httpToHttpsUrl, json.encode(data))
+-- 	local str = handle.readAll()
+-- 	handle.close()
+-- 	return str
+-- end
 
 
-function getStorageStructure()
-	if not storageStructure then
-		storageStructure = json.parseObject(http.get('http://joppekoers.nl:1337').readAll())
-	end
-	return storageStructure
-end
+-- ASCII file storage server ----------
 
-function getStorageData(url)
-	return http.get('http://joppekoers.nl:1337/' .. url).readAll()
-end
 
-function getHTTPHandle(url)
-	local handle = http.get(url)
-	cf.yield()
+-- function getHTTPHandle(url)
+-- 	local handle = http.get(url)
+-- 	cf.yield()
 	
-	if handle == nil then error('https.getHTTPHandle() didn\'t get a response back.') end
+-- 	if handle == nil then error("https.getHTTPHandle() didn't get a response back.") end
 
-	return handle
-end
+-- 	return handle
+-- end
 
-function getHTTPTable(url)
-	local handle = getHTTPHandle(url)
+-- function getHTTPTable(url)
+-- 	local handle = getHTTPHandle(url)
 	
-	local strTable = {}
-	local i = 1
-	for line in handle.readLine do
-		strTable[i] = line
-		i = i + 1
-	end
-	cf.yield()
+-- 	local strTable = {}
+-- 	local i = 1
+-- 	for line in handle.readLine do
+-- 		strTable[i] = line
+-- 		i = i + 1
+-- 	end
+-- 	cf.yield()
 	
-	handle.close()
-	cf.yield()
+-- 	handle.close()
+-- 	cf.yield()
 	
-	if strTable[1] == '404: Not Found' then
-		print(url)
-		error('https.get() 404: File not found.')
-	end
+-- 	if strTable[1] == '404: Not Found' then
+-- 		print(url)
+-- 		error('https.get() 404: File not found.')
+-- 	end
 
-	return strTable
-end
+-- 	return strTable
+-- end
 
-function downloadStorageFile(url, folder, name)
-	if not fs.exists(folder) then
-		fs.makeDir(folder)
-	end
+-- function downloadStorageFile(url, folder, name)
+-- 	if not fs.exists(folder) then
+-- 		fs.makeDir(folder)
+-- 	end
 	
-    local strTable = getHTTPTable('http://joppekoers.nl:1337/' .. url)
-	cf.yield()
+--     local strTable = getHTTPTable('http://joppekoers.nl:1337/' .. url)
+-- 	cf.yield()
 
-	local handle = io.open(cf.pathJoin(folder, name), 'w')
-	cf.yield()
+-- 	local handle = io.open(cf.pathJoin(folder, name), 'w')
+-- 	cf.yield()
 	
-	for _, str in ipairs(strTable) do
-		handle:write(str)
-		handle:write('\n')
-	end
-	cf.yield()
+-- 	for _, str in ipairs(strTable) do
+-- 		handle:write(str)
+-- 		handle:write('\n')
+-- 	end
+-- 	cf.yield()
 	
-	handle:close()
-	cf.yield()
-end
+-- 	handle:close()
+-- 	cf.yield()
+-- end
 
 
 --[[
@@ -229,27 +215,27 @@ end
 ]]--
 
 
-function httpGetIP()
-	if not IP then
-		local handle = http.get(IPUrl)
-		IP = handle.readAll()
-	end
-	return IP
-end
+-- function httpGetIP()
+-- 	if not IP then
+-- 		local handle = http.get(IPUrl)
+-- 		IP = handle.readAll()
+-- 	end
+-- 	return IP
+-- end
 
-function getRandomQuota()
-	if not IP then
-		httpGetIP()
-	end
-	local url = randomQuotaUrlStart .. IP .. randomQuotaUrlEnd
-	return http.get(url)
-end
+-- function getRandomQuota()
+-- 	if not IP then
+-- 		httpGetIP()
+-- 	end
+-- 	local url = randomQuotaUrlStart .. IP .. randomQuotaUrlEnd
+-- 	return http.get(url)
+-- end
 
-function getIntegers()
-	url = 'https://www.random.org/integers/?num=10&min=1&max=6&col=1&base=10&format=plain&rnd=new'
-	get(url)
-end
+-- function getIntegers()
+-- 	url = 'https://www.random.org/integers/?num=10&min=1&max=6&col=1&base=10&format=plain&rnd=new'
+-- 	get(url)
+-- end
 
-function getFortune()
-	return get('https://osmarks.tk/random-stuff/fortune/')
-end
+-- function getFortune()
+-- 	return get('https://osmarks.tk/random-stuff/fortune/')
+-- end
