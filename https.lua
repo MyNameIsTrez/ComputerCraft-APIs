@@ -146,16 +146,16 @@ REQUIREMENTS
 --     local strTable = getHTTPTable('http://joppekoers.nl:1337/' .. url)
 -- 	cf.yield()
 
--- 	local handle = io.open(cf.pathJoin(folder, name), 'w')
+-- 	local handle = fs.open(cf.pathJoin(folder, name), 'w')
 -- 	cf.yield()
 	
 -- 	for _, str in ipairs(strTable) do
--- 		handle:write(str)
--- 		handle:write('\n')
+-- 		handle.write(str)
+-- 		handle.write('\n')
 -- 	end
 -- 	cf.yield()
 	
--- 	handle:close()
+-- 	handle.close()
 -- 	cf.yield()
 -- end
 
@@ -182,16 +182,16 @@ function downloadFile(url, folder, fileName)
     local strTable = getTable(url)
 	cf.yield()
 
-	local handle = io.open(folder .. '/' .. fileName .. '.txt', 'w')
+	local handle = fs.open(folder .. '/' .. fileName .. '.txt', 'w')
 	cf.yield()
 	
 	for _, str in ipairs(strTable) do
-		handle:write(str)
-		handle:write('\n')
+		handle.write(str)
+		handle.write('\n')
 	end
 	cf.yield()
 	
-	handle:close()
+	handle.close()
 	cf.yield()
 end
 

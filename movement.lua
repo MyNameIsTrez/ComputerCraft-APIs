@@ -248,7 +248,7 @@ function Movement:saveData()
     end
 end
 function Movement:createData()
-    io.write("(Save) Couldn't find the data/position file, make one? Y/N")
+    fs.write("(Save) Couldn't find the data/position file, make one? Y/N")
     answer = io.read()
     if answer:lower() == "y" then
         print("creating data/position file")

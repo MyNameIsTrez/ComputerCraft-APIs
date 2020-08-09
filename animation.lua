@@ -20,9 +20,21 @@ Animation = {}
 function Animation:new(settings)
 	setmetatable({}, Animation)
 
-	self.path = settings.path
+	self.path                           = settings.path
+	self.shell                          = settings.shell
+	self.frameSleeping                  = settings.frameSleeping
+	self.frameSleep                     = settings.frameSleep
+	self.frameSleepSkipping             = settings.frameSleepSkipping
+	self.maxFramesPerTimedAnimationFile = settings.maxFramesPerTimedAnimationFile
+	self.progressBool                   = settings.progressBool
+	self.loop                           = settings.loop
+	self.countdownTime                  = settings.countdownTime
+	self.offset                         = settings.offset
+	self.playAnimationBool = settings.playAnimationBool
+	-- self. = settings.
 
 	self:_init_paths()
+	self:_init_database()
 	self:_get_metadata()
 	
 	return self
@@ -33,459 +45,249 @@ function Animation:_init_paths()
 	self.timed_ascii_path = cf.pathJoin(self.path, "timed-ascii-content")
 end
 
-function Animation:_get_metadata()
-	self.metadata = online_storage.get_metadata()
+function Animation:_init_database()
+	self.database = database.Database:new({path=self.path, name="metadata"}) 
 end
 
-function Animation:print_ascii_names()
-	for _, document in ipairs(self.metadata) do
-		cf.printTable(document)
+function Animation:_get_metadata()
+	self.metadata = {}
+
+	local local_metadata = self.database:find()
+
+	for _, document in ipairs(local_metadata) do
+		document.downloaded = true
+		table.insert(self.metadata, document)
+	end
+
+	for _, document in ipairs(online_storage.get_metadata()) do
+		local already_downloaded = false
+		for _, local_document in ipairs(local_metadata) do
+			if document._id == local_document._id then
+				already_downloaded = true
+			end
+		end
+		if not already_downloaded then
+			document.downloaded = false
+			table.insert(self.metadata, document)
+		end
 	end
 end
 
 function Animation:choose_document()
-	print('\nEnter a "displayed_name":')
+	for _, document in ipairs(self.metadata) do
+		print(string.format("%s | %s", document.downloaded and " " or "!", document.displayed_name))
+	end
+	print("\nEnter a 'displayed_name':")
 	while true do
 		local answer_lowercase = read():lower()
 		for _, document in pairs(self.metadata) do
 			if document.displayed_name:lower() == answer_lowercase then
 				self.document = document
+				self.document_path = cf.pathJoin(self.ascii_path, self.document._id)
+				self.timed_document_path = cf.pathJoin(self.timed_ascii_path, self.document._id)
+
+				if not fs.exists(self.document_path) then self:_download_subfiles() end
+				self:_create_timed_subfiles()
+
 				return
 			end
 		end
-		print('\nInvalid "displayed_name", try again:')
+		print("\nInvalid 'displayed_name', try again:")
 	end
 end
 
-function Animation:download_subfiles()
-	local document_path = cf.pathJoin(self.ascii_path, self.document._id)
-	fs.makeDir(document_path)
+function Animation:_download_subfiles()
+	local cursorX, cursorY = term.getCursorPos()
+	if self.progressBool then
+		local str = "Fetching animation file 1/" .. tostring(self.document.frame_files_count) .. " from server. Calculating ETA..."
+		self:_print_status(str, cursorX, cursorY)
+	end
+
+	fs.makeDir(self.document_path)
+
 	for subfile_id = 1, self.document.frame_files_count do
-		local handle = fs.open(cf.pathJoin(document_path, subfile_id), "w")
+		local time_start = os.clock()
+		local handle = fs.open(cf.pathJoin(self.document_path, subfile_id), "w")
 		handle.write(online_storage.get_ascii_subfile(self.document._id, subfile_id))
 		handle.close()
+		local time_end = os.clock()
+
+		local files_left   = self.document.frame_files_count - subfile_id
+		local seconds_left = (time_end - time_start) * files_left
+		local seconds     = math.floor(seconds_left % 60)
+		local minutes     = math.floor(seconds_left / 60 % 60)
+		local hours       = math.floor(seconds_left / 3600 % 60)
+
+		local eta = " ( " ..
+		(hours   < 10 and "0" or "") .. tostring(hours)   .. ":" ..
+		(minutes < 10 and "0" or "") .. tostring(minutes) .. ":" ..
+		(seconds < 10 and "0" or "") .. tostring(seconds) .. " )"
+
+		if self.progressBool then
+			local str = "Fetching animation file " .. tostring(subfile_id < self.document.frame_files_count and subfile_id + 1 or subfile_id) .. "/" .. tostring(self.document.frame_files_count) .. " from server." .. eta .. "           "
+			self:_print_status(str, cursorX, cursorY)
+		end
+	end
+
+	self.database:insert(self.document)
+end
+
+function Animation:_create_timed_subfiles()
+	fs.makeDir(self.timed_document_path)
+
+	-- Create table of frame indices to sleep at.
+	local framesToSleep = {}
+	for v = 1, self.document.frame_count, self.frameSleepSkipping do
+		table.insert(framesToSleep, math.floor(v + 0.5))
+	end
+	local frameSleepSkippingIndex = 1
+
+	if self.progressBool then
+		self:_print_status("Opening data files...")
+	end
+
+	cf.tryYield() -- TODO: Try to remove.
+	
+	local cursorX, cursorY = term.getCursorPos()
+	local i = 1
+
+	for subfile_id = 1, self.document.frame_files_count do
+		local dataWriteHandle = fs.open(cf.pathJoin(self.timed_document_path, subfile_id), "w")
+
+		local frameOffset = (subfile_id - 1) * self.maxFramesPerTimedAnimationFile
+
+		local frameCountToFile = math.min(self.document.frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
+
+		local strTable = {}
+		local k = 1
+
+		local dataReadHandle = fs.open(cf.pathJoin(self.document_path, subfile_id), "r")
+
+		local f = frameOffset + 1
+		for line_str in dataReadHandle.readLine do
+			-- "k > 1" prevents the first line of each generated code file being empty.
+			if k > 1 then
+				strTable[k] = "\n"
+				k = k + 1
+			end
+			
+			-- line_str can contain a ' character
+			strTable[k] = 'cf.frameWrite("'
+			k = k + 1
+			strTable[k] = line_str
+			k = k + 1
+			strTable[k] = '",nil,nil'
+			k = k + 1
+
+			if f ~= self.document.frame_count and self.loop then
+				strTable[k] = ","
+				k = k + 1
+
+				-- TODO: framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
+				if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
+					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
+
+					strTable[k] = tostring(self.frameSleep) -- TODO: May not need tostring().
+					k = k + 1
+				else
+					strTable[k] = "'tryYield'"
+					k = k + 1
+				end
+			end
+
+			strTable[k] = ")"
+			k = k + 1
+
+			if i % self.maxFramesPerTimedAnimationFile == 0 or i == self.document.frame_count then
+				cf.tryYield() -- TODO: Try to remove.
+				
+				-- TODO: I don't remember why it's necessary to check this. Try removing this later.
+				local allAreStrings = true
+				for str in ipairs(strTable) do
+					if type(str) ~= "string" then
+						allAreStrings = false
+					end
+				end
+				os.queueEvent("yield")
+				os.pullEvent("yield")
+
+				local str = table.concat(strTable)
+				os.queueEvent("yield")
+				os.pullEvent("yield")
+				
+				-- I expect dataWriteHandle.write() to be an expensive operation,
+				-- so that's why I choose to only call it every N frames.
+				dataWriteHandle.write(str)
+				os.queueEvent("yield")
+				os.pullEvent("yield")
+
+				strTable = {}
+				k = 1
+
+				if self.progressBool then
+					local str = "Generated "..tostring(i).."/"..tostring(self.document.frame_count).." frames..."
+					self:_print_status(str, cursorX, cursorY)
+				end
+			end
+			i = i + 1
+			f = f + 1
+		end
+		dataWriteHandle.close()
+		dataReadHandle.close()
+		cf.tryYield() -- TODO: Try to remove.
+	end
+	
+	-- TODO: For the final frame. Refactor this away.
+	if self.progressBool then
+		self:_print_status("Generated " .. tostring(self.document.frame_count) .. "/" .. tostring(self.document.frame_count) .. " frames...", cursorX, cursorY)
 	end
 end
 
--- function Animation:initStructure()
--- 	-- self.metadata = 
+function Animation:_print_status(str, x, y)
+	if x and y then term.setCursorPos(x, y) end
+	print(str)
+end
 
+function Animation:play_animation()
+	if self.progressBool then
+		if self.countdownTime > 0 then
+			self:_countdown()
+		else
+			self:_print_status("Playing animation...")
+		end
+	end
 
--- 	-- self.structure = {}
+	term.setCursorPos(self.offset.x, self.offset.y)
+	local len = #fs.list(self.timed_document_path)
+	if self.loop and self.document.frame_count > 1 then
+		while true do
+			if self.playAnimationBool then
+				self:_playAnimation(len)
+			else
+				sleep(1)
+			end
+		end
+	else
+		self:_playAnimation(len)
+	end
+end
 
--- 	-- -- Add local structure.
--- 	-- if fs.exists(self.ascii_path) then
--- 	-- 	for _, charType in ipairs(fs.list(self.ascii_path)) do
--- 	-- 		local pathLocalCharType = cf.pathJoin(self.ascii_path, charType)
--- 	-- 		if not self.structure[charType] then self.structure[charType] = {} end
--- 	-- 		if fs.exists(pathLocalCharType) then
--- 	-- 			for _, size in ipairs(fs.list(pathLocalCharType)) do
--- 	-- 				local pathLocalFiles = cf.pathJoin(pathLocalCharType, size)
--- 	-- 				if not self.structure[charType][size] then self.structure[charType][size] = {} end
--- 	-- 				local localFiles = fs.list(pathLocalFiles)
--- 	-- 				for _, file in ipairs(localFiles) do table.insert(self.structure[charType][size], file) end
--- 	-- 			end
--- 	-- 		end
--- 	-- 	end
--- 	-- end
+function Animation:_countdown()
+	local cursorX, cursorY = term.getCursorPos()
+	for i = 1, self.countdownTime do
+		self:_print_status("Playing animation in " .. tostring(self.countdownTime - i + 1) .. "...", cursorX, cursorY)
+		sleep(1)
+	end
+end
 
--- 	-- -- Add server structure.
--- 	-- if self.useCloud and http then
--- 	-- 	local cloudStructure = https.getAsciiInfo()
--- 	-- 	if cloudStructure then
--- 	-- 		for charType, _ in pairs(cloudStructure) do
--- 	-- 			if not self.structure[charType] then self.structure[charType] = {} end
--- 	-- 			for size, _ in pairs(cloudStructure[charType]) do
--- 	-- 				if not self.structure[charType][size] then self.structure[charType][size] = {} end
--- 	-- 				for _, file in ipairs(cloudStructure[charType][size]) do
--- 	-- 					if not cf.valueInTable(self.structure[charType][size], file) then
--- 	-- 						table.insert(self.structure[charType][size], file)
--- 	-- 					end
--- 	-- 				end
--- 	-- 			end
--- 	-- 		end
--- 	-- 	end
--- 	-- end
-
--- 	-- if #cf.getKeys(self.structure) == 0 then error("No local or server structure found!") end
--- end
-
--- function Animation:getLocalStructure()
--- 	if not self.localStructure then
--- 		self.localStructure = {}
--- 		if fs.exists(self.ascii_path) then
--- 			for _, charType in ipairs(fs.list(self.ascii_path)) do
--- 				local pathLocalCharType = cf.pathJoin(self.ascii_path, charType)
--- 				if not self.localStructure[charType] then self.localStructure[charType] = {} end
--- 				if fs.exists(pathLocalCharType) then
--- 					for _, size in ipairs(fs.list(pathLocalCharType)) do
--- 						if not self.localStructure[charType][size] then self.localStructure[charType][size] = {} end
--- 						local pathLocalFiles = cf.pathJoin(pathLocalCharType, size)
--- 						local localFiles = fs.list(pathLocalFiles)
--- 						for _, file in ipairs(localFiles) do table.insert(self.localStructure[charType][size], file) end
--- 					end
--- 				end
--- 			end
--- 		end
--- 	end
--- 	return self.localStructure
--- end
-
--- -- Lists options the user can choose from.
--- -- If keysStrings is set to 'true', the table is looped with 'pairs()'.
--- function Animation:listOptions(askType)
--- 	local localStructure = self:getLocalStructure()
--- 	print()
-
--- 	if askType == "charType" then
--- 		for charType, _ in pairs(self.structure) do
--- 			if localStructure[charType] ~= nil then
--- 				term.write('  ')
--- 			else
--- 				term.write('! ')
--- 			end
--- 			print(charType)
--- 		end
-		
--- 		print('\nEnter one of the above char types:')
-		
--- 		while true do
--- 			local answer_lowercase = read():lower()
--- 			for charType, _ in pairs(self.structure) do
--- 				if charType:lower() == answer_lowercase then
--- 					return charType
--- 				end
--- 			end
--- 			print('Invalid program name.') -- Only reached when we haven't returned.
--- 		end
--- 	elseif askType == "size" then
--- 		for size, _ in pairs(self.structure[self.charType]) do
--- 			if localStructure[self.charType] ~= nil and localStructure[self.charType][size] ~= nil then
--- 				term.write('  ')
--- 			else
--- 				term.write('! ')
--- 			end
--- 			local short = size:gsub('size_', '')
--- 			print(short)
--- 		end
-		
--- 		print('\nEnter one of the above folder names:')
-		
--- 		while true do
--- 			local answer_lowercase = read():lower()
--- 			for size, _ in pairs(self.structure[self.charType]) do
--- 				if size:gsub('size_', ''):lower() == answer_lowercase then
--- 					return size
--- 				end
--- 			end
--- 			print('Invalid program name.') -- Only reached when we haven't returned.
--- 		end
--- 	elseif askType == "file" then
--- 		for _, name in pairs(self.structure[self.charType][self.sizeFolder]) do
--- 			if localStructure[self.charType] ~= nil and localStructure[self.charType][self.sizeFolder] ~= nil and cf.valueInTable(localStructure[self.charType][self.sizeFolder], name) then
--- 				term.write('  ')
--- 			else
--- 				term.write('! ')
--- 			end
--- 			print(name)
--- 		end
-		
--- 		print('\nEnter one of the above file names:')
-		
--- 		while true do
--- 			local answer_lowercase = read():lower()
--- 			for _, name in pairs(self.structure[self.charType][self.sizeFolder]) do
--- 				if name:lower() == answer_lowercase then
--- 					return name
--- 				end
--- 			end
--- 			print('Invalid program name.') -- Only reached when we haven't returned.
--- 		end
--- 	end
--- end
-
--- function Animation:askCharType()
--- 	fs.makeDir(self.ascii_path)
--- 	self.charType = self:listOptions("charType")
--- 	cf.clearTerm()
--- end
-
--- function Animation:askFolder()
--- 	local pathCharType = cf.pathJoin(self.ascii_path, self.charType)
--- 	fs.makeDir(pathCharType)
--- 	self.sizeFolder = self:listOptions("size")
--- 	local _animationSize = cf.split(self.sizeFolder:gsub('size_', ''), 'x')
--- 	self.animationSize = { width = _animationSize[1], height = _animationSize[2] }
--- 	cf.clearTerm()
--- end
-
--- function Animation:askFile()
--- 	local pathSize = cf.pathJoin(self.ascii_path, self.charType, self.sizeFolder)
--- 	fs.makeDir(pathSize)
--- 	self.fileName = self:listOptions("file")
--- 	cf.clearTerm()
--- end
-
--- function Animation:printProgress(str, x, y)
--- 	-- If the BruteOS API is used, print the message at a different location.
--- 	if _BRUTEOS then
--- 		os.setMessage(str, 'NotUsingMenu');
--- 	else
--- 		if x and y then term.setCursorPos(x, y) end
--- 		print(str)
--- 	end
--- end
-
--- function Animation:downloadAnimationInfo(pathFile)
--- 	local size = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
--- 	local path = cf.pathJoin(self.charType, size, self.fileName, 'metadata.txt')
--- 	local str  = https.downloadAsciiSubfile(path)
-
--- 	fs.makeDir(pathFile)
-
--- 	local handle = io.open(cf.pathJoin(self.ascii_path, path), 'w')
--- 	handle:write(str)
--- 	handle:close()
-	
--- 	self.metadata = textutils.unserialize(str)
--- end
-
--- function Animation:downloadAnimationFile(pathFile)
--- 	local cursorX, cursorY = term.getCursorPos()
-
--- 	if self.progressBool then
--- 		local str = 'Fetching animation file 1/' .. tostring(self.metadata.frame_files_count) .. ' from server. Calculating ETA...'
--- 		self:printProgress(str, cursorX, cursorY)
--- 	end
-
--- 	for i = 1, self.metadata.frame_files_count do
--- 		local timeStart = os.clock()
-
--- 		local pathData = cf.pathJoin(pathFile, 'data')
--- 		local fileName = tostring(i) .. '.txt'
--- 		local size     = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
--- 		local path     = cf.pathJoin(self.charType, size, self.fileName, 'data', fileName)
-
--- 		-- https.downloadAsciiSubfile(path, pathData, fileName)
-
--- 		local timeEnd = os.clock()
-
--- 		-- Print the ETA.
--- 		local filesLeft   = self.metadata.frame_files_count - i
--- 		local secondsLeft = (timeEnd - timeStart) * filesLeft
--- 		local seconds     = math.floor(secondsLeft % 60)
--- 		local minutes     = math.floor(secondsLeft / 60 % 60)
--- 		local hours       = math.floor(secondsLeft / 3600 % 60)
-
--- 		local eta = ' ( ' ..
--- 		(hours   < 10 and '0' or '') .. tostring(hours)   .. ':' ..
--- 		(minutes < 10 and '0' or '') .. tostring(minutes) .. ':' ..
--- 		(seconds < 10 and '0' or '') .. tostring(seconds) .. ' )'
-
--- 		if self.progressBool then
--- 			local str = 'Fetching animation file ' .. tostring(i < self.metadata.frame_files_count and i + 1 or i) .. '/' .. tostring(self.metadata.frame_files_count) .. ' from server.' .. eta .. '           '
--- 			self:printProgress(str, cursorX, cursorY)
--- 		end
--- 	end
--- end
-
--- function Animation:getInfo()
--- 	local size = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
--- 	local pathInfo = cf.pathJoin(self.ascii_path, self.charType, size, self.fileName, 'metadata.txt')
--- 	local str = fs.open(pathInfo, 'r').readAll()
--- 	self.metadata = textutils.unserialize(str)
--- end
-
--- function Animation:getSelectedAnimationData()
--- 	-- -- Create Timed Animations folder.
--- 	-- fs.makeDir(self.timed_ascii_path)
-
--- 	-- -- Create charType folder.
--- 	-- local pathTimedAnimationsCharType = cf.pathJoin(self.timed_ascii_path, self.charType)
--- 	-- fs.makeDir(pathTimedAnimationsCharType)
-	
--- 	-- -- Create size folder.
--- 	-- local size = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
--- 	-- local pathTimedAnimationsSize = cf.pathJoin(pathTimedAnimationsCharType, size)
--- 	-- fs.makeDir(pathTimedAnimationsSize)
-
--- 	-- -- Create fileName folder.
--- 	-- local pathTimedAnimationsFile = cf.pathJoin(pathTimedAnimationsSize, self.fileName)
--- 	-- fs.makeDir(pathTimedAnimationsFile)
-
--- 	-- local pathAnimationsFile = cf.pathJoin(self.ascii_path, self.charType, size, self.fileName)
-
--- 	if not fs.exists(pathAnimationsFile) then			
--- 		-- self:downloadAnimationInfo(pathAnimationsFile)
--- 		self:downloadAnimationFile(pathAnimationsFile)
--- 	else
--- 		local str = fs.open(cf.pathJoin(pathAnimationsFile, 'metadata.txt'), 'r').readAll()
--- 		self.metadata = textutils.unserialize(str)
--- 	end
-
--- 	-- Create table of frame indices to sleep at.
--- 	local framesToSleep = {}
--- 	for v = 1, self.metadata.frame_count, self.frameSleepSkipping do
--- 		table.insert(framesToSleep, math.floor(v + 0.5))
--- 	end
--- 	local frameSleepSkippingIndex = 1
-
--- 	if self.progressBool then
--- 		self:printProgress('Opening data files...')
--- 	end
-
--- 	cf.tryYield() -- TODO: Try to remove.
-	
--- 	local cursorX, cursorY = term.getCursorPos()
--- 	local i = 1
-
--- 	for dataFileIndex = 1, self.metadata.frame_files_count do
--- 		local dataWriteHandle = io.open(cf.pathJoin(pathTimedAnimationsFile, dataFileIndex), 'w')
-
--- 		local frameOffset = (dataFileIndex - 1) * self.maxFramesPerTimedAnimationFile
-
--- 		local frameCountToFile = math.min(self.metadata.frame_count - frameOffset, self.maxFramesPerTimedAnimationFile)
-
--- 		local strTable = {}
--- 		local k = 1
-
--- 		local dataReadHandle = fs.open(cf.pathJoin(pathAnimationsFile, 'data', dataFileIndex .. '.txt'), 'r')
-
--- 		local f = frameOffset + 1
--- 		for lineStr in dataReadHandle.readLine do
--- 			-- 'k > 1' prevents the first line of each generated code file being empty.
--- 			if k > 1 then
--- 				strTable[k] = '\n'
--- 				k = k + 1
--- 			end
-			
--- 			strTable[k] = 'cf.frameWrite("'
--- 			k = k + 1
--- 			strTable[k] = lineStr
--- 			k = k + 1
--- 			strTable[k] = '",nil,nil'
--- 			k = k + 1
-
--- 			if f ~= self.metadata.frame_count and self.loop then
--- 				strTable[k] = ','
--- 				k = k + 1
-
--- 				-- TODO: framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
--- 				if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
--- 					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
-
--- 					strTable[k] = tostring(self.frameSleep) -- TODO: May not need tostring().
--- 					k = k + 1
--- 				else
--- 					strTable[k] = "'tryYield'"
--- 					k = k + 1
--- 				end
--- 			end
-
--- 			strTable[k] = ')'
--- 			k = k + 1
-			
--- 			if i % self.maxFramesPerTimedAnimationFile == 0 or i == self.metadata.frame_count then
--- 				cf.tryYield() -- TODO: Try to remove.
-				
--- 				-- TODO: I don't remember why it's necessary to check this. Try removing this later.
--- 				local allAreStrings = true
--- 				for str in ipairs(strTable) do
--- 					if type(str) ~= 'string' then
--- 						allAreStrings = false
--- 					end
--- 				end
--- 				os.queueEvent('yield')
--- 				os.pullEvent('yield')
-
--- 				local str = table.concat(strTable)
--- 				os.queueEvent('yield')
--- 				os.pullEvent('yield')
-				
--- 				-- I expect dataWriteHandle:write() to be an expensive operation,
--- 				-- so that's why I choose to only use it every N frames.
--- 				dataWriteHandle:write(str)
--- 				os.queueEvent('yield')
--- 				os.pullEvent('yield')
-
--- 				strTable = {}
--- 				k = 1
-
--- 				if self.progressBool then
--- 					local str = 'Generated '..tostring(i)..'/'..tostring(self.metadata.frame_count)..' frames...'
--- 					self:printProgress(str, cursorX, cursorY)
--- 				end
--- 			end
--- 			i = i + 1
--- 			f = f + 1
--- 		end
--- 		dataWriteHandle:close()
--- 		dataReadHandle:close()
--- 		cf.tryYield() -- TODO: Try to remove.
--- 	end
-	
--- 	-- TODO: For the final frame. Refactor this away.
--- 	if self.progressBool then
--- 		self:printProgress('Generated ' .. tostring(self.metadata.frame_count) .. '/' .. tostring(self.metadata.frame_count) .. ' frames...', cursorX, cursorY)
--- 	end
--- end
-
--- function Animation:countdown()
--- 	local cursorX, cursorY = term.getCursorPos()
-
--- 	for i = 1, self.countdownTime do
--- 		self:printProgress('Playing animation in ' .. tostring(self.countdownTime - i + 1) .. '...', cursorX, cursorY)
--- 		sleep(1)
--- 	end
--- end
-
--- function Animation:createTimedAnimation()
--- 	local size = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
--- 	if not fs.exists(cf.pathJoin(self.timed_ascii_path, size, self.fileName)) then
--- 		self:getSelectedAnimationData()
--- 		cf.tryYield() -- TODO: Try to remove.
--- 	end
--- end
-
--- function Animation:_playAnimation(pathFile, len)
--- 	for i = 1, len do
--- 		if self.playAnimationBool then
--- 			self.shell.run(cf.pathJoin(pathFile, i))
--- 		end
--- 	end
--- 	cf.tryYield() -- TODO: Try to remove.
--- end
-
--- function Animation:playAnimation()
--- 	if self.progressBool then
--- 		if self.countdownTime > 0 then
--- 			self:countdown()
--- 		else
--- 			self:printProgress('Playing animation...')
--- 		end
--- 	end
-
--- 	local size = 'size_' .. self.animationSize.width .. 'x' .. self.animationSize.height
--- 	local pathFile = cf.pathJoin(self.timed_ascii_path, self.charType, size, self.fileName)
--- 	local len = #fs.list(pathFile)
-
--- 	term.setCursorPos(self.offset.x, self.offset.y)
-
--- 	-- Inits self.metadata.frame_count.
--- 	self:getInfo() -- TODO: Should be possible to call this method less often.
-
--- 	if self.loop and self.metadata.frame_count > 1 then
--- 		while true do
--- 			if self.playAnimationBool then
--- 				self:_playAnimation(pathFile, len)
--- 			else
--- 				sleep(1)
--- 			end
--- 		end
--- 	else
--- 		self:_playAnimation(pathFile, len)
--- 	end
--- end
+function Animation:_playAnimation(len)
+	for subfile_id = 1, len do
+		if self.playAnimationBool then
+			self.shell.run(cf.pathJoin(self.timed_document_path, subfile_id))
+		end
+	end
+	cf.tryYield() -- TODO: Try to remove.
+end
 
 -- function Animation:setOffset(x, y)
 -- 	self.offset = { x = x, y = y }
@@ -516,13 +318,13 @@ end
 -- 	local yNew = y + yCharOffNew * 8
 
 -- 	local inCanvasNew = xNew >= 1 and yNew >= 1 and xNew <= self.screen_width and yNew <= self.screen_height
-	
+
 -- 	if validCharCode and inCanvasNew then
 -- 		self:addCharCodeOffset(xCharOffNew, yCharOffNew)
 
--- 		self.fileName = 'char_' .. tostring(charCode)
+-- 		self.fileName = "char_" .. tostring(charCode)
 
--- 		self:createTimedAnimation()
--- 		self:playAnimation()
+-- 		self:_create_timed_subfiles()
+-- 		self:play_animation()
 -- 	end
 -- end
