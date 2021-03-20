@@ -2,9 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const https = require("https");
 
-// TEMP
-//const fs = require("fs");
-
 
 const app = express();
 
@@ -23,37 +20,15 @@ function printStats(path) {
 }
 
 
-// h=io.open("apis","w")h:write(http.get("http://h2896147.stratoserver.net:1338".."/apis-download").readAll())h:close()
-app.get("/apis-download", (req, res) => {
-	printStats("apis-download");
-	res.download("files/apis.lua");
+// h=io.open("api_manager","w")h:write(http.get("http://h2896147.stratoserver.net:1338".."/api-manager-dl").readAll())h:close()
+app.get("/api-manager-dl", (req, res) => {
+	printStats("api-manager-dl");
+	res.download("files/api_manager.lua");
 });
 
 
 app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 	printStats("apis-get-latest");
 	console.log(JSON.parse(httpRequest.body.data))
-	//console.log(httpRequest.body.data)
-	//fs.writeFileSync("request_obj.json", JSON.safeStringify(httpRequest));
 	httpResponse.end();
 });
-
-
-/*
-// safely handles circular references
-JSON.safeStringify = (obj, indent = 2) => {
-  let cache = [];
-  const retVal = JSON.stringify(
-    obj,
-    (key, value) =>
-      typeof value === "object" && value !== null
-        ? cache.includes(value)
-          ? undefined // Duplicate reference found, discard key
-          : cache.push(value) && value // Store value in our collection
-        : value,
-    indent
-  );
-  cache = null;
-  return retVal;
-};
-*/

@@ -19,9 +19,9 @@ end
 
 -- TODO: Move to BackwardsOS bootloader.
 function download_json()
-	fs.makeDir("api_dir")
-	local h = io.open("api_dir/json", "w")
-	h:write(https.get("https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/json.lua").readAll())
+	fs.makeDir("apis")
+	local h = io.open("apis/json", "w")
+	h:write(https.get("https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/apis/json.lua").readAll())
 	h:close()
-	os.loadAPI("api_dir/json")
+	os.loadAPI("apis/json")
 end
