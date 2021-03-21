@@ -35,7 +35,7 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 
 	const data = httpRequest.body.data;
 	let msgString;
-	if (data == "[]") {
+	if (data === "[]") {
 		msgString = data;
 	} else {
 		//msgString = data.slice(1, -1).replace(/\\/g, "");
@@ -43,25 +43,28 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 	}
 	const userAPIs = JSON.parse(msgString);
 	
-	let diffAPIs = {};
+	let diffAPIs = { "add": {}, "remove": [] };
 	
 	fs.readdir("apis", (err, serverAPINames) => {
 		const serverAPIsData = {};
+		
 		serverAPINames.forEach(serverAPIBase => { // Base means name + extension, so foo.lua
-			const APIPath = path.join("apis", serverAPIBase);
-			const stats = fs.statSync(APIPath);
-			
-			const lua_code = fs.readFileSync(APIPath, "utf8");
-			
-			const serverAPIName = path.parse(serverAPIBase).name; // Trims .lua
-			
-			// mtime is a Date object.
-			serverAPIsData[serverAPIName] = { "age": stats.mtime.getTime(), "lua": lua_code };
+			if (serverAPIBase.endsWith(".lua")) { // Don't save swap files from Vim.
+				const APIPath = path.join("apis", serverAPIBase);
+				const stats = fs.statSync(APIPath);
+				
+				const lua_code = fs.readFileSync(APIPath, "utf8");
+				
+				const serverAPIName = path.parse(serverAPIBase).name; // Trims .lua
+				
+				// mtime is a Date object.
+				serverAPIsData[serverAPIName] = { "age": stats.mtime.getTime(), "lua": lua_code };
+			}
 		});
 
 		// If the user doesn't have any APIs yet, just send all of the server's API data.
 		if (Array.isArray(userAPIs) && userAPIs.length === 0) {
-			diffAPIs = serverAPIsData;
+			diffAPIs.add = serverAPIsData;
 		} else {
 	  		for (const [serverAPIName, serverAPIData] of Object.entries(serverAPIsData)) {
 				// Age is Unix time; a newer file has a larger Unix time for its modification date.
@@ -71,22 +74,28 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 				}
 				
 				const serverAPIAge = serverAPIData.age;
-	
-				if (userAPIs.hasOwnProperty(serverAPIName)) {
-					if (userAPIAge != serverAPIAge) {
-						console.log(`userAPIAge: ${userAPIAge}, serverAPIAge: ${serverAPIAge}`);
-						console.log(`name: ${serverAPIName}`);
-					}
-					//console.log(typeof(userAPIAge), typeof(serverAPIAge));
-				}
-
+				
 				if (userAPIAge === undefined || serverAPIAge > userAPIAge) {
-					diffAPIs[serverAPIName] = serverAPIData;
+					diffAPIs.add[serverAPIName] = serverAPIData;
 				}
 	  		}
+
+	  		for (const userAPIName in userAPIs) {
+				if (!serverAPIsData.hasOwnProperty(userAPIName)) {
+					diffAPIs.remove.push(userAPIName);
+				}
+			}
 		}
 
-		console.log(`APIs sent: ${Object.keys(diffAPIs).length}\n`);
+		console.log(`Bytes sent: ${JSON.stringify(diffAPIs).length}`);
+
+		const addedNames = Object.keys(diffAPIs.add);
+		console.log(`\nAdded: ${addedNames.length}`);
+		console.log(JSON.stringify(addedNames));
+
+		console.log(`\nRemoved: ${diffAPIs.remove.length}`);
+		console.log(JSON.stringify(diffAPIs.remove));
+
 		httpResponse.send(diffAPIs);
 	});
 });
