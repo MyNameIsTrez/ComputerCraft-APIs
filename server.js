@@ -55,14 +55,16 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 			
 			const serverAPIName = path.parse(serverAPIBase).name; // Trims .lua
 			
-			serverAPIsData[serverAPIName] = { "age": stats.mtime, "lua": lua_code};
+			serverAPIsData[serverAPIName] = { "age": stats.mtime, "lua": lua_code };
 		});
 
 		// If the user doesn't have any APIs yet, just send all of the server's API data.
 		if (Array.isArray(userAPIs) && userAPIs.length === 0) {
+			console.log("empty!");
 			diffAPIs = serverAPIsData;
 		} else {
 	  		for (const [serverAPIName, serverAPIData] of Object.entries(serverAPIsData)) {
+				if (serverAPIName === "animation") console.log("found animation file on server!");
 				// Age is Unix time; a newer file has a larger Unix time for its modification date.
 				let userAPIAge;
 				if (userAPIs.hasOwnProperty(serverAPIName)) {
