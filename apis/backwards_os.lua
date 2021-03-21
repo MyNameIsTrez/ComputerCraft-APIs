@@ -1,6 +1,6 @@
 local bw_os_dir = "backwards_os"
 local apis = fs.combine(bw_os_dir, "apis")
-local cfg_path = fs.combine(apis, "backwards_os_cfg")
+local cfg_path = fs.combine(bw_os_dir, "cfg")
 
 
 function main()

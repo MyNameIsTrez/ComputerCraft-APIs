@@ -22,10 +22,18 @@ function printStats(path) {
 }
 
 
-// h=io.open("api_manager","w")h:write(http.get("http://h2896147.stratoserver.net:1338".."/api-manager-dl").readAll())h:close()
-app.get("/api-manager-dl", (req, res) => {
-	printStats("api-manager-dl");
-	res.download("files/api_manager.lua");
+app.get("/is-online", (req, res) => res.send(true));
+
+
+app.get("/get-api", (req, res) => {
+	const name = req.query.name;
+	printStats("get-api?name=" + name);
+	const api_path = path.join("apis", name + ".lua");
+	if (fs.existsSync(api_path)) {
+		res.download(api_path);
+	} else {
+		res.send(false);
+	}
 });
 
 
