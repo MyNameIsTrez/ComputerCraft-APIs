@@ -1,5 +1,4 @@
--- BackwardsOS
-
+--[[
 
 useBackwardsOS = true
 
@@ -113,3 +112,5 @@ connectionsConnectionWeightAlphaMult = 0.06
 connectionsMaxFPS                    = 30 -- Not necessary?
 connectionsPointMinVel               = 30 / connectionsMaxFPS
 connectionsPointMaxVel               = 30 / connectionsMaxFPS
+
+]]--

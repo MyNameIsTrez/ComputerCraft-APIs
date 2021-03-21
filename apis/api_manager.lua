@@ -1,7 +1,6 @@
--- ComputerCraft and server code written and hosted by MyNameIsTrez#1585 on Discord. Feel free to contact me!
-
-
-local metadata_path = "apis/api_metadata.json"
+local bw_os_name = "backwards_os"
+local apis_path = fs.combine(bw_os_name, "apis")
+local metadata_path = fs.combine(apis_path, "api_metadata.json")
 
 
 function get_latest(printing)
@@ -9,12 +8,12 @@ function get_latest(printing)
 	local diff_metadata = get_diff_metadata(local_metadata)
 	if diff_metadata == false then print("Server offline!") return false end
 
+	if printing then print_diff_stats(diff_metadata) end
+
 	add_apis(diff_metadata)
 	remove_apis(diff_metadata)
 
 	write_combined_metadata(local_metadata, diff_metadata)
-
-	if printing then print_diff_stats(diff_metadata) end
 
 	return true
 end
@@ -22,7 +21,7 @@ end
 
 function add_apis(diff_metadata)
 	for k, v in pairs(diff_metadata.add) do
-		h = io.open(fs.combine("apis", k), "w")
+		h = io.open(fs.combine(apis_path, k), "w")
 		h:write(v.lua)
 		h:close()
 		v.lua = nil -- So Lua code doesn't end up in the metadata file.
@@ -31,7 +30,7 @@ end
 
 
 function remove_apis(diff_metadata)
-	for k, v in ipairs(diff_metadata.remove) do fs.delete(fs.combine("apis", v)) end
+	for k, v in ipairs(diff_metadata.remove) do fs.delete(fs.combine(apis_path, v)) end
 end
 
 
@@ -47,23 +46,7 @@ function get_local_metadata()
 end
 
 
--- TODO: Move to BackwardsOS bootloader.
-function download_json()
-	os.loadAPI("https")
-
-	local h = io.open("apis/json", "w")
-	h:write(https.get("https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/apis/json.lua").readAll())
-	h:close()
-	os.loadAPI("apis/json")
-end
-
-
 function get_diff_metadata(local_metadata)
-	-- TODO: Move to BackwardsOS bootloader.
-	fs.makeDir("apis")
-	if not json then download_json() end
-
-
 	local serialized_local_metadata = "data=" .. json.encode(local_metadata)
 	
 	local url = "http://h2896147.stratoserver.net:1338/apis-get-latest"
@@ -77,15 +60,23 @@ end
 
 
 function print_diff_stats(diff_metadata)
-	print("Bytes received: ", #textutils.serialize(diff_metadata))
-
 	local added_names = keys(diff_metadata.add)
-	print("\nAdded: ", #added_names)
-	print_array(added_names)
+	local any_added = #added_names > 0
+	if any_added then
+		print("\nAdded: ", #added_names)
+		print_array(added_names)
+	end
 	
 	local removed_names = diff_metadata.remove
-	print("\nRemoved: ", #removed_names)
-	print_array(removed_names)
+	local any_removed = #removed_names > 0
+	if any_removed then
+		print("\nRemoved: ", #removed_names)
+		print_array(removed_names)
+	end
+
+	if any_added or any_removed then
+		print("\nBytes received: ", #textutils.serialize(diff_metadata))
+	end
 end
 
 

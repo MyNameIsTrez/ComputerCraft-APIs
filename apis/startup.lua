@@ -6,18 +6,14 @@ local bw_os_name = "backwards_os"
 local apis_path = fs.combine(bw_os_name, "apis")
 local bw_os_api_path = fs.combine(apis_path, "backwards_os")
 
-local required_apis = { "api_manager", "json", "backwards_os_cfg" }
-
 
 function main()
 	-- TODO: Support offline usage of BackwardsOS.
 	if not is_server_online() then error("Server's not online!") end
-	
-	if not fs.exists(bw_os_name) then fs.makeDir(bw_os_name) end
-	if not fs.exists(apis_path) then fs.makeDir(apis_path) end
-	
+
+	create_dirs()
 	download_and_load_required_apis()
-	
+
 	if not fs.exists(bw_os_api_path) then download_api(bw_os_name) end
 	shell.run(bw_os_api_path)
 end
@@ -28,12 +24,21 @@ function is_server_online()
 end
 
 
+function create_dirs()
+	if not fs.exists(bw_os_name) then fs.makeDir(bw_os_name) end
+	if not fs.exists(apis_path) then fs.makeDir(apis_path) end
+end
+
+
 function download_and_load_required_apis()
-	for _, api_name in ipairs(required_apis) do
-		local api_path = fs.combine(apis_path, api_name)
-		if not fs.exists(api_path) then download_api(api_name) end
-		os.loadAPI(api_path)
-	end
+	-- The api_manager requires json, but I assume the json API won't ever be updated.
+	local json_path = fs.combine(apis_path, "json")
+	if not fs.exists(json_path) then download_api("json") end
+	os.loadAPI(json_path)
+	
+	-- Need to redownload the api_manager every time, in case any of the server's API download paths change.
+	download_api("api_manager")
+	os.loadAPI(fs.combine(apis_path, "api_manager"))
 end
 
 

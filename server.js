@@ -95,14 +95,23 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 			}
 		}
 
-		console.log(`Bytes sent: ${JSON.stringify(diffAPIs).length}`);
-
 		const addedNames = Object.keys(diffAPIs.add);
-		console.log(`\nAdded: ${addedNames.length}`);
-		console.log(JSON.stringify(addedNames));
+		const anyAdded = addedNames.length > 0;
+		if (anyAdded) {
+			console.log(`\nAdded: ${addedNames.length}`);
+			console.log(JSON.stringify(addedNames));
+		}
 
-		console.log(`\nRemoved: ${diffAPIs.remove.length}`);
-		console.log(JSON.stringify(diffAPIs.remove));
+		const removedNames = diffAPIs.remove;
+		const anyRemoved = removedNames.length > 0;
+		if (anyRemoved) {
+			console.log(`\nRemoved: ${removedNames.length}`);
+			console.log(JSON.stringify(removedNames));
+		}
+
+		if (anyAdded || anyRemoved) {
+			console.log(`\nBytes sent: ${JSON.stringify(diffAPIs).length}`);
+		}
 
 		httpResponse.send(diffAPIs);
 	});
