@@ -5,7 +5,8 @@ local api_metadata_path = "apis/api_metadata.json"
 
 
 function get_latest()
-	local diff_metadata = get_diff_metadata()
+	local local_metadata = get_local_metadata()
+	local diff_metadata = get_diff_metadata(local_metadata)
 	
 	if next(diff_metadata) then -- If not empty.
 		-- Write diff APIs.
@@ -18,11 +19,12 @@ function get_latest()
 			
 			print("Downloaded " .. k .. ": " .. diff_metadata[k].age)
 		end
-
-		-- Combine local and diff API metadata.
-		local combined_metadata = diff_metadata
-	
-		-- Write combined API metadata.
+		
+		-- Combine local and diff metadata.
+		local combined_metadata = local_metadata -- Doesn't copy; pass by reference.
+		for k, v in pairs(diff_metadata) do combined_metadata[k] = v end
+		
+		-- Write combined metadata.
 		h = io.open(api_metadata_path, "w")
 		h:write(textutils.serialize(combined_metadata))
 		h:close()
@@ -51,13 +53,13 @@ function download_json()
 end
 
 
-function get_diff_metadata()
+function get_diff_metadata(local_metadata)
 	-- TODO: Move to BackwardsOS bootloader.
 	fs.makeDir("apis")
 	if not json then download_json() end
 
 
-	local serialized_local_metadata = "data=" .. json.encode(get_local_metadata())
+	local serialized_local_metadata = "data=" .. json.encode(local_metadata)
 	
 	local url = "http://h2896147.stratoserver.net:1338/apis-get-latest"
 	local h = http.post(url, serialized_local_metadata)
