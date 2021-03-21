@@ -33,9 +33,6 @@ app.get("/api-manager-dl", (req, res) => {
 app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 	printStats("apis-get-latest");
 
-	console.log("httpRequest.body.data:");
-	console.log(httpRequest.body.data);
-
 	const data = httpRequest.body.data;
 	let msgString;
 	if (data == "[]") {
@@ -44,17 +41,8 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 		//msgString = data.slice(1, -1).replace(/\\/g, "");
 		msgString = data.replace(/\\/g, "");
 	}
-	console.log("msgString:", msgString);
 	const userAPIs = JSON.parse(msgString);
 	
-	//console.log(typeof(userAPIs));
-	//console.log(userAPIs["matrix"]);
-	
-	console.log("userAPIs key length:", Object.keys(userAPIs).length);
-	
-	console.log("userAPIs:")
-	console.log(userAPIs);
-
 	let diffAPIs = {};
 	
 	fs.readdir("apis", (err, serverAPINames) => {
@@ -89,8 +77,7 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 	  		}
 		}
 
-		console.log("diffAPIs key count:", Object.keys(diffAPIs).length);
-		console.log("diffAPIs type:", diffAPIs);
+		console.log("APIs sent:", Object.keys(diffAPIs).length);
 		httpResponse.send(diffAPIs);
 	});
 });
