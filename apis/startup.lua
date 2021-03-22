@@ -37,9 +37,7 @@ function download_and_load_required_apis()
 	download_api("api_manager")
 	os.loadAPI(fs.combine(apis_path, "api_manager"))
 
-	-- The backwards_os API can't call os.loadAPI("backwards_os") on itself.
-	-- This is why backwards_os needs to be redownloaded every time.
-	download_api(bw_os_name)
+	api_manager.get_latest(true)
 end
 
 
