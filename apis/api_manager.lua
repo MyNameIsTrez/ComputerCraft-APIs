@@ -2,6 +2,9 @@ local bw_os_name = "backwards_os"
 local apis_path = fs.combine(bw_os_name, "apis")
 local metadata_path = fs.combine(apis_path, "api_metadata.json")
 
+-- Can't load backwards_os here as it's this same file, and shouldn't API load a JSON file.
+local not_loaded_apis = { "startup", "backwards_os", "api_metadata.json" }
+
 
 function get_latest(printing)
 	local local_metadata = get_local_metadata()
@@ -14,6 +17,8 @@ function get_latest(printing)
 	remove_apis(diff_metadata)
 
 	write_combined_metadata(local_metadata, diff_metadata)
+
+	load_apis()
 
 	return true
 end
@@ -60,7 +65,7 @@ end
 
 
 function print_diff_stats(diff_metadata)
-	local added_names = keys(diff_metadata.add)
+	local added_names = tableKeys(diff_metadata.add)
 	local any_added = #added_names > 0
 	if any_added then
 		print("\nAdded: ", #added_names)
@@ -81,7 +86,7 @@ end
 
 
 -- TODO: Move to BackwardsOS bootloader.
-function keys(tab)
+function tableKeys(tab)
 	local key_set = {}
 	local i = 1
 	
@@ -109,4 +114,24 @@ function write_combined_metadata(local_metadata, diff_metadata)
 	h = io.open(metadata_path, "w")
 	h:write(textutils.serialize(combined_metadata))
 	h:close()
+end
+
+
+function load_apis()
+	for _, name in ipairs(fs.list(apis_path)) do
+		if not table_contains(not_loaded_apis, name) then
+			os.loadAPI(fs.combine(apis_path, name))
+		end
+	end
+end
+
+
+-- common_functions isn't loaded yet, so that's why this is copied from there.
+function table_contains(tab, element)
+	for _, value in pairs(tab) do
+		if value == element then
+			return true
+		end
+	end
+	return false
 end

@@ -5,6 +5,13 @@ local cfg_path = fs.combine(apis, "backwards_os_cfg")
 
 function main()
 	api_manager.get_latest(true)
+	listen_for_key_press()
+end
+
+
+-- TODO: Detect user pressing a key in a coroutine that calls .get_latest(true).
+function listen_for_key_press()
+	print(keys)
 end
 
 

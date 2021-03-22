@@ -70,9 +70,9 @@ end
 function handleKeys()
     while true do
         local event, keyNum = os.pullEvent()
-		if (event == "key") then
-			onKey(getName(keyNum), keyNum)
-		end
+	if (event == "key") then
+		onKey(getName(keyNum), keyNum)
+	end
     end
 end
 

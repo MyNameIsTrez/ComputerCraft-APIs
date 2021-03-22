@@ -10,11 +10,8 @@ local bw_os_api_path = fs.combine(apis_path, "backwards_os")
 function main()
 	-- TODO: Support offline usage of BackwardsOS.
 	if not is_server_online() then error("Server's not online!") end
-
 	create_dirs()
 	download_and_load_required_apis()
-
-	if not fs.exists(bw_os_api_path) then download_api(bw_os_name) end
 	shell.run(bw_os_api_path)
 end
 
@@ -39,6 +36,10 @@ function download_and_load_required_apis()
 	-- Need to redownload the api_manager every time, in case any of the server's API download paths change.
 	download_api("api_manager")
 	os.loadAPI(fs.combine(apis_path, "api_manager"))
+
+	-- The backwards_os API can't call os.loadAPI("backwards_os") on itself.
+	-- This is why backwards_os needs to be redownloaded every time.
+	download_api(bw_os_name)
 end
 
 
