@@ -2,11 +2,17 @@ local bw_os_name = "backwards_os"
 local apis_path = fs.combine(bw_os_name, "apis")
 local metadata_path = fs.combine(apis_path, "api_metadata.json")
 
+-- TODO: Once there's a "programs" folder, place startup in there. Copy startup from there to . path.
+-- startup downloads itself to . instead of backwards_os/apis, as that's where CC looks for the startup file.
+--local not_downloaded = { "startup" }
+
+-- TODO: Once there's a "programs" folder, no files would have to be ignored. "api_metadata.json" would be in "../apis" too.
 -- Can't load backwards_os here as it's this same file, and shouldn't API load a JSON file.
 local not_loaded_apis = { "startup", "backwards_os", "api_metadata.json" }
 
 
 function get_latest(printing)
+	print("api_manager can be updated live")
 	local local_metadata = get_local_metadata()
 	local diff_metadata = get_diff_metadata(local_metadata)
 	if diff_metadata == false then print("Server offline!") return false end

@@ -2,20 +2,25 @@ local bw_os_dir = "backwards_os"
 local apis = fs.combine(bw_os_dir, "apis")
 local cfg_path = fs.combine(apis, "backwards_os_cfg")
 
+local fake_width, height = term.getSize()
+local width = fake_width - 1
+
+
+function premain()
+	print("backwards_os can be updated live")
+	keys.start_listening(main, reboot)
+end
+
 
 function main()
-	print("foo")
-	print(common_functions.printTable(keys))
-	print("bar")
-	
-	listen_for_key_press()
+	sleep(1e6)
 end
 
 
--- TODO: Detect user pressing a key in a coroutine that calls .get_latest(true).
-function listen_for_key_press()
-	
+function reboot(key_string, key_num)
+	if key_string == "r" then os.reboot() end
 end
+
 
 
 
@@ -96,4 +101,4 @@ end
 ]]--
 
 
-main()
+premain()

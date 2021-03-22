@@ -8,8 +8,12 @@ local bw_os_api_path = fs.combine(apis_path, "backwards_os")
 
 
 function main()
-	-- TODO: Support offline usage of BackwardsOS.
+	-- TODO: Uncomment this once startup is automatically copied from "files/startup" to "."
+	--print("startup can be updated live")
+	
+	-- TODO: Support offline usage.
 	if not is_server_online() then error("Server's not online!") end
+	
 	create_dirs()
 	download_and_load_required_apis()
 	shell.run(bw_os_api_path)
