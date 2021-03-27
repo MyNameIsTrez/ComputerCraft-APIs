@@ -9,7 +9,7 @@ local bw_os_api_path = fs.combine(apis_path, "backwards_os")
 
 function main()
 	-- TODO: Uncomment this once startup is automatically copied from "files/startup" to "."
-	--print("startup can be updated live")
+	--print("startup program can be updated live")
 	
 	-- TODO: Support offline usage.
 	if not is_server_online() then error("Server's not online!") end
@@ -32,16 +32,16 @@ end
 
 
 function download_and_load_required_apis()
-	-- The api_manager requires json, but I assume the json API won't ever be updated.
+	-- The apis API requires json, but I assume the json API won't ever be updated.
 	local json_path = fs.combine(apis_path, "json")
 	if not fs.exists(json_path) then download_api("json") end
 	os.loadAPI(json_path)
 	
-	-- Need to redownload the api_manager every time, in case any of the server's API download paths change.
-	download_api("api_manager")
-	os.loadAPI(fs.combine(apis_path, "api_manager"))
+	-- Need to redownload the apis API every time, in case any of the server's API download paths change.
+	download_api("apis")
+	os.loadAPI(fs.combine(apis_path, "apis"))
 
-	api_manager.get_latest(true)
+	apis.get_latest(true)
 end
 
 

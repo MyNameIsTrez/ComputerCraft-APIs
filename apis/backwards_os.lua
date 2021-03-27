@@ -7,8 +7,8 @@ local width = fake_width - 1
 
 
 function premain()
-	print("backwards_os can be updated live")
-	keys.start_listening(main, reboot)
+	print("backwards_os program can be updated live")
+	keys.start_listening(main, actions)
 end
 
 
@@ -17,8 +17,9 @@ function main()
 end
 
 
-function reboot(key_string, key_num)
+function actions(key_string, key_num)
 	if key_string == "r" then os.reboot() end
+	if key_string == "t" then sleep(0.05) error("Terminated") end -- Sleep so "t" isn't typed.
 end
 
 
