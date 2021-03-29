@@ -7,7 +7,6 @@ local width = fake_width - 1
 
 
 function premain()
-	print("backwards_os program can be updated live")
 	keys.start_listening(main, actions)
 end
 

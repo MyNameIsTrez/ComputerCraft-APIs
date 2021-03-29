@@ -11,7 +11,6 @@ local get_latest_synced_files_url = "http://h2896147.stratoserver.net:1338/get-l
 
 
 function get_latest(printing)
-	print("apis API can be updated live")
 	local local_metadata = get_local_metadata()
 	local diff_metadata = get_diff_metadata(local_metadata)
 	if diff_metadata == false then print("Server offline!") return false end

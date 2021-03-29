@@ -17,9 +17,6 @@ local bw_os_program_path = fs.combine(programs_path, "backwards_os")
 
 
 function main()
-	-- TODO: Uncomment this once startup is automatically copied from "files/startup" to "."
-	--print("startup program can be updated live")
-	
 	-- TODO: Support offline usage.
 	if not is_server_online() then error("Server's not online!") end
 	
