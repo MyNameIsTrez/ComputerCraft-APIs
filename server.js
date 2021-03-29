@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const https = require("https");
 const fs = require("fs");
 const path = require("path");
+const read = require("fs-readdir-recursive");
 
 
 const app = express();
@@ -25,12 +26,13 @@ function printStats(path) {
 app.get("/is-online", (req, res) => res.send(true));
 
 
-app.get("/get-api", (req, res) => {
+app.get("/file", (req, res) => {
 	const name = req.query.name;
-	printStats("get-api?name=" + name);
-	const api_path = path.join("apis", name + ".lua");
-	if (fs.existsSync(api_path)) {
-		res.download(api_path);
+	printStats("file?name=" + name);
+	
+	const file_path = path.join("synced", name + ".lua");
+	if (fs.existsSync(file_path)) {
+		res.download(file_path);
 	} else {
 		res.send(false);
 	}
@@ -38,8 +40,8 @@ app.get("/get-api", (req, res) => {
 
 
 // TODO: Refactor into subfunctions.
-app.post("/apis-get-latest", (httpRequest, httpResponse) => {
-	printStats("apis-get-latest");
+app.post("/get-latest-files", (httpRequest, httpResponse) => {
+	printStats("get-latest-files");
 
 	const data = httpRequest.body.data;
 	let msgString;
@@ -49,70 +51,76 @@ app.post("/apis-get-latest", (httpRequest, httpResponse) => {
 		//msgString = data.slice(1, -1).replace(/\\/g, "");
 		msgString = data.replace(/\\/g, "");
 	}
-	const userAPIs = JSON.parse(msgString);
+	const userFilesData = JSON.parse(msgString);
 	
-	let diffAPIs = { "add": {}, "remove": [] };
+	let diffFiles = { "add": {}, "remove": [] };
 	
-	fs.readdir("apis", (err, serverAPINames) => {
-		const serverAPIsData = {};
-		
-		serverAPINames.forEach(serverAPIBase => { // Base means name + extension, so foo.lua
-			if (serverAPIBase.endsWith(".lua")) { // Don't save swap files from Vim.
-				const APIPath = path.join("apis", serverAPIBase);
-				const stats = fs.statSync(APIPath);
-				
-				const lua_code = fs.readFileSync(APIPath, "utf8");
-				
-				const serverAPIName = path.parse(serverAPIBase).name; // Trims .lua
-				
-				// mtime is a Date object.
-				serverAPIsData[serverAPIName] = { "age": stats.mtime.getTime(), "lua": lua_code };
-			}
-		});
-
-		// If the user doesn't have any APIs yet, just send all of the server's API data.
-		if (Array.isArray(userAPIs) && userAPIs.length === 0) {
-			diffAPIs.add = serverAPIsData;
-		} else {
-	  		for (const [serverAPIName, serverAPIData] of Object.entries(serverAPIsData)) {
-				// Age is Unix time; a newer file has a larger Unix time for its modification date.
-				let userAPIAge;
-				if (userAPIs.hasOwnProperty(serverAPIName)) {
-					userAPIAge = userAPIs[serverAPIName].age;
-				}
-				
-				const serverAPIAge = serverAPIData.age;
-				
-				if (userAPIAge === undefined || serverAPIAge > userAPIAge) {
-					diffAPIs.add[serverAPIName] = serverAPIData;
-				}
-	  		}
-
-	  		for (const userAPIName in userAPIs) {
-				if (!serverAPIsData.hasOwnProperty(userAPIName)) {
-					diffAPIs.remove.push(userAPIName);
-				}
-			}
-		}
-
-		const addedNames = Object.keys(diffAPIs.add);
-		const anyAdded = addedNames.length > 0;
-		if (anyAdded) {
-			console.log(`\nAdded: ${addedNames.length}`);
-			console.log(JSON.stringify(addedNames));
-		}
-
-		const removedNames = diffAPIs.remove;
-		const anyRemoved = removedNames.length > 0;
-		if (anyRemoved) {
-			console.log(`\nRemoved: ${removedNames.length}`);
-			console.log(JSON.stringify(removedNames));
-		}
-
-		if (anyAdded || anyRemoved) {
-			console.log(`\nBytes sent: ${JSON.stringify(diffAPIs).length}`);
-		}
-
-		httpResponse.send(diffAPIs);
+	const files = read("synced", name => {
+		return name[0] !== "." && !name.endsWith(".swp");
 	});
+	
+	const serverFilesData = {};
+	
+	files.forEach(serverFilePathWithoutSynced => {
+		const serverFilePath = path.join("synced", serverFilePathWithoutSynced);
+		
+		const stats = fs.statSync(serverFilePath);
+		
+		const lua_code = fs.readFileSync(serverFilePath, "utf8");
+		
+		const serverFileName = path.parse(serverFilePath).name;
+		
+		// mtime is a Date object.
+		serverFilesData[serverFileName] = {
+			"lua": lua_code,
+			"age": stats.mtime.getTime(),
+			"dir": path.parse(serverFilePathWithoutSynced).dir,
+		};
+	});
+	
+	// If the user doesn't have any files yet, just send all of the server's files.
+	if (Array.isArray(userFilesData) && userFilesData.length === 0) {
+		diffFiles.add = serverFilesData;
+	} else {
+		for (const [serverFileName, serverFileData] of Object.entries(serverFilesData)) {
+			// Age is Unix time; a newer file has a larger Unix time for its modification date.
+			let userFileAge;
+			if (userFilesData.hasOwnProperty(serverFileName)) {
+				userFileAge = userFilesData[serverFileName].age;
+			}
+			
+			const serverFileAge = serverFileData.age;
+			
+			if (userFileAge === undefined || serverFileAge > userFileAge) {
+				diffFiles.add[serverFileName] = serverFileData;
+			}
+		}
+		
+		for (const userFileName in userFilesData) {
+			if (!serverFilesData.hasOwnProperty(userFileName)) {
+				console.log("removed ", userFilesData[userFileName].dir + userFileName);
+				diffFiles.remove.push(userFilesData[userFileName].dir + userFileName);
+			}
+		}
+	}
+	
+	const addedNames = Object.keys(diffFiles.add);
+	const anyAdded = addedNames.length > 0;
+	if (anyAdded) {
+		console.log(`\nAdded: ${addedNames.length}`);
+		console.log(JSON.stringify(addedNames));
+	}
+
+	const removedNames = diffFiles.remove;
+	const anyRemoved = removedNames.length > 0;
+	if (anyRemoved) {
+		console.log(`\nRemoved: ${removedNames.length}`);
+		console.log(JSON.stringify(removedNames));
+	}
+
+	if (anyAdded || anyRemoved) {
+		console.log(`\nBytes sent: ${JSON.stringify(diffFiles).length}`);
+	}
+
+	httpResponse.send(diffFiles);
 });

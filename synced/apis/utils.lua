@@ -280,8 +280,12 @@ end
 -- Return if an element is inside of a table.
 function table_contains(tab, element)
 	for _, val in pairs(tab) do
-		if type(val) == 'table' and val ~= tab then	return valueInTable(val, element) end
-		if val == element then return true end
+		if type(val) == 'table' and val ~= tab then
+			return valueInTable(val, element)
+		end
+		if val == element then
+			return true
+		end
 	end
 	return false
 end

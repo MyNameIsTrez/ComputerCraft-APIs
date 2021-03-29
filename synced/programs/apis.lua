@@ -1,14 +1,13 @@
 local bw_os_name = "backwards_os"
-local apis_path = fs.combine(bw_os_name, "apis")
-local metadata_path = fs.combine(apis_path, "metadata")
+local synced_path = fs.combine(bw_os_name, "synced")
+local synced_metadata_path = fs.combine(bw_os_name, "synced_metadata")
+local apis_path = fs.combine(synced_path, "apis")
+
+local get_latest_synced_files_url = "http://h2896147.stratoserver.net:1338/get-latest-files"
 
 -- TODO: Once there's a "programs" folder, place startup in there. Copy startup from there to . path.
 -- startup downloads itself to . instead of backwards_os/apis, as that's where CC looks for the startup file.
 --local not_downloaded = { "startup" }
-
--- TODO: Once there's a "programs" folder, no files would have to be ignored. "metadata" would be in "../apis" too.
--- Can't load backwards_os here as it's this same file, and shouldn't API load a JSON file.
-local not_loaded_apis = { "startup", "backwards_os", "metadata" }
 
 
 function get_latest(printing)
@@ -19,8 +18,8 @@ function get_latest(printing)
 
 	if printing then print_diff_stats(diff_metadata) end
 
-	add_apis(diff_metadata)
-	remove_apis(diff_metadata)
+	add_files(diff_metadata)
+	remove_files(diff_metadata)
 
 	write_combined_metadata(local_metadata, diff_metadata)
 
@@ -30,24 +29,32 @@ function get_latest(printing)
 end
 
 
-function add_apis(diff_metadata)
-	for k, v in pairs(diff_metadata.add) do
-		h = io.open(fs.combine(apis_path, k), "w")
-		h:write(v.lua)
+function add_files(diff_metadata)
+	for name, file_data in pairs(diff_metadata.add) do
+		local file_path = fs.combine(synced_path, fs.combine(file_data.dir, name))
+		local h = io.open(file_path, "w")
+		h:write(file_data.lua)
 		h:close()
-		v.lua = nil -- So Lua code doesn't end up in the metadata file.
+		file_data.lua = nil -- So Lua code doesn't end up in the metadata file.
+
+		if name == "startup" then
+			fs.delete("startup")
+			fs.copy(file_path, "startup")
+		end
 	end
 end
 
 
-function remove_apis(diff_metadata)
-	for k, v in ipairs(diff_metadata.remove) do fs.delete(fs.combine(apis_path, v)) end
+function remove_files(diff_metadata)
+	for _, file_path in ipairs(diff_metadata.remove) do
+		fs.delete(file_path)
+	end
 end
 
 
 function get_local_metadata()
-	if fs.exists(metadata_path) then
-		local h = io.open(metadata_path, "r")
+	if fs.exists(synced_metadata_path) then
+		local h = io.open(synced_metadata_path, "r")
 		local data = h:read()
 		h:close()
 		return textutils.unserialize(data)
@@ -60,8 +67,7 @@ end
 function get_diff_metadata(local_metadata)
 	local serialized_local_metadata = "data=" .. json.encode(local_metadata)
 	
-	local url = "http://h2896147.stratoserver.net:1338/apis-get-latest"
-	local h = http.post(url, serialized_local_metadata)
+	local h = http.post(get_latest_synced_files_url, serialized_local_metadata)
 	
 	if h == nil then return false end -- If the server is offline.
 	
@@ -117,7 +123,7 @@ function write_combined_metadata(local_metadata, diff_metadata)
 	-- Remove diff_metadata.remove APIs from combined_metadata.
 	for k, v in ipairs(diff_metadata.remove) do combined_metadata[v] = nil end
 
-	h = io.open(metadata_path, "w")
+	h = io.open(synced_metadata_path, "w")
 	h:write(textutils.serialize(combined_metadata))
 	h:close()
 end
@@ -125,19 +131,6 @@ end
 
 function load_apis()
 	for _, name in ipairs(fs.list(apis_path)) do
-		if not table_contains(not_loaded_apis, name) then
-			os.loadAPI(fs.combine(apis_path, name))
-		end
+		os.loadAPI(fs.combine(apis_path, name))
 	end
-end
-
-
--- utils.table_contains() isn't loadable yet.
-function table_contains(tab, element)
-	for _, value in pairs(tab) do
-		if value == element then
-			return true
-		end
-	end
-	return false
 end

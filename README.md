@@ -2,11 +2,6 @@
 Project for hosting a server that stores and updates ComputerCraft APIs in real-time. (for Tekkit Classic, CC 1.33)
 
 # TODO
-* Create a "programs" folder that gets updated like the APIs.
-	The files in it are like "startup", and shouldn't be loaded.
-	Add a "/get-program" port.
-* Update "startup" by copying from "files/startup"
-	Copy "files/startup" to "." and overwrite the "startup" that was there.
 * Subterminal.
 	Make backwardsos.main() create a subterminal where the delete key *does* work.
 * Support offline usage.
