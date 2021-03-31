@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 function printStats(path) {
-	console.log(path, "request received on", new Date());
+	console.log(path, "Request received on", new Date());
 }
 
 
@@ -48,9 +48,10 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 	if (data === "[]") {
 		msgString = data;
 	} else {
-		//msgString = data.slice(1, -1).replace(/\\/g, "");
-		msgString = data.replace(/\\/g, "");
+		//msgString = data.replace(/\\/g, ""); // TODO: Keep this as it may become necessary.
+		msgString = data;
 	}
+	//console.log(msgString);
 	const userFilesData = JSON.parse(msgString);
 	
 	let diffFiles = { "add": {}, "remove": [] };
@@ -98,29 +99,28 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 		
 		for (const userFileName in userFilesData) {
 			if (!serverFilesData.hasOwnProperty(userFileName)) {
-				console.log("removed ", userFilesData[userFileName].dir + userFileName);
-				diffFiles.remove.push(userFilesData[userFileName].dir + userFileName);
+				//const removedPath = path.join(userFilesData[userFileName].dir, userFileName);
+				diffFiles.remove.push(userFileName);
 			}
 		}
 	}
+
+	let changesString = "";
 	
 	const addedNames = Object.keys(diffFiles.add);
 	const anyAdded = addedNames.length > 0;
 	if (anyAdded) {
-		console.log(`\nAdded: ${addedNames.length}`);
-		console.log(JSON.stringify(addedNames));
+		changesString += `Added: ${addedNames.length}`;
 	}
 
 	const removedNames = diffFiles.remove;
 	const anyRemoved = removedNames.length > 0;
 	if (anyRemoved) {
-		console.log(`\nRemoved: ${removedNames.length}`);
-		console.log(JSON.stringify(removedNames));
+		if (anyAdded) changesString += ", ";
+		changesString += `Removed: ${removedNames.length}`;
 	}
 
-	if (anyAdded || anyRemoved) {
-		console.log(`\nBytes sent: ${JSON.stringify(diffFiles).length}`);
-	}
+	if (anyAdded || anyRemoved) console.log(changesString);
 
 	httpResponse.send(diffFiles);
 });

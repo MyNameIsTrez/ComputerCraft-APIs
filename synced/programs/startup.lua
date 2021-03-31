@@ -17,12 +17,21 @@ local bw_os_program_path = fs.combine(programs_path, "backwards_os")
 
 
 function main()
+	remove_craftos_watermark()
+	
 	-- TODO: Support offline usage.
 	if not is_server_online() then error("Server's not online!") end
 	
 	create_dirs()
 	download_and_load_required_apis()
 	shell.run(bw_os_program_path)
+end
+
+
+function remove_craftos_watermark()
+	term.setCursorPos(1, 1)
+	write("           ")
+	term.setCursorPos(1, 1)
 end
 
 

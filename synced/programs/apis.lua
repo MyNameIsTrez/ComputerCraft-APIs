@@ -3,7 +3,7 @@ local synced_path = fs.combine(bw_os_name, "synced")
 local synced_metadata_path = fs.combine(bw_os_name, "synced_metadata")
 local apis_path = fs.combine(synced_path, "apis")
 
-local get_latest_synced_files_url = "http://h2896147.stratoserver.net:1338/get-latest-files"
+local get_latest_files_url = "http://h2896147.stratoserver.net:1338/get-latest-files"
 
 -- TODO: Once there's a "programs" folder, place startup in there. Copy startup from there to . path.
 -- startup downloads itself to . instead of backwards_os/apis, as that's where CC looks for the startup file.
@@ -66,7 +66,7 @@ end
 function get_diff_metadata(local_metadata)
 	local serialized_local_metadata = "data=" .. json.encode(local_metadata)
 	
-	local h = http.post(get_latest_synced_files_url, serialized_local_metadata)
+	local h = http.post(get_latest_files_url, serialized_local_metadata)
 	
 	if h == nil then return false end -- If the server is offline.
 	
@@ -79,19 +79,14 @@ function print_diff_stats(diff_metadata)
 	local added_names = tableKeys(diff_metadata.add)
 	local any_added = #added_names > 0
 	if any_added then
-		print("\nAdded: ", #added_names)
-		print_array(added_names)
+		write("Added: " .. #added_names)
 	end
 	
 	local removed_names = diff_metadata.remove
 	local any_removed = #removed_names > 0
 	if any_removed then
-		print("\nRemoved: ", #removed_names)
-		print_array(removed_names)
-	end
-
-	if any_added or any_removed then
-		print("\nBytes received: ", #textutils.serialize(diff_metadata))
+		if any_added then write(", ") end
+		print("Removed: ", #removed_names)
 	end
 end
 
@@ -108,10 +103,6 @@ function tableKeys(tab)
 	
 	return key_set
 end
-
-
--- TODO: Move to BackwardsOS bootloader.
-function print_array(arr) print("{ " .. table.concat(arr, ", ") .. " }") end
 
 
 function write_combined_metadata(local_metadata, diff_metadata)
