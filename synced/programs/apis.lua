@@ -68,15 +68,19 @@ function get_diff_metadata(local_metadata)
 	
 	local h = http.post(get_latest_files_url, serialized_local_metadata)
 	
-	if h == nil then return false end -- If the server is offline.
+	if h == nil then -- If the server is offline.
+		h.close()
+		return false
+	end
 	
 	local diff_msg = h.readAll()
+	h.close()
 	return json.decode(diff_msg)
 end
 
 
 function print_diff_stats(diff_metadata)
-	local added_names = tableKeys(diff_metadata.add)
+	local added_names = table_keys(diff_metadata.add)
 	local any_added = #added_names > 0
 	if any_added then
 		write("Added: " .. #added_names)
@@ -92,7 +96,7 @@ end
 
 
 -- TODO: Move to BackwardsOS bootloader.
-function tableKeys(tab)
+function table_keys(tab)
 	local key_set = {}
 	local i = 1
 	

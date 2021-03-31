@@ -4,6 +4,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const read = require("fs-readdir-recursive");
+const util = require("util"); // For printing circular JSON.
 
 // Local JS files.
 const longPollFunctions = require("./js/longPollFunctions");
@@ -26,13 +27,44 @@ function printStats(path) {
 }
 
 
+let connectionCount = 0;
+function startConnectionTimeout(res) {
+	connectionCount++;
+	console.log(`Connections: ${connectionCount}`);
+	setTimeout(() => {
+		if (!res.writableEnded) { // If not res.end() already called.
+			res.end();
+			connectionCount--;
+			console.log(`Connections: ${connectionCount}`);
+		}
+	}, 10000);
+}
+
+
+function decrementConnection() {
+	connectionCount--;
+	console.log(`Connections: ${connectionCount}`);
+}
+
+
+app.get("/never-closes", (req, res) => {
+	startConnectionTimeout(res);
+	console.log("never-closes called");
+	res.end();
+	decrementConnection();
+});
+
+
 app.get("/is-online", (req, res) => {
+	startConnectionTimeout(res);
 	printStats("is-online");
 	res.send(true)
+	decrementConnection();
 });
 
 
 app.get("/file", (req, res) => {
+	startConnectionTimeout(res);
 	const name = req.query.name;
 	printStats("file?name=" + name);
 	
@@ -42,11 +74,13 @@ app.get("/file", (req, res) => {
 	} else {
 		res.send(false);
 	}
+	decrementConnection();
 });
 
 
 // TODO: Refactor into subfunctions.
 app.post("/get-latest-files", (httpRequest, httpResponse) => {
+	startConnectionTimeout(httpResponse);
 	printStats("get-latest-files");
 	
 	const userFilesData = getUserFilesData(httpRequest.body.data);
@@ -58,6 +92,7 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 	httpResponse.send(diffFilesData);
 	
 	printAddAndRemoveCounts(diffFilesData);
+	decrementConnection();
 });
 
 
@@ -155,11 +190,8 @@ function printAddAndRemoveCounts(diffFilesData) {
 }
 
 
-
-
-
-
 app.get("/long_poll", (req, res) => {
+	startConnectionTimeout(res);
 	const fnName = req.query.fn_name;
 	printStats("long_poll?fn_name=" + fnName);
 	
@@ -168,9 +200,11 @@ app.get("/long_poll", (req, res) => {
 		new Promise(fn).then((fnResult) => {
 			res.send(fnResult);
 			console.log("Sent response.");
+			decrementConnection();
 		});
 	} else {
 		res.send("There's no long poll function named '" + fnName + "'!");
 		console.log("There's no long poll function named '" + fnName + "'!");
+		decrementConnection();
 	}
 });

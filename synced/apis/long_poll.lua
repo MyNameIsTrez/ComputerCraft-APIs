@@ -4,5 +4,6 @@ function listen(listen_path)
 	local h = http.get(listen_url .. listen_path)
 	if h == nil then error("Server offline.") end
 	local response = h.readAll()
+	h.close()
 	return response
 end

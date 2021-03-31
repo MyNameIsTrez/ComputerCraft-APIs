@@ -36,7 +36,10 @@ end
 
 
 function is_server_online()
-	return http.get(server_online_url) ~= nil
+	local h = http.get(server_online_url)
+	local response = h ~= nil
+	h.close()
+	return response
 end
 
 
@@ -64,12 +67,17 @@ end
 
 function download_file(name, dir)
 	local file_path = fs.combine(dir, name)
-
+	
 	local file_handle = http.get(file_name_url .. file_path)
-	if file_handle == false then error("Error: The API '" .. file_path .. "' doesn't exist on the online server!") end
-
+	if file_handle == false then
+		file_handle.close()
+		error("Error: The API '" .. file_path .. "' doesn't exist on the online server!")
+	end
+	
 	local h = io.open(fs.combine(synced_path, file_path), "w")
 	h:write(file_handle.readAll())
+	
+	file_handle.close()
 	h:close()
 end
 

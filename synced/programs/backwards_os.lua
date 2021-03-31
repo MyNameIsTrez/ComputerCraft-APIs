@@ -64,10 +64,12 @@ function downloadCfg()
 	local handleHttps = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
 
 	if not handleHttps then
+		handleHttps.close()
 		error('Downloading file failed!')
 	end
 
 	local str = handleHttps.readAll()
+	handleHttps.close()
 
 	local handleFile = fs.open(cfgPath, 'w')
 	handleFile.write(str)
