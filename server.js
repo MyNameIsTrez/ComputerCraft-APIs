@@ -48,8 +48,20 @@ app.get("/file", (req, res) => {
 // TODO: Refactor into subfunctions.
 app.post("/get-latest-files", (httpRequest, httpResponse) => {
 	printStats("get-latest-files");
+	
+	const userFilesData = getUserFilesData(httpRequest.body.data);
+	
+	const serverFilesData = getServerFilesData();
+	
+	const diffFilesData = getDiffFilesData(userFilesData, serverFilesData);
+	
+	httpResponse.send(diffFilesData);
+	
+	printAddAndRemoveCounts(diffFilesData);
+});
 
-	const data = httpRequest.body.data;
+
+function getUserFilesData(data) {
 	let msgString;
 	if (data === "[]") {
 		msgString = data;
@@ -58,17 +70,18 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 		msgString = data;
 	}
 	//console.log(msgString);
-	const userFilesData = JSON.parse(msgString);
-	
-	let diffFiles = { "add": {}, "remove": [] };
-	
-	const files = read("synced", name => {
+	return JSON.parse(msgString);
+}
+
+
+function getServerFilesData() {
+	const serverFilePathsWithoutSynced = read("synced", name => {
 		return name[0] !== "." && !name.endsWith(".swp");
 	});
 	
-	const serverFilesData = {};
+	let serverFilesData = {};
 	
-	files.forEach(serverFilePathWithoutSynced => {
+	serverFilePathsWithoutSynced.forEach(serverFilePathWithoutSynced => {
 		const serverFilePath = path.join("synced", serverFilePathWithoutSynced);
 		
 		const stats = fs.statSync(serverFilePath);
@@ -85,9 +98,16 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 		};
 	});
 	
+	return serverFilesData;
+}
+
+
+function getDiffFilesData(userFilesData, serverFilesData) {
+	let diffFilesData = { "add": {}, "remove": [] };
+	
 	// If the user doesn't have any files yet, just send all of the server's files.
 	if (Array.isArray(userFilesData) && userFilesData.length === 0) {
-		diffFiles.add = serverFilesData;
+		diffFilesData.add = serverFilesData;
 	} else {
 		for (const [serverFileName, serverFileData] of Object.entries(serverFilesData)) {
 			// Age is Unix time; a newer file has a larger Unix time for its modification date.
@@ -99,27 +119,32 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 			const serverFileAge = serverFileData.age;
 			
 			if (userFileAge === undefined || serverFileAge > userFileAge) {
-				diffFiles.add[serverFileName] = serverFileData;
+				diffFilesData.add[serverFileName] = serverFileData;
 			}
 		}
 		
 		for (const userFileName in userFilesData) {
 			if (!serverFilesData.hasOwnProperty(userFileName)) {
 				//const removedPath = path.join(userFilesData[userFileName].dir, userFileName);
-				diffFiles.remove.push(userFileName);
+				diffFilesData.remove.push(userFileName);
 			}
 		}
 	}
+	
+	return diffFilesData;
+}
 
+
+function printAddAndRemoveCounts(diffFilesData) {
 	let changesString = "";
 	
-	const addedNames = Object.keys(diffFiles.add);
+	const addedNames = Object.keys(diffFilesData.add);
 	const anyAdded = addedNames.length > 0;
 	if (anyAdded) {
 		changesString += `Added: ${addedNames.length}`;
 	}
 
-	const removedNames = diffFiles.remove;
+	const removedNames = diffFilesData.remove;
 	const anyRemoved = removedNames.length > 0;
 	if (anyRemoved) {
 		if (anyAdded) changesString += ", ";
@@ -127,9 +152,11 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 	}
 
 	if (anyAdded || anyRemoved) console.log(changesString);
+}
 
-	httpResponse.send(diffFiles);
-});
+
+
+
 
 
 app.get("/long_poll", (req, res) => {
@@ -137,12 +164,13 @@ app.get("/long_poll", (req, res) => {
 	printStats("long_poll?fn_name=" + fnName);
 	
 	const fn = longPollFunctions[fnName];
-	if (typeof(fn) === "object") { // Object in case of a Promise.
-		fn.then((fnResult) => {
+	if (typeof(fn) === "function") {
+		new Promise(fn).then((fnResult) => {
 			res.send(fnResult);
 			console.log("Sent response.");
 		});
 	} else {
-		res.send("Function name '" + fnName + "' doesn't exist!");
+		res.send("There's no long poll function named '" + fnName + "'!");
+		console.log("There's no long poll function named '" + fnName + "'!");
 	}
 });

@@ -55,20 +55,9 @@ end
 keys_string_number["return"] = keys_string_number.enter
 
 
-function start_listening(main_fn, on_key_fn)
-	parallel.waitForAny(
-		main_fn,
-		
-		-- An anynomous function, as the parallel function
-		-- can't be passed the on_key_fn argument otherwise.
-		-- Storing on_key_fn in a global variable instead would've also worked.
-		function()
-		    while true do
-		        local event, key_num = os.pullEvent("key")
-			on_key_fn(get_name(key_num), key_num)
-		    end
-		end
-	)
+function start_listening(on_key_fn)
+	local event, key_num = os.pullEvent("key")
+	on_key_fn(get_name(key_num), key_num)
 end
 
 

@@ -7,7 +7,25 @@ local width = fake_width - 1
 
 
 function premain()
-	keys.start_listening(main, actions)
+	parallel.waitForAny(
+		files_updated_listening,
+		keys_start_listening,
+		main
+	)
+end
+
+
+function files_updated_listening()
+	while true do
+		if long_poll.listen("lol") == "true" then os.reboot() end
+	end
+end
+
+
+function keys_start_listening()
+	while true do
+		keys.start_listening(on_key_actions)
+	end
 end
 
 
@@ -16,10 +34,13 @@ function main()
 end
 
 
-function actions(key_string, key_num)
+function on_key_actions(key_string, key_num)
 	if key_string == "r" then os.reboot() end
 	if key_string == "t" then sleep(0.05) error("Terminated") end -- Sleep so "t" isn't typed.
+	if key_string == "x" then sleep(0.05) print("typed x") end
 end
+
+
 
 
 
