@@ -5,6 +5,9 @@ const fs = require("fs");
 const path = require("path");
 const read = require("fs-readdir-recursive");
 
+// Local JS files.
+const longPollFunctions = require("./js/longPollFunctions");
+
 
 const app = express();
 
@@ -19,11 +22,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 function printStats(path) {
-	console.log(path, "Request received on", new Date());
+	console.log("'" + path + "' request received on", new Date());
 }
 
 
-app.get("/is-online", (req, res) => res.send(true));
+app.get("/is-online", (req, res) => {
+	printStats("is-online");
+	res.send(true)
+});
 
 
 app.get("/file", (req, res) => {
@@ -123,4 +129,20 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 	if (anyAdded || anyRemoved) console.log(changesString);
 
 	httpResponse.send(diffFiles);
+});
+
+
+app.get("/long_poll", (req, res) => {
+	const fnName = req.query.fn_name;
+	printStats("long_poll?fn_name=" + fnName);
+	
+	const fn = longPollFunctions[fnName];
+	if (typeof(fn) === "object") { // Object in case of a Promise.
+		fn.then((fnResult) => {
+			res.send(fnResult);
+			console.log("Sent response.");
+		});
+	} else {
+		res.send("Function name '" + fnName + "' doesn't exist!");
+	}
 });

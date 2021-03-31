@@ -20,7 +20,7 @@ function main()
 	remove_craftos_watermark()
 	
 	-- TODO: Support offline usage.
-	if not is_server_online() then error("Server's not online!") end
+	if not is_server_online() then error("Server offline.") end
 	
 	create_dirs()
 	download_and_load_required_apis()

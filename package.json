@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/MyNameIsTrez/ComputerCraft-APIs#readme",
   "dependencies": {
+    "chokidar": "^3.5.1",
     "express": "^4.17.1",
     "fs-readdir-recursive": "^1.1.0"
   }
