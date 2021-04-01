@@ -7,9 +7,10 @@ const read = require("fs-readdir-recursive");
 const util = require("util"); // For printing circular JSON.
 
 // Local JS files.
-//const longPollFunctions = require("./js/longPollFunctions");
+const longPollFunctions = require("./js/longPollFunctions");
 
 
+// TODO: Move to globals file, as it's also in js/longPollFunctions.js
 const httpTimeoutMs = 2 * 1000;
 
 
@@ -192,38 +193,13 @@ function printAddAndRemoveCounts(diffFilesData) {
 }
 
 
-
-
-
-
-
-
-const chokidar = require("chokidar");
-
-const chokidarOptions = {
-	ignoreInitial: true,
-};
-const watcher = chokidar.watch("synced", chokidarOptions);
-
 app.get("/long_poll", (req, res) => {
-	connectionCount++;
-	console.log(`Connections: ${connectionCount}`);
-	setTimeout(() => {
-		if (!res.writableEnded) {
-			res.end();
-			decrementConnection();
-			watcher.removeAllListeners("all");
-		}
-	}, httpTimeoutMs);
-	
 	const fnName = req.query.fn_name;
 	printStats("long_poll?fn_name=" + fnName);
 	
-	watcher.once("all", (event, path) => {
-		if (!res.writableEnded) {
-			res.send(true);
-			console.log("Sent response.");
-			decrementConnection();
-		}
-	});
+	if (longPollFunctions.hasOwnProperty(fnName)) {
+		longPollFunctions[fnName](res);
+	} else {
+		res.end("longPollFunctions doesn't contain the function '" + fnName + "'.");
+	}
 });
