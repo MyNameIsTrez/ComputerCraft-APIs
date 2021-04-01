@@ -10,7 +10,7 @@ const util = require("util"); // For printing circular JSON.
 //const longPollFunctions = require("./js/longPollFunctions");
 
 
-const httpTimeoutMs = 10 * 1000;
+const httpTimeoutMs = 2 * 1000;
 
 
 const app = express();
@@ -205,20 +205,25 @@ const chokidarOptions = {
 };
 const watcher = chokidar.watch("synced", chokidarOptions);
 
-/*
-watcher.on("all", (event, path) => {
-	console.log(path);
-});
-*/
-
 app.get("/long_poll", (req, res) => {
-	startConnectionTimeout(res);
+	connectionCount++;
+	console.log(`Connections: ${connectionCount}`);
+	setTimeout(() => {
+		if (!res.writableEnded) {
+			res.end();
+			decrementConnection();
+			watcher.removeAllListeners("all");
+		}
+	}, httpTimeoutMs);
+	
 	const fnName = req.query.fn_name;
 	printStats("long_poll?fn_name=" + fnName);
 	
 	watcher.once("all", (event, path) => {
-		res.send(true);
-		console.log("Sent response.");
-		decrementConnection();
+		if (!res.writableEnded) {
+			res.send(true);
+			console.log("Sent response.");
+			decrementConnection();
+		}
 	});
 });
