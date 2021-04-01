@@ -90,8 +90,10 @@ function print_diff_stats(diff_metadata)
 	local any_removed = #removed_names > 0
 	if any_removed then
 		if any_added then write(", ") end
-		print("Removed: ", #removed_names)
+		write("Removed: " .. #removed_names)
 	end
+	
+	write("\n")
 end
 
 

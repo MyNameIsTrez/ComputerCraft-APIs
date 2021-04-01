@@ -12,7 +12,7 @@ const httpTimeoutMs = 10 * 1000;
 
 
 module.exports = {
-	lol: (res) => {
+	file_change: (res) => {
 		setTimeout(() => {
 			if (!res.writableEnded) {
 				res.end();

@@ -11,7 +11,7 @@ const longPollFunctions = require("./js/longPollFunctions");
 
 
 // TODO: Move to globals file, as it's also in js/longPollFunctions.js
-const httpTimeoutMs = 2 * 1000;
+const httpTimeoutMs = 10 * 1000;
 
 
 const app = express();
@@ -31,30 +31,18 @@ function printStats(path) {
 }
 
 
-let connectionCount = 0;
 function startConnectionTimeout(res) {
-	connectionCount++;
-	console.log(`Connections: ${connectionCount}`);
 	setTimeout(() => {
 		if (!res.writableEnded) { // If res.end() hasn't been called yet.
 			res.end();
-			decrementConnection();
 		}
 	}, httpTimeoutMs);
-}
-
-
-function decrementConnection() {
-	connectionCount--;
-	console.log(`Connections: ${connectionCount}`);
 }
 
 
 app.get("/never-closes", (req, res) => {
 	startConnectionTimeout(res);
 	console.log("never-closes called");
-	//res.end();
-	//decrementConnection();
 });
 
 
@@ -62,7 +50,6 @@ app.get("/is-online", (req, res) => {
 	startConnectionTimeout(res);
 	printStats("is-online");
 	res.send(true)
-	decrementConnection();
 });
 
 
@@ -77,7 +64,6 @@ app.get("/file", (req, res) => {
 	} else {
 		res.send(false);
 	}
-	decrementConnection();
 });
 
 
@@ -95,7 +81,6 @@ app.post("/get-latest-files", (httpRequest, httpResponse) => {
 	httpResponse.send(diffFilesData);
 	
 	printAddAndRemoveCounts(diffFilesData);
-	decrementConnection();
 });
 
 
@@ -195,7 +180,7 @@ function printAddAndRemoveCounts(diffFilesData) {
 
 app.get("/long_poll", (req, res) => {
 	const fnName = req.query.fn_name;
-	printStats("long_poll?fn_name=" + fnName);
+	//printStats("long_poll?fn_name=" + fnName);
 	
 	if (longPollFunctions.hasOwnProperty(fnName)) {
 		longPollFunctions[fnName](res);

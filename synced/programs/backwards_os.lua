@@ -17,7 +17,7 @@ end
 
 function files_updated_listening()
 	while true do
-		if long_poll.listen("lol") == "true" then os.reboot() end
+		if long_poll.listen("file_change") == "true" then os.reboot() end
 	end
 end
 
