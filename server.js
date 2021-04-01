@@ -7,7 +7,10 @@ const read = require("fs-readdir-recursive");
 const util = require("util"); // For printing circular JSON.
 
 // Local JS files.
-const longPollFunctions = require("./js/longPollFunctions");
+//const longPollFunctions = require("./js/longPollFunctions");
+
+
+const httpTimeoutMs = 10 * 1000;
 
 
 const app = express();
@@ -32,12 +35,11 @@ function startConnectionTimeout(res) {
 	connectionCount++;
 	console.log(`Connections: ${connectionCount}`);
 	setTimeout(() => {
-		if (!res.writableEnded) { // If not res.end() already called.
+		if (!res.writableEnded) { // If res.end() hasn't been called yet.
 			res.end();
-			connectionCount--;
-			console.log(`Connections: ${connectionCount}`);
+			decrementConnection();
 		}
-	}, 10000);
+	}, httpTimeoutMs);
 }
 
 
@@ -50,8 +52,8 @@ function decrementConnection() {
 app.get("/never-closes", (req, res) => {
 	startConnectionTimeout(res);
 	console.log("never-closes called");
-	res.end();
-	decrementConnection();
+	//res.end();
+	//decrementConnection();
 });
 
 
@@ -190,21 +192,33 @@ function printAddAndRemoveCounts(diffFilesData) {
 }
 
 
+
+
+
+
+
+
+const chokidar = require("chokidar");
+
+const chokidarOptions = {
+	ignoreInitial: true,
+};
+const watcher = chokidar.watch("synced", chokidarOptions);
+
+/*
+watcher.on("all", (event, path) => {
+	console.log(path);
+});
+*/
+
 app.get("/long_poll", (req, res) => {
 	startConnectionTimeout(res);
 	const fnName = req.query.fn_name;
 	printStats("long_poll?fn_name=" + fnName);
 	
-	const fn = longPollFunctions[fnName];
-	if (typeof(fn) === "function") {
-		new Promise(fn).then((fnResult) => {
-			res.send(fnResult);
-			console.log("Sent response.");
-			decrementConnection();
-		});
-	} else {
-		res.send("There's no long poll function named '" + fnName + "'!");
-		console.log("There's no long poll function named '" + fnName + "'!");
+	watcher.once("all", (event, path) => {
+		res.send(true);
+		console.log("Sent response.");
 		decrementConnection();
-	}
+	});
 });
