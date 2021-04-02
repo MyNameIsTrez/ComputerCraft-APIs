@@ -38,7 +38,7 @@ end
 function is_server_online()
 	local h = http.get(server_online_url)
 	local response = h ~= nil
-	h.close()
+	if response then h.close() end
 	return response
 end
 

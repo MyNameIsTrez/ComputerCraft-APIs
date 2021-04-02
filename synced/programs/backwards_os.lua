@@ -30,6 +30,35 @@ end
 
 
 function main()
+	subterm.enable_history_recording()
+	
+	--write(string.rep("a", 25))
+	--write(string.rep("b", 75))
+	--write(string.rep("c", 51))
+	write(string.rep("a", 50) .. "\n")
+	server.print(subterm.history)
+	
+	--[[
+	write(string.rep("a", 45))
+	while true do
+		write(string.rep("b", 1))
+		sleep(1)
+		server.print(subterm.history)
+	end
+	]]--
+	
+	--[[
+	--subterm.disable_history_recording()
+	
+	--subterm.original_print("xd")
+	print("xd")
+	--subterm.history_print("xd")
+	
+	write("foo")
+	write("bar")
+	subterm.debug_print_history()
+	--subterm.disable_history_recording()
+	]]--
 	sleep(1e6)
 end
 

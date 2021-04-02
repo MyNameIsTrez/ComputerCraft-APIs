@@ -46,6 +46,12 @@ app.get("/never-closes", (req, res) => {
 });
 
 
+app.post("/server-print", (req, res) => {
+	console.log("'server-print': " + req.body.msg);
+	res.send(true);
+});
+
+
 app.get("/is-online", (req, res) => {
 	startConnectionTimeout(res);
 	printStats("is-online");

@@ -157,7 +157,7 @@ end
 
 -- Prints the contents of a table much like 'textutils.serialize(tab)',
 -- but the output is much more readable and it has the option to toggle recursion.
-function printTable(tab, recursive, depth)
+function print_table(tab, recursive, depth)
 	recursive = not (recursive == false) -- True by default.
 	depth = depth or 0 -- The depth starts at 0.
 	
@@ -355,4 +355,13 @@ function matchBetween(str, startStr, endStr)
 		i = i + 1
 	end
 	return tab
+end
+
+
+function split_by_chunk(text, chunk_size)
+	local s = {}
+	for i = 1, #text, chunk_size do
+		s[#s + 1] = text:sub(i, i + chunk_size - 1)
+	end
+	return s
 end
