@@ -1,52 +1,68 @@
 history = {} -- Public.
 
 
-original_write = write
-
-
---[[
 -- The original write function has a bug where it can't write to the rightmost position,
 -- 	unless the entire line is written at once.
 -- It also has a bug where write(string.rep("a", 50) .. "\n") moves the string.rep("a", 50) down with it.
 -- This version is also hopefully a little faster due to being dumbed down.
 original_write = function(str)
-	local w, h = term.getSize()
 	local x, y = term.getCursorPos()
 	
-	local strTab = split_by_chunk_x_offset(str, 50, x)
-	server.print(strTab)
+	local strTab = {}
 	
-	term.write(strTab[1])
-	
-	for i = 2, #strTab do
-		term.write(strTab[i])
-		y = y + 1
-		term.setCursorPos(x, y)
+	for _, str2 in ipairs(split_but_keep_newlines(str)) do
+		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
+			--server.print(str3)
+			strTab[#strTab+1] = str3
+		end
 	end
+	--server.print(strTab)
 	
-	return #strTab
+	local n_lines_printed = 0
+	for i = 1, #strTab do
+		local str = strTab[i]
+		
+		if str == "\n" then
+			x = 1
+			y = y + 1
+			n_lines_printed = n_lines_printed + 1
+			term.setCursorPos(x, y)
+		else
+			term.write(strTab[i])
+		end
+	end
+	--server.print("n_lines_printed: " .. n_lines_printed)
+	
+	return n_lines_printed
 end
-]]--
 
 
-function split_by_chunk_x_offset(text, chunk_size, x_offset)
-	local s = {}
-	
-	-- TODO: Maybe take x_offset = 1 outside of this loop by doing the first sub manually.
-	--       Do benchmark the performance difference though, cause it could also be worse.
-	for i = 1, #text, chunk_size - x_offset + 1 do
-		s[#s + 1] = text:sub(i, i + chunk_size - 1 - x_offset + 1)
-		x_offset = 1
+function split_but_keep_newlines(str)
+	local t = {}
+	for a, b in string.gmatch(str, "([^\n]*)(\n?)") do
+		if #a > 0 then t[#t+1] = a end
+		if #b > 0 then t[#t+1] = b end
 	end
-	
-	return s
+	return t
+end
+
+
+local w, h = term.getSize()
+function split_by_terminal_width(str, x_offset)
+	local strTab = {}
+	local first_line_len = w - x_offset + 1
+	strTab[1] = str:sub(1, first_line_len)
+	for i = first_line_len + 1, #str, w do
+		strTab[#strTab + 1] = str:sub(i, i + w - 1)
+	end
+	return strTab
 end
 
 
 -- The original print function calls write(), but it needs to call original_write().
 original_print = function(...)
 	local nLinesPrinted = 0
-	for n,v in ipairs({...}) do
+	for n, v in ipairs({...}) do
 		nLinesPrinted = nLinesPrinted + original_write(tostring(v))
 	end
 	nLinesPrinted = nLinesPrinted + original_write("\n")
@@ -86,11 +102,11 @@ function history_write(argStr)
 end
 
 
-function split_by_chunk(text, chunk_size)
+function split_by_chunk(str, chunk_size)
 	local s = {}
 	
-	for i = 1, #text, chunk_size do
-		s[#s + 1] = text:sub(i, i + chunk_size - 1)
+	for i = 1, #str, chunk_size do
+		s[#s + 1] = str:sub(i, i + chunk_size - 1)
 	end
 	
 	return s

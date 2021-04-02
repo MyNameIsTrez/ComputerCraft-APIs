@@ -36,7 +36,7 @@ function main()
 	write(string.rep("a", 25))
 	write(string.rep("b", 75))
 	write(string.rep("c", 51))
-	write(string.rep("a", 50) .. "\n")
+	write(string.rep("d", 50) .. "\n")
 	server.print(subterm.history)
 	]]--
 	
