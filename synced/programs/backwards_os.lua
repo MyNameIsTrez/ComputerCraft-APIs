@@ -32,11 +32,13 @@ end
 function main()
 	subterm.enable_history_recording()
 	
-	--write(string.rep("a", 25))
-	--write(string.rep("b", 75))
-	--write(string.rep("c", 51))
+	--[[
+	write(string.rep("a", 25))
+	write(string.rep("b", 75))
+	write(string.rep("c", 51))
 	write(string.rep("a", 50) .. "\n")
 	server.print(subterm.history)
+	]]--
 	
 	--[[
 	write(string.rep("a", 45))
@@ -46,6 +48,10 @@ function main()
 		server.print(subterm.history)
 	end
 	]]--
+
+	--write(string.rep("b", 50) .. "\n")
+	--write(string.rep("b", 50) .. "\n")
+	--server.print(subterm.history)
 	
 	--[[
 	--subterm.disable_history_recording()

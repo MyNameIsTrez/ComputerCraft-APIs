@@ -170,17 +170,21 @@ function printAddAndRemoveCounts(diffFilesData) {
 	const addedNames = Object.keys(diffFilesData.add);
 	const anyAdded = addedNames.length > 0;
 	if (anyAdded) {
-		changesString += `Added: ${addedNames.length}`;
+		changesString += `Added/modified ${addedNames.length} file.`;
 	}
 
 	const removedNames = diffFilesData.remove;
 	const anyRemoved = removedNames.length > 0;
 	if (anyRemoved) {
 		if (anyAdded) changesString += ", ";
-		changesString += `Removed: ${removedNames.length}`;
+		changesString += `Removed ${removedNames.length} file.`;
 	}
 
-	if (anyAdded || anyRemoved) console.log(changesString);
+	if (anyAdded || anyRemoved) {
+		console.log(changesString);
+	} else {
+		console.log("Up-to-date.");
+	}
 }
 
 

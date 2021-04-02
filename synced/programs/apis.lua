@@ -83,14 +83,18 @@ function print_diff_stats(diff_metadata)
 	local added_names = table_keys(diff_metadata.add)
 	local any_added = #added_names > 0
 	if any_added then
-		write("Added: " .. #added_names)
+		write("Added/modified " .. #added_names .. " file.")
 	end
 	
 	local removed_names = diff_metadata.remove
 	local any_removed = #removed_names > 0
 	if any_removed then
 		if any_added then write(", ") end
-		write("Removed: " .. #removed_names)
+		write("Removed " .. #removed_names .. " file.")
+	end
+
+	if not any_added and not any_removed then
+		write("Up-to-date.")
 	end
 	
 	write("\n")

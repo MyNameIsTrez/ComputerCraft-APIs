@@ -356,12 +356,3 @@ function matchBetween(str, startStr, endStr)
 	end
 	return tab
 end
-
-
-function split_by_chunk(text, chunk_size)
-	local s = {}
-	for i = 1, #text, chunk_size do
-		s[#s + 1] = text:sub(i, i + chunk_size - 1)
-	end
-	return s
-end
