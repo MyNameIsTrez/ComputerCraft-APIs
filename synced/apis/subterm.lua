@@ -11,8 +11,9 @@ original_write = function(str)
 	local strTab = {}
 	
 	for _, str2 in ipairs(split_but_keep_newlines(str)) do
+		--server.print(str2)
 		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
-			--server.print(str3)
+			server.print(str3)
 			strTab[#strTab+1] = str3
 		end
 	end
@@ -22,15 +23,24 @@ original_write = function(str)
 	for i = 1, #strTab do
 		local str = strTab[i]
 		
+		server.print("x: " .. x .. ", y: " .. y .. ", #strTab: " .. #strTab .. ", str: " .. str)
+		
 		if str == "\n" then
+			n_lines_printed = n_lines_printed + 1
+		else
+			term.setCursorPos(x, y)
+			term.write(str)
+			x = x + #str
+		end
+		sleep(1)
+		
+		if #strTab > 1 or x > 50 then
 			x = 1
 			y = y + 1
-			n_lines_printed = n_lines_printed + 1
-			term.setCursorPos(x, y)
-		else
-			term.write(strTab[i])
 		end
 	end
+	
+	term.setCursorPos(x, y)
 	--server.print("n_lines_printed: " .. n_lines_printed)
 	
 	return n_lines_printed
