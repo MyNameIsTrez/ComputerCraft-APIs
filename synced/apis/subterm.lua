@@ -1,29 +1,31 @@
-history = {} -- Public.
+history = { "" } -- Initializing with an empty string so it can be concatenated with.
 
 
 -- The original write function has a bug where it can't write to the rightmost position,
 -- 	unless the entire line is written at once.
 -- It also has a bug where write(string.rep("a", 50) .. "\n") moves the string.rep("a", 50) down with it.
 -- This version is also hopefully a little faster due to being dumbed down.
-original_write = function(str)
+_G.write = function(str)
 	local x, y = term.getCursorPos()
+	
+	local str = tostring(str)
 	
 	local strTab = {}
 	
 	for _, str2 in ipairs(split_but_keep_newlines(str)) do
-		--server.print(str2)
+		--server.print("str2: " .. str2)
 		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
-			server.print(str3)
+			--server.print("str3: " .. str3)
 			strTab[#strTab+1] = str3
 		end
 	end
-	--server.print(strTab)
+	server.print(strTab)
 	
 	local n_lines_printed = 0
 	for i = 1, #strTab do
 		local str = strTab[i]
 		
-		server.print("x: " .. x .. ", y: " .. y .. ", #strTab: " .. #strTab .. ", str: " .. str)
+		--server.print("x: " .. x .. ", y: " .. y .. ", #strTab: " .. #strTab .. ", str: " .. str)
 		
 		if str == "\n" then
 			n_lines_printed = n_lines_printed + 1
@@ -31,12 +33,20 @@ original_write = function(str)
 			term.setCursorPos(x, y)
 			term.write(str)
 			x = x + #str
+			
+			if record_history then
+				history[#history] = history[#history] .. str
+			end
 		end
-		sleep(1)
+		--sleep(0.5)
 		
-		if #strTab > 1 or x > 50 then
+		if x > 50 or str == "\n" then
 			x = 1
 			y = y + 1
+			
+			if record_history then
+				history[#history+1] = ""
+			end
 		end
 	end
 	
@@ -69,76 +79,36 @@ function split_by_terminal_width(str, x_offset)
 end
 
 
--- The original print function calls write(), but it needs to call original_write().
-original_print = function(...)
-	local nLinesPrinted = 0
+_G.print = function(...)
+	local n_lines_printed = 0
 	for n, v in ipairs({...}) do
-		nLinesPrinted = nLinesPrinted + original_write(tostring(v))
+		n_lines_printed = n_lines_printed + write(v)
 	end
-	nLinesPrinted = nLinesPrinted + original_write("\n")
-	return nLinesPrinted
-end
-
-
-function history_print(...)
-	local str = ""
-	for _, argStr in ipairs({...}) do
-		str = str .. tostring(argStr)
-	end
-	
-	table.insert(history, str)
-	table.insert(history, "")
-	
-	return original_print(...)
-end
-
-
-function history_write(argStr)
-	if #history > 0 then
-		local strTab = split_by_chunk(history[#history] .. tostring(argStr), 50)
-		local historyLen = #history
-		
-		for i = 1, #strTab do
-			history[historyLen + i - 1] = strTab[i]
-		end
-	else
-		local strTab = split_by_chunk(tostring(argStr), 50)
-		for i = 1, #strTab do
-			history[i] = strTab[i]
-		end
-	end
-	
-	return original_write(tostring(argStr))
-end
-
-
-function split_by_chunk(str, chunk_size)
-	local s = {}
-	
-	for i = 1, #str, chunk_size do
-		s[#s + 1] = str:sub(i, i + chunk_size - 1)
-	end
-	
-	return s
+	n_lines_printed = n_lines_printed + write("\n")
+	return n_lines_printed
 end
 
 
 function enable_history_recording()
-	_G.print = history_print -- Can't use "print =" here.
-	_G.write = history_write
+	record_history = true
 end
 
 
 function disable_history_recording()
-	_G.print = original_print
-	_G.write = original_write
+	record_history = false
 end
 
 
 function debug_print_history()
-	original_write(#history)
+	local was_recording_history = record_history
+	
+	if was_recording_history then disable_history_recording() end
+
+	write(#history)
 	for _, str in ipairs(history) do
-		original_print(str)
-		--original_write(str)
+		print(str)
+		--write(str)
 	end
+	
+	if was_recording_history then enable_history_recording() end
 end
