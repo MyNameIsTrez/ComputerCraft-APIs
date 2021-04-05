@@ -12,7 +12,7 @@ local keys_number_string = {
 	"j","k","l","semiColon","apostrophe", -- 36
 	"grave","leftShift",nil,"z","x", -- 41
 	"c","v","b","n","m", -- 46
-	"comma","period","slash","rightShift", -- 51
+	"comma","period","slash","rightShift",nil, -- 51
 	"leftAlt","space","capsLock","f1","f2", -- 56
 	"f3","f4","f5","f6","f7", -- 61
 	"f8","f9","f10",nil,nil, -- 66

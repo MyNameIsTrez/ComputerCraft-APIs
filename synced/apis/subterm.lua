@@ -2,6 +2,7 @@ history = { "" } -- Initializing with an empty string so it can be concatenated 
 
 
 local record_history = true
+local lines_scrolled_down = 0
 
 
 -- The original write function has a bug where it can't write to the rightmost position,
@@ -22,7 +23,7 @@ _G.write = function(str)
 			strTab[#strTab+1] = str3
 		end
 	end
-	server.print(strTab)
+	--server.print(strTab)
 	
 	local n_lines_printed = 0
 	for i = 1, #strTab do
@@ -99,4 +100,14 @@ end
 
 function disable_history_recording()
 	record_history = false
+end
+
+
+function scrollUp()
+	
+end
+
+
+function scrollDown()
+	
 end

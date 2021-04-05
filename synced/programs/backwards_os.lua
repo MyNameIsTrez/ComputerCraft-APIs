@@ -30,6 +30,10 @@ end
 
 
 function main()
+	for i = 1, 5 do
+		print(i)
+	end
+	
 	--[[
 	write(string.rep("a", 25) .. "\n\n\n")
 	--write(string.rep("a", 25))
@@ -58,14 +62,14 @@ function main()
 	server.print(subterm.history)
 	]]--
 	
-	
+	--[[
 	--subterm.disable_history_recording()
 	print("xd")
 	write("foo")
 	write("bar")
-	server.print("subterm.history:")
-	server.print(subterm.history)
-	
+	--server.print("subterm.history:")
+	--server.print(subterm.history)
+	]]--
 	
 	sleep(1e6)
 end
@@ -74,7 +78,16 @@ end
 function on_key_actions(key_string, key_num)
 	if key_string == "r" then os.reboot() end
 	if key_string == "t" then sleep(0.05) error("Terminated") end -- Sleep so "t" isn't typed.
-	if key_string == "x" then sleep(0.05) print("typed x") end
+	
+	-- Function of synced/apis/subterm.lua
+	if key_string == "pageUp" then
+		subterm.scrollUp()
+		server.print("typed pageUp")
+	end
+	if key_string == "pageDown" then
+		subterm.scrollDown()
+		server.print("typed pageDown")
+	end
 end
 
 
