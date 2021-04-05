@@ -1,6 +1,9 @@
 history = { "" } -- Initializing with an empty string so it can be concatenated with.
 
 
+local record_history = true
+
+
 -- The original write function has a bug where it can't write to the rightmost position,
 -- 	unless the entire line is written at once.
 -- It also has a bug where write(string.rep("a", 50) .. "\n") moves the string.rep("a", 50) down with it.
@@ -96,19 +99,4 @@ end
 
 function disable_history_recording()
 	record_history = false
-end
-
-
-function debug_print_history()
-	local was_recording_history = record_history
-	
-	if was_recording_history then disable_history_recording() end
-
-	write(#history)
-	for _, str in ipairs(history) do
-		print(str)
-		--write(str)
-	end
-	
-	if was_recording_history then enable_history_recording() end
 end

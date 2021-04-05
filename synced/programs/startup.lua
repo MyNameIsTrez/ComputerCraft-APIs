@@ -9,6 +9,7 @@ local synced_path = fs.combine(bw_os_name, "synced")
 
 local apis_path = fs.combine(synced_path, "apis")
 local programs_path = fs.combine(synced_path, "programs")
+local jobs_path = fs.combine(synced_path, "jobs")
 
 local json_api_path = fs.combine(apis_path, "json")
 
@@ -44,11 +45,17 @@ end
 
 
 function create_dirs()
-	if not fs.exists(bw_os_name) then fs.makeDir(bw_os_name) end
-	if not fs.exists(synced_path) then fs.makeDir(synced_path) end
+	create_dir(bw_os_name)
+	create_dir(synced_path)
 
-	if not fs.exists(apis_path) then fs.makeDir(apis_path) end
-	if not fs.exists(programs_path) then fs.makeDir(programs_path) end
+	create_dir(apis_path)
+	create_dir(programs_path)
+	create_dir(jobs_path)
+end
+
+
+function create_dir(dir)
+	if not fs.exists(dir) then fs.makeDir(dir) end
 end
 
 

@@ -30,8 +30,6 @@ end
 
 
 function main()
-	subterm.enable_history_recording()
-	
 	--[[
 	write(string.rep("a", 25) .. "\n\n\n")
 	--write(string.rep("a", 25))
@@ -53,7 +51,7 @@ function main()
 		--server.print(subterm.history)
 	end
 	]]--
-
+	
 	--[[
 	write(string.rep("b", 50) .. "\n")
 	write(string.rep("b", 50) .. "\n")
@@ -65,9 +63,6 @@ function main()
 	print("xd")
 	write("foo")
 	write("bar")
-	server.print("subterm.history:")
-	server.print(subterm.history)
-	subterm.debug_print_history()
 	server.print("subterm.history:")
 	server.print(subterm.history)
 	
