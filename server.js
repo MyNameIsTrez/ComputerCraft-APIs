@@ -183,7 +183,7 @@ function printAddAndRemoveCounts(diffFilesData) {
 	if (anyAdded || anyRemoved) {
 		console.log(changesString);
 	} else {
-		console.log("Up-to-date.");
+		console.log("Already up to date.");
 	}
 }
 

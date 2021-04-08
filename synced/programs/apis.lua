@@ -15,7 +15,7 @@ function get_latest(printing)
 	local diff_metadata = get_diff_metadata(local_metadata)
 	if diff_metadata == false then print("Server offline!") return false end
 
-	if printing then print_diff_stats(diff_metadata) end
+	if printing then print_synced(diff_metadata) end
 
 	add_files(diff_metadata)
 	remove_files(diff_metadata)
@@ -79,25 +79,30 @@ function get_diff_metadata(local_metadata)
 end
 
 
-function print_diff_stats(diff_metadata)
+function print_synced(diff_metadata)
 	local added_names = table_keys(diff_metadata.add)
 	local any_added = #added_names > 0
 	if any_added then
-		write("Added/modified " .. #added_names .. " file.")
+		write("Added/modified " .. #added_names .. " file" .. (#added_names > 1 and "s." or "."))
 	end
 	
 	local removed_names = diff_metadata.remove
 	local any_removed = #removed_names > 0
 	if any_removed then
 		if any_added then write(", ") end
-		write("Removed " .. #removed_names .. " file.")
+		write("Removed " .. #removed_names .. " file" .. (#removed_names > 1 and "s." or "."))
 	end
 
 	if not any_added and not any_removed then
-		write("Up-to-date.")
+		write("Already up to date.")
 	end
 	
 	write("\n")
+	
+	local print_synced_clear_delay = 0.5 -- Move to globals file.
+	sleep(print_synced_clear_delay)
+	term.setCursorPos(1, 1)
+	term.clearLine()
 end
 
 

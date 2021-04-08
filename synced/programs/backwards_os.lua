@@ -76,17 +76,27 @@ end
 
 
 function on_key_actions(key_string, key_num)
-	if key_string == "r" then os.reboot() end
-	if key_string == "t" then sleep(0.05) error("Terminated") end -- Sleep so "t" isn't typed.
+	if key_string == "r" then
+		os.reboot()
+	end
+	
+	if key_string == "t" then
+		error("Terminated")
+	end
+	
+	if key_string == "x" then
+		print("x")
+	end
 	
 	-- Function of synced/apis/subterm.lua
 	if key_string == "pageUp" then
-		subterm.scrollUp()
-		server.print("typed pageUp")
+		subterm.scroll_up(1)
+		--server.print("typed pageUp")
 	end
+	
 	if key_string == "pageDown" then
-		subterm.scrollDown()
-		server.print("typed pageDown")
+		subterm.scroll_down(1)
+		--server.print("typed pageDown")
 	end
 end
 

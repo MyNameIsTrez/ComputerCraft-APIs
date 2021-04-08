@@ -2,7 +2,7 @@ history = { "" } -- Initializing with an empty string so it can be concatenated 
 
 
 local record_history = true
-local lines_scrolled_down = 0
+local start_line = 1
 
 
 -- The original write function has a bug where it can't write to the rightmost position,
@@ -103,11 +103,32 @@ function disable_history_recording()
 end
 
 
-function scrollUp()
-	
+function scroll_up(scroll_amount)
+	--server.print(#history)
+	if start_line - scroll_amount >= 1 then
+		start_line = start_line - scroll_amount
+		print_history()
+	end
 end
 
 
-function scrollDown()
-	
+function scroll_down(scroll_amount)
+	--server.print(#history)
+	if start_line + scroll_amount <= #history - h then
+		start_line = start_line + scroll_amount
+		print_history()
+	end
+end
+
+
+function print_history()
+	for i = 1, h do
+		local line = history[i + start_line - 1]
+		if (line ~= nil) then
+			term.setCursorPos(1, i)
+			term.write(string.rep(" ", w))
+			term.setCursorPos(1, i)
+			term.write(line)
+		end
+	end
 end
