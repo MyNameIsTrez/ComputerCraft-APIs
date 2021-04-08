@@ -30,10 +30,6 @@ end
 
 
 function main()
-	for i = 1, 5 do
-		print(i)
-	end
-	
 	--[[
 	write(string.rep("a", 25) .. "\n\n\n")
 	--write(string.rep("a", 25))
@@ -76,6 +72,10 @@ end
 
 
 function on_key_actions(key_string, key_num)
+	--print(key_string .. ", " .. key_num)
+	--server.print(key_string)
+	--server.print(key_num)
+	
 	if key_string == "r" then
 		os.reboot()
 	end
@@ -84,8 +84,12 @@ function on_key_actions(key_string, key_num)
 		error("Terminated")
 	end
 	
-	if key_string == "x" then
-		print("x")
+	if key_string == "a" then
+		print("a")
+	end
+	
+	if key_string == "b" then
+		print("b")
 	end
 	
 	-- Function of synced/apis/subterm.lua

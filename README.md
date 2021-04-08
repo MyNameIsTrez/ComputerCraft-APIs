@@ -2,6 +2,7 @@
 Project for hosting a server that stores and updates ComputerCraft APIs in real-time. (for Tekkit Classic, CC 1.33)
 
 # TODO
+* Add globals file.
 * Expand one-liners like "if X==Y then Z() end" into multiple lines, cause they're annoying to expand later.
 * "Subterminal" class.
 	* Make backwardsos.main() create a subterminal where the delete key does work.

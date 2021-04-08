@@ -4,32 +4,24 @@ history = { "" } -- Initializing with an empty string so it can be concatenated 
 local record_history = true
 local start_line = 1
 
+local w, h = term.getSize() -- TODO: Move in globals file.
+
 
 -- The original write function has a bug where it can't write to the rightmost position,
 -- 	unless the entire line is written at once.
 -- It also has a bug where write(string.rep("a", 50) .. "\n") moves the string.rep("a", 50) down with it.
 -- This version is also hopefully a little faster due to being dumbed down.
 _G.write = function(str)
+	local str = tostring(str)
 	local x, y = term.getCursorPos()
 	
-	local str = tostring(str)
-	
-	local strTab = {}
-	
-	for _, str2 in ipairs(split_but_keep_newlines(str)) do
-		--server.print("str2: " .. str2)
-		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
-			--server.print("str3: " .. str3)
-			strTab[#strTab+1] = str3
-		end
-	end
-	--server.print(strTab)
+	local str_tab = get_str_tab(str, x)
 	
 	local n_lines_printed = 0
-	for i = 1, #strTab do
-		local str = strTab[i]
+	for i = 1, #str_tab do
+		local str = str_tab[i]
 		
-		--server.print("x: " .. x .. ", y: " .. y .. ", #strTab: " .. #strTab .. ", str: " .. str)
+		--server.print("x: " .. x .. ", y: " .. y .. ", #str_tab: " .. #str_tab .. ", str: " .. str)
 		
 		if str == "\n" then
 			n_lines_printed = n_lines_printed + 1
@@ -49,8 +41,10 @@ _G.write = function(str)
 			y = y + 1
 			
 			if record_history then
-				history[#history+1] = ""
+				history[#history + 1] = ""
 			end
+			
+			scroll_after_write()
 		end
 	end
 	
@@ -61,25 +55,46 @@ _G.write = function(str)
 end
 
 
+function get_str_tab(str, x)
+	local str_tab = {}
+	for _, str2 in ipairs(split_but_keep_newlines(str)) do
+		--server.print("str2: " .. str2)
+		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
+			--server.print("str3: " .. str3)
+			str_tab[#str_tab+1] = str3
+		end
+	end
+	return str_tab
+	--server.print(str_tab)
+end
+
+
 function split_but_keep_newlines(str)
 	local t = {}
 	for a, b in string.gmatch(str, "([^\n]*)(\n?)") do
-		if #a > 0 then t[#t+1] = a end
-		if #b > 0 then t[#t+1] = b end
+		if #a > 0 then t[#t + 1] = a end
+		if #b > 0 then t[#t + 1] = b end
 	end
 	return t
 end
 
 
-local w, h = term.getSize()
 function split_by_terminal_width(str, x_offset)
-	local strTab = {}
+	local t = {}
 	local first_line_len = w - x_offset + 1
-	strTab[1] = str:sub(1, first_line_len)
+	t[1] = str:sub(1, first_line_len)
 	for i = first_line_len + 1, #str, w do
-		strTab[#strTab + 1] = str:sub(i, i + w - 1)
+		t[#t + 1] = str:sub(i, i + w - 1)
 	end
-	return strTab
+	return t
+end
+
+
+function scroll_after_write()
+	local scroll_amount = #history - h - start_line
+	if scroll_amount >= 1 then
+		scroll_down(scroll_amount)
+	end
 end
 
 
@@ -122,13 +137,14 @@ end
 
 
 function print_history()
+	local start_x, start_y = term.getCursorPos()
 	for i = 1, h do
 		local line = history[i + start_line - 1]
 		if (line ~= nil) then
 			term.setCursorPos(1, i)
-			term.write(string.rep(" ", w))
-			term.setCursorPos(1, i)
+			term.clearLine()
 			term.write(line)
 		end
 	end
+	term.setCursorPos(start_x, start_y)
 end
