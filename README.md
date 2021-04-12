@@ -2,6 +2,7 @@
 Project for hosting a server that stores and updates ComputerCraft APIs in real-time. (for Tekkit Classic, CC 1.33)
 
 # TODO
+* Figure out why the "lua" program starts with an extra enter in my program.
 * Add ctrl+backspace from VS Code.
 * Add ctrl+delete from VS Code.
 * Add globals file.

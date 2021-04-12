@@ -9,7 +9,7 @@ local typing_start_x = 3
 --local typing_start_y = 1
 local typed = ""
 local typed_history = {}
-local typed_history_index
+local typed_history_index = 0
 local running_program = false
 
 
@@ -144,20 +144,32 @@ function on_key(key, key_num)
 			--local y = 
 			
 			if key == "backspace" then
-				local shifted = #typed - typed_cursor_index + 1
-				--server.print(shifted)
-				
+				-- Clears the last character of the line.
 				term.setCursorPos(typing_start_x + #typed - 1, cursor_y)
 				term.write(" ")
 				
+				-- Moves the cursor back by 1.
 				term.setCursorPos(cursor_x - 1, cursor_y)
-				-- TODO: Doesn't always need to write this.
+				-- Moves the characters after the cursor back by 1.
 				term.write(typed:sub(typed_cursor_index + 1, -1))
 				
+				-- Moves the cursor to its final position.
 				term.setCursorPos(cursor_x - 1, cursor_y)
 				
 				typed = typed:sub(1, typed_cursor_index - 1) .. typed:sub(typed_cursor_index + 1, -1)
 			elseif key == "delete" then
+				-- Clears the last character of the line.
+				term.setCursorPos(typing_start_x + #typed - 1, cursor_y)
+				term.write(" ")
+				
+				-- Moves the characters after the cursor back by 1.
+				term.setCursorPos(cursor_x, cursor_y)
+				term.write(typed:sub(typed_cursor_index + 2, -1))
+				
+				-- Moves the cursor to its final position.
+				term.setCursorPos(cursor_x, cursor_y)
+				
+				typed = typed:sub(1, typed_cursor_index) .. typed:sub(typed_cursor_index + 2, -1)
 			end
 		end
 	end
@@ -171,7 +183,7 @@ function on_key(key, key_num)
 end
 
 
-function on_char(char, char_num)	
+function on_char(char, char_num)
 	--server.print("")
 	local cursor_x, cursor_y = term.getCursorPos()
 	--server.print("cursor_x: " .. cursor_x .. ", cursor_y: " .. cursor_y)
