@@ -2,7 +2,7 @@
 -- while true do type, num = os.pullEvent("key") print(num) end
 local keys_number_string = {
 	"backslash", -- 0
-	nil,"one","two","three","four", -- 1
+	"escape","one","two","three","four", -- 1
 	"five","six","seven","eight","nine", -- 6
 	"zero","minus","equals","backspace","tab", -- 11
 	"q","w","e","r","t", -- 16
@@ -42,25 +42,33 @@ local keys_number_string = {
 	nil,nil,nil,nil,nil, -- 186
 	nil,nil,nil,nil,nil, -- 191
 	nil,nil,nil,"home","up", -- 196
-	"pageUp",nil,"left",nil,nil, -- 201
-	nil,"end","down","pageDown","right", -- 206
+	"pageUp",nil,"left",nil,"right", -- 201
+	nil,"end","down","pageDown",nil, -- 206
 	"delete",nil,nil,nil,nil, -- 211
 }
 
 
+--[[
 local keys_string_number = {}
 for n_key, s_key in pairs(keys_number_string) do
 	keys_string_number[s_key] = n_key
 end
 keys_string_number["return"] = keys_string_number.enter
+]]--
 
 
-function start_listening(on_key_fn)
+function listen_key(on_key)
 	local event, key_num = os.pullEvent("key")
-	on_key_fn(get_name(key_num), key_num)
+	on_key(get_name(key_num), key_num)
 end
 
 
 function get_name(key_num)
 	return keys_number_string[key_num + 1]
+end
+
+
+function listen_char(on_char)
+	local event, char = os.pullEvent("char")
+	on_char(char, string.byte(char))
 end

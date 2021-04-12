@@ -5,31 +5,49 @@ local cfg_path = fs.combine(apis, "backwards_os_cfg")
 local fake_width, height = term.getSize()
 local width = fake_width - 1
 
+local typing_start_x = 3
+--local typing_start_y = 1
+local typed = ""
+local running_program = false
+
 
 function premain()
 	parallel.waitForAny(
-		files_updated_listening,
-		keys_start_listening,
+		listen_file_update,
+		listen_key,
+		listen_char,
 		main
 	)
 end
 
 
-function files_updated_listening()
+function listen_file_update()
 	while true do
-		if long_poll.listen("file_change") == "true" then os.reboot() end
+		if long_poll.listen("file_change") == "true" then
+			os.reboot()
+		end
 	end
 end
 
 
-function keys_start_listening()
+function listen_key()
 	while true do
-		keys.start_listening(on_key_actions)
+		keyboard.listen_key(on_key)
+	end
+end
+
+
+function listen_char()
+	while true do
+		keyboard.listen_char(on_char)
 	end
 end
 
 
 function main()
+	write("> ")
+	term.setCursorBlink(true)
+	
 	--[[
 	write(string.rep("a", 25) .. "\n\n\n")
 	--write(string.rep("a", 25))
@@ -71,43 +89,92 @@ function main()
 end
 
 
-function on_key_actions(key_string, key_num)
-	--print(key_string .. ", " .. key_num)
-	--server.print(key_string)
-	--server.print(key_num)
-	
-	if key_string == "r" then
+function on_key(key, key_num)
+	if key == "r" then
 		os.reboot()
 	end
 	
-	if key_string == "t" then
+	if key == "t" then
+		sleep(0.05) -- So the "t" isn't printed.
 		error("Terminated")
 	end
 	
-	if key_string == "a" then
-		print("a")
-	end
-	
-	if key_string == "b" then
-		print("b")
-	end
-	
 	-- Function of synced/apis/subterm.lua
-	if key_string == "pageUp" then
+	if key == "pageUp" then
 		subterm.scroll_up(1)
 		--server.print("typed pageUp")
 	end
 	
-	if key_string == "pageDown" then
+	if key == "pageDown" then
 		subterm.scroll_down(1)
 		--server.print("typed pageDown")
+	end
+	
+	if key == "enter" then
+		write("\n")
+		
+		running_program = true
+		shell.run(typed)
+		running_program = false
+		
+		write("> ")
+		
+		local x, y = term.getCursorPos()
+		typing_start_x = x
+		--typing_start_y = y
+		
+		typed = ""
+	end
+	
+	if key == "backspace" or key == "delete" then
+		if #typed > 0 then
+			local cursor_x, cursor_y = term.getCursorPos()
+			local typed_cursor_index = cursor_x - typing_start_x
+			--local y = 
+			
+			if key == "backspace" then
+				-- TODO: Shifts too much when moving the cursor.
+				local shifted = #typed - typed_cursor_index + 1
+				server.print(shifted)
+				
+				term.setCursorPos(typing_start_x + #typed - 1, cursor_y)
+				term.write(" ")
+				term.setCursorPos(cursor_x - 1, cursor_y)
+				term.write(typed:sub(typed_cursor_index + 1, -1))
+				
+				term.setCursorPos(cursor_x - 1, cursor_y)
+				
+				typed = typed:sub(1, typed_cursor_index - 1) .. typed:sub(typed_cursor_index + 1, -1)
+			elseif key == "delete" then
+			end
+		end
+	end
+	
+	if key == "up" or key == "down" or key == "left" or key == "right" then
+	local x, y = term.getCursorPos()
+	if key == "up" then
+		
+	end
+	if key == "down" then
+		
+	end
+	if key == "left" then
+		term.setCursorPos(x - 1, y)
+	end
+	if key == "right" then
+		term.setCursorPos(x + 1, y)
+	end
 	end
 end
 
 
 
-
-
+function on_char(char, char_num)
+	if not running_program then
+		write(char)
+	end
+	typed = typed .. char
+end
 
 
 --[[
