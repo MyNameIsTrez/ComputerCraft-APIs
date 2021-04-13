@@ -1,0 +1,1833 @@
+Name,Common Name,ID,Data Value,EMC,Obtainable,Lore,Potion Duration,Vanilla,Stack Size,Durability,Microblockable
+Stone,NaN,1,NaN,1,y,NaN,NaN,y,,,y
+Grass Block,NaN,2,NaN,1,y,NaN,NaN,y,,,NaN
+Dirt,NaN,3,NaN,1,y,NaN,NaN,y,,,y
+Cobblestone,NaN,4,NaN,1,y,NaN,NaN,y,,,y
+,,,,,,,,,,,
+Wooden Planks,Oak Planks,5,NaN,8,y,NaN,NaN,y,,,y
+Wooden Planks,Spruce Planks,5,1,8,y,NaN,NaN,y,,,NaN
+Wooden Planks,Birch Planks,5,2,8,y,NaN,NaN,y,,,NaN
+Wooden Planks,Jungle Planks,5,3,8,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Sapling,Oak Sapling,6,NaN,32,y,NaN,NaN,y,,,NaN
+Sapling,Spruce Sapling,6,1,32,y,NaN,NaN,y,,,NaN
+Sapling,Birch Sapling,6,2,32,y,NaN,NaN,y,,,NaN
+Sapling,Jungle Sapling,6,3,32,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Bedrock,NaN,7,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Water Source,NaN,8,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Water Still,NaN,9,NaN,NaN,y,NaN,NaN,y,,,NaN
+Lava Source,NaN,10,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Lava Still,NaN,11,NaN,NaN,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Sand,NaN,12,NaN,1,y,NaN,NaN,y,,,NaN
+Gravel,NaN,13,NaN,4,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Gold Ore,NaN,14,NaN,NaN,y,NaN,NaN,y,,,NaN
+Iron Ore,NaN,15,NaN,NaN,y,NaN,NaN,y,,,NaN
+Coal Ore,NaN,16,NaN,NaN,silk touch,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Wood,Oak Wood,17,NaN,32,y,NaN,NaN,y,,,y
+Wood,Spruce Wood,17,1,32,y,NaN,NaN,y,,,NaN
+Wood,Birch Wood,17,2,32,y,NaN,NaN,y,,,NaN
+Wood,Jungle Wood,17,3,32,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Leaves,Oak Leaves,18,NaN,1,y,NaN,NaN,y,,,NaN
+Leaves,Spruce Leaves,18,1,1,y,NaN,NaN,y,,,NaN
+Leaves,Birch Leaves,18,2,1,y,NaN,NaN,y,,,NaN
+Leaves,Jungle Leaves,18,3,1,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Sponge,NaN,19,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Glass,NaN,20,NaN,1,y,NaN,NaN,y,,,y
+,,,,,,,,,,,
+Lapis Lazuli Ore,NaN,21,NaN,NaN,silk touch,NaN,NaN,y,,,NaN
+Lapis Lazuli Block,NaN,22,NaN,7776,y,NaN,NaN,y,,,y
+,,,,,,,,,,,
+Dispenser,NaN,23,NaN,119,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Sandstone,NaN,24,NaN,4,y,NaN,NaN,y,,,y
+Sandstone,Chiseled Sandstone,24,1,4,y,NaN,NaN,y,,,NaN
+Sandstone,Cut Sandstone,24,2,4,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Note Block,NaN,25,NaN,128,y,NaN,NaN,y,,,NaN
+Powered Track,NaN,27,NaN,2048,y,NaN,NaN,y,,,NaN
+Detector Track,NaN,28,NaN,256,y,NaN,NaN,y,,,NaN
+Sticky Piston,NaN,29,NaN,372,y,NaN,NaN,y,,,NaN
+Cobweb,NaN,30,NaN,12,y,NaN,NaN,y,,,NaN
+Shrub,NaN,31,NaN,1,alchemical tome,NaN,NaN,y,,,NaN
+Grass,NaN,31,1,1,y,NaN,NaN,y,,,NaN
+Fern,NaN,31,2,1,y,NaN,NaN,y,,,NaN
+Dead Bush,NaN,32,NaN,1,y,NaN,NaN,y,,,NaN
+Piston,NaN,33,NaN,348,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Wool,NaN,35,NaN,48,y,NaN,NaN,y,,,y
+Orange Wool,NaN,35,1,48,y,NaN,NaN,y,,,y
+Magenta Wool,NaN,35,2,48,y,NaN,NaN,y,,,y
+Light Blue Wool,NaN,35,3,48,y,NaN,NaN,y,,,y
+Yellow Wool,NaN,35,4,48,y,NaN,NaN,y,,,y
+Lime Wool,NaN,35,5,48,y,NaN,NaN,y,,,y
+Pink Wool,NaN,35,6,48,y,NaN,NaN,y,,,y
+Gray Wool,NaN,35,7,48,y,NaN,NaN,y,,,y
+Light Gray Wool,NaN,35,8,48,y,NaN,NaN,y,,,y
+Cyan Wool,NaN,35,9,48,y,NaN,NaN,y,,,y
+Purple Wool,NaN,35,10,48,y,NaN,NaN,y,,,y
+Blue Wool,NaN,35,11,48,y,NaN,NaN,y,,,y
+Brown Wool,NaN,35,12,48,y,NaN,NaN,y,,,y
+Green Wool,NaN,35,13,48,y,NaN,NaN,y,,,y
+Red Wool,NaN,35,14,48,y,NaN,NaN,y,,,y
+Black Wool,NaN,35,15,48,y,NaN,NaN,y,,,y
+,,,,,,,,,,,
+Flower,Dandelion,37,NaN,16,y,NaN,NaN,y,,,NaN
+Rose,NaN,38,NaN,16,y,NaN,NaN,y,,,NaN
+Mushroom,Brown Mushroom,39,NaN,32,y,NaN,NaN,y,,,NaN
+Mushroom,Red Mushroom,40,NaN,32,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Block of Gold,NaN,41,NaN,18432,y,NaN,NaN,y,,,y
+Block of Iron,NaN,42,NaN,2304,y,NaN,NaN,y,,,y
+,,,,,,,,,,,
+Double Slab,NaN,43,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Double Sandstone Slab,NaN,43,1,NaN,NaN,NaN,NaN,y,,,NaN
+Double Wooden Slab,Double Oak Planks Slab,43,2,NaN,NaN,NaN,NaN,y,,,NaN
+Double Cobblestone Slab,NaN,43,3,NaN,NaN,NaN,NaN,y,,,NaN
+Double Bricks Slab,NaN,43,4,NaN,NaN,NaN,NaN,y,,,NaN
+Double Stone Bricks Slab,NaN,43,5,NaN,NaN,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Stone Slab,NaN,44,NaN,1,y,NaN,NaN,y,,,y
+Sandstone Slab,NaN,44,1,2,y,NaN,NaN,y,,,NaN
+Wooden Slab,NaN,44,2,4,y,NaN,NaN,y,,,NaN
+Cobblestone Slab,NaN,44,3,1,y,NaN,NaN,y,,,NaN
+Bricks Slab,NaN,44,4,32,y,NaN,NaN,y,,,NaN
+Stone Bricks Slab,NaN,44,5,1,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Bricks,NaN,45,NaN,64,y,NaN,NaN,y,,,y
+TNT,NaN,46,NaN,964,y,NaN,NaN,y,,,NaN
+Bookshelf,NaN,47,NaN,336,y,NaN,NaN,y,,,y
+Moss Stone,NaN,48,NaN,145,y,NaN,NaN,y,,,y
+Obsidian,NaN,49,NaN,64,y,NaN,NaN,y,,,y
+Torch,NaN,50,NaN,9,y,NaN,NaN,y,,,NaN
+Fire,NaN,51,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Monster Spawner,NaN,52,50,NaN,NaN,Creeper,NaN,y,,,NaN
+Monster Spawner,NaN,52,51,NaN,NaN,Skeleton,NaN,y,,,NaN
+Monster Spawner,NaN,52,52,NaN,NaN,Spider,NaN,y,,,NaN
+Monster Spawner,NaN,52,53,NaN,NaN,Giant,NaN,y,,,NaN
+Monster Spawner,NaN,52,54,NaN,NaN,Zombie,NaN,y,,,NaN
+Monster Spawner,NaN,52,55,NaN,NaN,Slime,NaN,y,,,NaN
+Monster Spawner,NaN,52,56,NaN,NaN,Ghast,NaN,y,,,NaN
+Monster Spawner,NaN,52,57,NaN,NaN,PigZombie,NaN,y,,,NaN
+Monster Spawner,NaN,52,58,NaN,NaN,Enderman,NaN,y,,,NaN
+Monster Spawner,NaN,52,59,NaN,NaN,CaveSpider,NaN,y,,,NaN
+Monster Spawner,NaN,52,60,NaN,NaN,Silverfish,NaN,y,,,NaN
+Monster Spawner,NaN,52,61,NaN,NaN,Blaze,NaN,y,,,NaN
+Monster Spawner,NaN,52,62,NaN,NaN,LavaSlime,NaN,y,,,NaN
+Monster Spawner,NaN,52,90,NaN,NaN,Pig,NaN,y,,,NaN
+Monster Spawner,NaN,52,91,NaN,NaN,Sheep,NaN,y,,,NaN
+Monster Spawner,NaN,52,92,NaN,NaN,Cow,NaN,y,,,NaN
+Monster Spawner,NaN,52,93,NaN,NaN,Chicken,NaN,y,,,NaN
+Monster Spawner,NaN,52,94,NaN,NaN,Squid,NaN,y,,,NaN
+Monster Spawner,NaN,52,95,NaN,NaN,Wolf,NaN,y,,,NaN
+Monster Spawner,NaN,52,96,NaN,NaN,MushroomCow,NaN,y,,,NaN
+Monster Spawner,NaN,52,97,NaN,NaN,SnowMan,NaN,y,,,NaN
+Monster Spawner,NaN,52,98,NaN,NaN,Ozelot,NaN,y,,,NaN
+Monster Spawner,NaN,52,99,NaN,NaN,VillagerGolem,NaN,y,,,NaN
+Monster Spawner,NaN,52,120,NaN,NaN,Villager,NaN,y,,,NaN
+,,,,,,,,,,,
+Wooden Stairs,NaN,53,NaN,12,y,NaN,NaN,y,,,NaN
+Chest,NaN,54,NaN,64,y,NaN,NaN,y,,,NaN
+Diamond Ore,NaN,56,NaN,NaN,silk touch,NaN,NaN,y,,,NaN
+Block of Diamond,NaN,57,NaN,73728,y,NaN,NaN,y,,,y
+Crafting Table,NaN,58,NaN,32,y,NaN,NaN,y,,,NaN
+Farmland,NaN,60,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Furnace,NaN,61,NaN,8,y,NaN,NaN,y,,,NaN
+Furnace,Lit Furnace,62,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Ladder,NaN,65,NaN,14,y,NaN,NaN,y,,,NaN
+Track,NaN,66,NaN,96,y,NaN,NaN,y,,,NaN
+Stone Stairs,NaN,67,NaN,1,y,NaN,NaN,y,,,NaN
+Lever,NaN,69,NaN,5,y,NaN,NaN,y,,,NaN
+Pressure Plate,Stone Pressure Plate,70,NaN,2,y,NaN,NaN,y,,,NaN
+Pressure Plate,Wooden Pressure Plate,72,NaN,16,y,NaN,NaN,y,,,NaN
+Redstone Ore,NaN,73,NaN,NaN,silk touch,NaN,NaN,y,,,NaN
+Redstone Torch,NaN,76,NaN,68,y,NaN,NaN,y,,,NaN
+Button,Stone Button,77,NaN,2,y,NaN,NaN,y,,,NaN
+Snow,NaN,78,NaN,NaN,NaN,NaN,NaN,y,,,y
+Ice,NaN,79,NaN,1,y,NaN,NaN,y,,,NaN
+Snow,Snow Block,80,NaN,1,y,NaN,NaN,y,,,NaN
+Cactus,NaN,81,NaN,8,y,NaN,NaN,y,,,NaN
+Clay,Clay Block,82,NaN,64,y,NaN,NaN,y,,,y
+Jukebox,NaN,84,NaN,8256,y,NaN,NaN,y,,,NaN
+Fence,Oak Fence,85,NaN,12,y,NaN,NaN,y,,,NaN
+Pumpkin,NaN,86,NaN,144,y,NaN,NaN,y,,,y
+Netherrack,NaN,87,NaN,1,y,NaN,NaN,y,,,y
+Soul Sand,NaN,88,NaN,49,y,NaN,NaN,y,,,y
+Glowstone,NaN,89,NaN,1536,y,NaN,NaN,y,,,NaN
+Portal,Nether Portal,90,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Jack 'o' Lantern,Jack-o'-Lantern,91,NaN,144,y,NaN,NaN,y,,,NaN
+Cake,Cake Block,92,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Locked Chest,NaN,95,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Trapdoor,NaN,96,NaN,24,y,NaN,NaN,y,,,NaN
+Silverfish Stone,NaN,97,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Stone Bricks,NaN,98,NaN,1,y,NaN,NaN,y,,,y
+Stone Bricks,Mossy Stone Bricks,98,1,1,y,NaN,NaN,y,,,NaN
+Stone Bricks,Cracked Stone Bricks,98,2,1,y,NaN,NaN,y,,,NaN
+Stone Bricks,Chiseled Stone Bricks,98,3,1,y,NaN,NaN,y,,,NaN
+Mushroom,Brown Mushroom Block,99,NaN,NaN,y,NaN,NaN,y,,,NaN
+Mushroom,Red Mushroom Block,100,NaN,NaN,y,NaN,NaN,y,,,NaN
+Iron Bars,NaN,101,NaN,96,y,NaN,NaN,y,,,NaN
+Glass Pane,NaN,102,NaN,NaN,y,NaN,NaN,y,,,NaN
+Melon,Melon Block,103,NaN,144,y,NaN,NaN,y,,,NaN
+Vines,NaN,106,NaN,8,y,NaN,NaN,y,,,NaN
+Fence Gate,NaN,107,NaN,32,y,NaN,NaN,y,,,NaN
+Brick Stairs,NaN,108,NaN,96,y,NaN,NaN,y,,,NaN
+Stone Brick Stairs,Stone Brick Stairs,109,NaN,1,y,NaN,NaN,y,,,NaN
+Mycelium,NaN,110,NaN,1,y,NaN,NaN,y,,,NaN
+Lily Pad,NaN,111,NaN,16,y,NaN,NaN,y,,,NaN
+Nether Brick,Nether Bricks,112,NaN,4,y,NaN,NaN,y,,,y
+Nether Brick Fence,NaN,113,NaN,4,y,NaN,NaN,y,,,NaN
+Nether Brick Stairs,NaN,114,NaN,6,y,NaN,NaN,y,,,NaN
+Nether Wart,NaN,115,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Enchantment Table,NaN,116,NaN,16736,y,NaN,NaN,y,,,NaN
+Unnamed,Brewing Stand Tile,117,NaN,1539,alchemical tome,NaN,NaN,y,,,NaN
+End Portal,NaN,119,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+End Portal Frame,NaN,120,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+White Stone,NaN,121,NaN,1,y,NaN,NaN,y,,,NaN
+End Stone,NaN,121,1,1,NaN,NaN,NaN,y,,,NaN
+Dragon Egg,NaN,122,NaN,139264,y,NaN,NaN,y,,,NaN
+Redstone Lamp,NaN,123,NaN,1792,y,NaN,NaN,y,,,NaN
+Redstone Lamp,NaN,124,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Energy Collector,NaN,126,NaN,82953,y,NaN,NaN,NaN,,,NaN
+Collector MK2,NaN,126,1,232969,y,NaN,NaN,NaN,,,NaN
+Collector MK3,NaN,126,2,710665,y,NaN,NaN,NaN,,,NaN
+DM Furnace,Dark Matter Furnace,126,3,1114120,y,NaN,NaN,NaN,,,NaN
+RM Furnace,NaN,126,4,2514952,y,NaN,NaN,NaN,,,NaN
+Anti-Matter Relay,NaN,126,5,74177,y,NaN,NaN,NaN,,,NaN
+Relay MK2,NaN,126,6,213889,y,NaN,NaN,NaN,,,NaN
+Relay MK3,NaN,126,7,681281,y,NaN,NaN,NaN,,,NaN
+DM Block,Dark Matter Block,126,8,139264,y,NaN,NaN,NaN,,,NaN
+RM Block,NaN,126,9,466944,y,NaN,NaN,NaN,,,NaN
+Nova Catalyst,NaN,126,10,1506,y,NaN,NaN,NaN,,,NaN
+Nova Cataclysm,NaN,126,11,4849,y,NaN,NaN,NaN,,,NaN
+DM Pedestal,Dark Matter Pedestal,127,NaN,2564096,y,NaN,NaN,NaN,,,NaN
+Alchemical Chest,NaN,128,NaN,8987,y,NaN,NaN,NaN,,,NaN
+Energy Condenser,NaN,128,1,42011,y,NaN,NaN,NaN,,,NaN
+Interdiction Torch,NaN,129,NaN,12932,y,NaN,NaN,NaN,,,NaN
+Transmutation Tablet,NaN,130,NaN,260,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Backplane,NaN,133,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+8K RAM Module,NaN,133,1,NaN,y,NaN,NaN,NaN,,,NaN
+Monitor,NaN,134,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Central Processing Unit,NaN,134,1,NaN,y,NaN,NaN,NaN,,,NaN
+Disk Drive,NaN,134,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Nether Coal,Nether Coal Ore,135,NaN,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Diamond,Nether Diamond Ore,135,1,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Gold Ore,NaN,135,2,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Iron Ore,NaN,135,3,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Lapis Lazuli,Nether Lapis Lazuli Ore,135,4,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Redstone Ore,NaN,135,5,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Copper Ore,NaN,135,6,NaN,NaN,NaN,NaN,NaN,,,NaN
+Nether Tin Ore,NaN,135,7,NaN,NaN,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Cobblestone Cover,NaN,136,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Cover,NaN,136,1,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Plank Cover,Oak Plank Cover,136,2,NaN,y,NaN,NaN,NaN,,,NaN
+Sandstone Cover,NaN,136,3,NaN,y,NaN,NaN,NaN,,,NaN
+Moss Stone Cover,NaN,136,4,NaN,y,NaN,NaN,NaN,,,NaN
+Bricks Cover,NaN,136,5,NaN,y,NaN,NaN,NaN,,,NaN
+Obsidian Cover,NaN,136,6,NaN,y,NaN,NaN,NaN,,,NaN
+Glass Cover,NaN,136,7,NaN,y,NaN,NaN,NaN,,,NaN
+Dirt Cover,NaN,136,8,NaN,y,NaN,NaN,NaN,,,NaN
+Clay Cover,NaN,136,9,NaN,y,NaN,NaN,NaN,,,NaN
+Bookshelf Cover,NaN,136,10,NaN,y,NaN,NaN,NaN,,,NaN
+Netherrack Cover,NaN,136,11,NaN,y,NaN,NaN,NaN,,,NaN
+Wood Cover,Oak Wood Cover,136,12,NaN,y,NaN,NaN,NaN,,,NaN
+Soul Sand Cover,NaN,136,15,NaN,y,NaN,NaN,NaN,,,NaN
+Polished Stone Cover,NaN,136,16,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Cover,NaN,136,17,NaN,y,NaN,NaN,NaN,,,NaN
+Gold Cover,NaN,136,18,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Cover,NaN,136,19,NaN,y,NaN,NaN,NaN,,,NaN
+Lapis Lazuli Cover,NaN,136,20,NaN,y,NaN,NaN,NaN,,,NaN
+Snow Cover,NaN,136,21,NaN,y,NaN,NaN,NaN,,,NaN
+Pumpkin Cover,NaN,136,22,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Brick Cover,NaN,136,23,NaN,y,NaN,NaN,NaN,,,NaN
+Nether Brick Cover,NaN,136,26,NaN,y,NaN,NaN,NaN,,,NaN
+White Wool Cover,NaN,136,32,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Wool Cover,NaN,136,33,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Wool Cover,NaN,136,34,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Wool Cover,NaN,136,35,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Wool Cover,NaN,136,36,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Wool Cover,NaN,136,37,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Wool Cover,NaN,136,38,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Wool Cover,NaN,136,39,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Wool Cover,NaN,136,40,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Wool Cover,NaN,136,41,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Wool Cover,NaN,136,42,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Wool Cover,NaN,136,43,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Wool Cover,NaN,136,44,NaN,y,NaN,NaN,NaN,,,NaN
+Green Wool Cover,NaN,136,45,NaN,y,NaN,NaN,NaN,,,NaN
+Red Wool Cover,NaN,136,46,NaN,y,NaN,NaN,NaN,,,NaN
+Black Wool Cover,NaN,136,47,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Cover,NaN,136,48,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Cover,NaN,136,49,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Brick Cover,NaN,136,50,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Cobblestone Cover,NaN,136,51,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Brick Cover,NaN,136,52,NaN,y,NaN,NaN,NaN,,,NaN
+Rubberwood Cover,NaN,136,53,NaN,y,NaN,NaN,NaN,,,NaN
+Ruby Block Cover,NaN,136,54,NaN,y,NaN,NaN,NaN,,,NaN
+Emerald Block Cover,NaN,136,55,NaN,y,NaN,NaN,NaN,,,NaN
+Sapphire Block Cover,NaN,136,56,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Red Alloy Wire,NaN,136,256,NaN,y,NaN,NaN,NaN,,,NaN
+White Insulated Wire,NaN,136,512,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Insulated Wire,NaN,136,513,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Insulated Wire,NaN,136,514,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Insulated Wire,NaN,136,515,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Insulated Wire,NaN,136,516,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Insulated Wire,NaN,136,517,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Insulated Wire,NaN,136,518,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Insulated Wire,NaN,136,519,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Insulated Wire,NaN,136,520,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Insulated Wire,NaN,136,521,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Insulated Wire,NaN,136,522,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Insulated Wire,NaN,136,523,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Insulated Wire,NaN,136,524,NaN,y,NaN,NaN,NaN,,,NaN
+Green Insulated Wire,NaN,136,525,NaN,y,NaN,NaN,NaN,,,NaN
+Red Insulated Wire,NaN,136,526,NaN,y,NaN,NaN,NaN,,,NaN
+Black Insulated Wire,NaN,136,527,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Bundled Cable,NaN,136,768,NaN,y,NaN,NaN,NaN,,,NaN
+White Bundled Cable,NaN,136,769,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Bundled Cable,NaN,136,770,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Bundled Cable,NaN,136,771,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Bundled Cable,NaN,136,772,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Bundled Cable,NaN,136,773,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Bundled Cable,NaN,136,774,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Bundled Cable,NaN,136,775,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Bundled Cable,NaN,136,776,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Bundled Cable,NaN,136,777,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Bundled Cable,NaN,136,778,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Bundled Cable,NaN,136,779,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Bundled Cable,NaN,136,780,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Bundled Cable,NaN,136,781,NaN,y,NaN,NaN,NaN,,,NaN
+Green Bundled Cable,NaN,136,782,NaN,y,NaN,NaN,NaN,,,NaN
+Red Bundled Cable,NaN,136,783,NaN,y,NaN,NaN,NaN,,,NaN
+Black Bundled Cable,NaN,136,784,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blue Alloy Wire,NaN,136,1280,NaN,y,NaN,NaN,NaN,,,NaN
+Fluid Pipe,NaN,136,1792,NaN,y,NaN,NaN,NaN,,,NaN
+Pneumatic Tube,NaN,136,2048,NaN,y,NaN,NaN,NaN,,,NaN
+Redstone Tube,NaN,136,2304,NaN,y,NaN,NaN,NaN,,,NaN
+Restriction Tube,NaN,136,2560,NaN,y,NaN,NaN,NaN,,,NaN
+Magtube,NaN,136,2816,NaN,y,NaN,NaN,NaN,,,NaN
+Ribbon Cable,NaN,136,3072,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+Cobblestone Jacketed Wire,NaN,136,16384,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Jacketed Wire,NaN,136,16385,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Plank Jacketed Wire,Oak Plank Jacketed Wire,136,16386,NaN,y,NaN,NaN,NaN,,,NaN
+Sandstone Jacketed Wire,NaN,136,16387,NaN,y,NaN,NaN,NaN,,,NaN
+Moss Stone Jacketed Wire,NaN,136,16388,NaN,y,NaN,NaN,NaN,,,NaN
+Brick Jacketed Wire,NaN,136,16389,NaN,y,NaN,NaN,NaN,,,NaN
+Obsidian Jacketed Wire,NaN,136,16390,NaN,y,NaN,NaN,NaN,,,NaN
+Dirt Jacketed Wire,NaN,136,16392,NaN,y,NaN,NaN,NaN,,,NaN
+Clay Jacketed Wire,NaN,136,16393,NaN,y,NaN,NaN,NaN,,,NaN
+Bookshelf Jacketed wire,NaN,136,16394,NaN,y,NaN,NaN,NaN,,,NaN
+Netherrack Jacketed Wire,NaN,136,16395,NaN,y,NaN,NaN,NaN,,,NaN
+Wood Jacketed Wire,Oak Wood Jacketed Wire,136,16396,NaN,y,NaN,NaN,NaN,,,NaN
+Soul Sand Jacketed Wire,NaN,136,16399,NaN,y,NaN,NaN,NaN,,,NaN
+Polished Stone Jacketed Wire,NaN,136,16400,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Jacketed Wire,NaN,136,16401,NaN,y,NaN,NaN,NaN,,,NaN
+Gold Jacketed Wire,NaN,136,16402,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Jacketed Wire,NaN,136,16403,NaN,y,NaN,NaN,NaN,,,NaN
+Lapis Lazuli Jacketed Wire,NaN,136,16404,NaN,y,NaN,NaN,NaN,,,NaN
+Snow Jacketed Wire,NaN,136,16405,NaN,y,NaN,NaN,NaN,,,NaN
+Pumpkin Jacketed Wire,NaN,136,16406,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Brick Jacketed Wire,NaN,136,16407,NaN,y,NaN,NaN,NaN,,,NaN
+Nether Brick Jacketed Wire,NaN,136,16410,NaN,y,NaN,NaN,NaN,,,NaN
+White Wool Jacketed Wire,NaN,136,16416,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Wool Jacketed Wire,NaN,136,16417,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Wool Jacketed Wire,NaN,136,16418,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Wool Jacketed Wire,NaN,136,16419,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Wool Jacketed Wire,NaN,136,16420,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Wool Jacketed Wire,NaN,136,16421,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Wool Jacketed Wire,NaN,136,16422,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Wool Jacketed Wire,NaN,136,16423,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Wool Jacketed Wire,NaN,136,16424,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Wool Jacketed Wire,NaN,136,16425,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Wool Jacketed Wire,NaN,136,16426,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Wool Jacketed Wire,NaN,136,16427,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Wool Jacketed Wire,NaN,136,16428,NaN,y,NaN,NaN,NaN,,,NaN
+Green Wool Jacketed Wire,NaN,136,16429,NaN,y,NaN,NaN,NaN,,,NaN
+Red Wool Jacketed Wire,NaN,136,16430,NaN,y,NaN,NaN,NaN,,,NaN
+Black Wool Jacketed Wire,NaN,136,16431,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Jacketed Wire,NaN,136,16432,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Jacketed Wire,NaN,136,16433,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Brick Jacketed Wire,NaN,136,16434,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Cobblestone Jacketed Wire,NaN,136,16435,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Brick Jacketed Wire,NaN,136,16436,NaN,y,NaN,NaN,NaN,,,NaN
+Rubberwood Jacketed Wire,NaN,136,16437,NaN,y,NaN,NaN,NaN,,,NaN
+Ruby Block Jacketed Wire,NaN,136,16438,NaN,y,NaN,NaN,NaN,,,NaN
+Emerald Block Jacketed Wire,NaN,136,16439,NaN,y,NaN,NaN,NaN,,,NaN
+Sapphire Block Jacketed Wire,NaN,136,16440,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Cobblestone Jacketed Cable,NaN,136,16640,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Jacketed Cable,NaN,136,16641,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Plank Jacketed Cable,Oak Plank Jacketed Cable,136,16642,NaN,y,NaN,NaN,NaN,,,NaN
+Sandstone Jacketed Cable,NaN,136,16643,NaN,y,NaN,NaN,NaN,,,NaN
+Moss Stone Jacketed Cable,NaN,136,16644,NaN,y,NaN,NaN,NaN,,,NaN
+Brick Jacketed Cable,NaN,136,16645,NaN,y,NaN,NaN,NaN,,,NaN
+Obsidian Jacketed Cable,NaN,136,16646,NaN,y,NaN,NaN,NaN,,,NaN
+Dirt Jacketed Cable,NaN,136,16648,NaN,y,NaN,NaN,NaN,,,NaN
+Clay Jacketed Cable,NaN,136,16649,NaN,y,NaN,NaN,NaN,,,NaN
+Bookshelf Jacketed Cable,NaN,136,16650,NaN,y,NaN,NaN,NaN,,,NaN
+Netherrack Jacketed Cable,NaN,136,16651,NaN,y,NaN,NaN,NaN,,,NaN
+Wood Jacketed Cable,Oak Wood Jacketed Cable,136,16652,NaN,y,NaN,NaN,NaN,,,NaN
+Soul Sand Jacketed Cable,NaN,136,16655,NaN,y,NaN,NaN,NaN,,,NaN
+Polished Stone Jacketed Cable,NaN,136,16656,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Jacketed Cable,NaN,136,16657,NaN,y,NaN,NaN,NaN,,,NaN
+Gold Jacketed Cable,NaN,136,16658,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Jacketed Cable,NaN,136,16659,NaN,y,NaN,NaN,NaN,,,NaN
+Lapis Lazuli Jacketed Cable,NaN,136,16660,NaN,y,NaN,NaN,NaN,,,NaN
+Snow Jacketed Cable,NaN,136,16661,NaN,y,NaN,NaN,NaN,,,NaN
+Pumpkin Jacketed Cable,NaN,136,16662,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Brick Jacketed Cable,NaN,136,16663,NaN,y,NaN,NaN,NaN,,,NaN
+Nether Brick Jacketed Cable,NaN,136,16666,NaN,y,NaN,NaN,NaN,,,NaN
+White Wool Jacketed Cable,NaN,136,16672,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Wool Jacketed Cable,NaN,136,16673,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Wool Jacketed Cable,NaN,136,16674,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Wool Jacketed Cable,NaN,136,16675,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Wool Jacketed Cable,NaN,136,16676,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Wool Jacketed Cable,NaN,136,16677,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Wool Jacketed Cable,NaN,136,16678,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Wool Jacketed Cable,NaN,136,16679,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Wool Jacketed Cable,NaN,136,16680,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Wool Jacketed Cable,NaN,136,16681,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Wool Jacketed Cable,NaN,136,16682,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Wool Jacketed Cable,NaN,136,16683,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Wool Jacketed Cable,NaN,136,16684,NaN,y,NaN,NaN,NaN,,,NaN
+Green Wool Jacketed Cable,NaN,136,16685,NaN,y,NaN,NaN,NaN,,,NaN
+Red Wool Jacketed Cable,NaN,136,16686,NaN,y,NaN,NaN,NaN,,,NaN
+Black Wool Jacketed Cable,NaN,136,16687,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Jacketed Cable,NaN,136,16688,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Jacketed Cable,NaN,136,16689,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Brick Jacketed Cable,NaN,136,16690,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Cobblestone Jacketed Cable,NaN,136,16691,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Brick Jacketed Cable,NaN,136,16692,NaN,y,NaN,NaN,NaN,,,NaN
+Rubberwood Jacketed Cable,NaN,136,16693,NaN,y,NaN,NaN,NaN,,,NaN
+Ruby Block Jacketed Cable,NaN,136,16694,NaN,y,NaN,NaN,NaN,,,NaN
+Emerald Block Jacketed Cable,NaN,136,16695,NaN,y,NaN,NaN,NaN,,,NaN
+Sapphire Block Jacketed Cable,NaN,136,16696,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Cobblestone Jacketed Bluewire,NaN,136,16896,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Jacketed Bluewire,NaN,136,16897,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Plank Jacketed Bluewire,Oak Plank Jacketed Bluewire,136,16898,NaN,y,NaN,NaN,NaN,,,NaN
+Sandstone Jacketed Bluewire,NaN,136,16899,NaN,y,NaN,NaN,NaN,,,NaN
+Moss Stone Jacketed Bluewire,NaN,136,16900,NaN,y,NaN,NaN,NaN,,,NaN
+Brick Jacketed Bluewire,NaN,136,16901,NaN,y,NaN,NaN,NaN,,,NaN
+Obsidian Jacketed Bluewire,NaN,136,16902,NaN,y,NaN,NaN,NaN,,,NaN
+Dirt Jacketed Bluewire,NaN,136,16904,NaN,y,NaN,NaN,NaN,,,NaN
+Clay Jacketed Bluewire,NaN,136,16905,NaN,y,NaN,NaN,NaN,,,NaN
+Bookshelf Jacketed Bluewire,NaN,136,16906,NaN,y,NaN,NaN,NaN,,,NaN
+Netherrack Jacketed Bluewire,NaN,136,16907,NaN,y,NaN,NaN,NaN,,,NaN
+Wood Jacketed Bluewire,Oak Wood Jacketed Bluewire,136,16908,NaN,y,NaN,NaN,NaN,,,NaN
+Soul Sand Jacketed Bluewire,NaN,136,16911,NaN,y,NaN,NaN,NaN,,,NaN
+Polished Stone Jacketed Bluewire,NaN,136,16912,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Jacketed Bluewire,NaN,136,16913,NaN,y,NaN,NaN,NaN,,,NaN
+Gold Jacketed Bluewire,NaN,136,16914,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Jacketed Bluewire,NaN,136,16915,NaN,y,NaN,NaN,NaN,,,NaN
+Lapis Lazuli Jacketed Bluewire,NaN,136,16916,NaN,y,NaN,NaN,NaN,,,NaN
+Snow Jacketed Bluewire,NaN,136,16917,NaN,y,NaN,NaN,NaN,,,NaN
+Pumpkin Jacketed Bluewire,NaN,136,16918,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Brick Jacketed Bluewire,NaN,136,16919,NaN,y,NaN,NaN,NaN,,,NaN
+Nether Brick Jacketed Bluewire,NaN,136,16922,NaN,y,NaN,NaN,NaN,,,NaN
+White Wool Jacketed Bluewire,NaN,136,16928,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Wool Jacketed Bluewire,NaN,136,16929,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Wool Jacketed Bluewire,NaN,136,16930,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Wool Jacketed Bluewire,NaN,136,16931,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Wool Jacketed Bluewire,NaN,136,16932,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Wool Jacketed Bluewire,NaN,136,16933,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Wool Jacketed Bluewire,NaN,136,16934,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Wool Jacketed Bluewire,NaN,136,16935,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Wool Jacketed Bluewire,NaN,136,16936,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Wool Jacketed Bluewire,NaN,136,16937,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Wool Jacketed Bluewire,NaN,136,16938,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Wool Jacketed Bluewire,NaN,136,16939,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Wool Jacketed Bluewire,NaN,136,16940,NaN,y,NaN,NaN,NaN,,,NaN
+Green Wool Jacketed Bluewire,NaN,136,16941,NaN,y,NaN,NaN,NaN,,,NaN
+Red Wool Jacketed Bluewire,NaN,136,16942,NaN,y,NaN,NaN,NaN,,,NaN
+Black Wool Jacketed Bluewire,NaN,136,16943,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Jacketed Bluewire,NaN,136,16944,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Jacketed Bluewire,NaN,136,16945,NaN,y,NaN,NaN,NaN,,,NaN
+Marble Brick Jacketed Bluewire,NaN,136,16946,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Cobblestone Jacketed Bluewire,NaN,136,16947,NaN,y,NaN,NaN,NaN,,,NaN
+Basalt Brick Jacketed Bluewire,NaN,136,16948,NaN,y,NaN,NaN,NaN,,,NaN
+Rubberwood Jacketed Bluewire,NaN,136,16949,NaN,y,NaN,NaN,NaN,,,NaN
+Ruby Block Jacketed Bluewire,NaN,136,16950,NaN,y,NaN,NaN,NaN,,,NaN
+Emerald Block Jacketed Bluewire,NaN,136,16951,NaN,y,NaN,NaN,NaN,,,NaN
+Sapphire Block Jacketed Bluewire,NaN,136,16952,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Alloy Furnace,NaN,137,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blulectric Furnace,NaN,137,1,NaN,y,NaN,NaN,NaN,,,NaN
+Buffer,NaN,137,2,NaN,y,NaN,NaN,NaN,,,NaN
+Project Table,NaN,137,3,NaN,y,NaN,NaN,NaN,,,NaN
+Blulectric Alloy Furnace,NaN,137,4,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Timer,NaN,138,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Sequencer,NaN,138,1,NaN,y,NaN,NaN,NaN,,,NaN
+State Cell,NaN,138,2,NaN,y,NaN,NaN,NaN,,,NaN
+RS Latch,NaN,138,256,NaN,y,NaN,NaN,NaN,,,NaN
+NOR Gate,NaN,138,257,NaN,y,NaN,NaN,NaN,,,NaN
+OR Gate,NaN,138,258,NaN,y,NaN,NaN,NaN,,,NaN
+NAND Gate,NaN,138,259,NaN,y,NaN,NaN,NaN,,,NaN
+And Gate,NaN,138,260,NaN,y,NaN,NaN,NaN,,,NaN
+XNOR Gate,NaN,138,261,NaN,y,NaN,NaN,NaN,,,NaN
+XOR Gate,NaN,138,262,NaN,y,NaN,NaN,NaN,,,NaN
+Pulse Former,NaN,138,263,NaN,y,NaN,NaN,NaN,,,NaN
+Toggle Latch,NaN,138,264,NaN,y,NaN,NaN,NaN,,,NaN
+NOT Gate,NaN,138,265,NaN,y,NaN,NaN,NaN,,,NaN
+Buffer Gate,NaN,138,266,NaN,y,NaN,NaN,NaN,,,NaN
+Multiplexer,NaN,138,267,NaN,y,NaN,NaN,NaN,,,NaN
+Repeater,NaN,138,268,NaN,y,NaN,NaN,NaN,,,NaN
+Synchronizer,NaN,138,269,NaN,y,NaN,NaN,NaN,,,NaN
+Randomizer,NaN,138,270,NaN,y,NaN,NaN,NaN,,,NaN
+Transparent Latch,NaN,138,271,NaN,y,NaN,NaN,NaN,,,NaN
+Light Sensor,NaN,138,272,NaN,y,NaN,NaN,NaN,,,NaN
+Null Cell,NaN,138,512,NaN,y,NaN,NaN,NaN,,,NaN
+Invert Cell,NaN,138,513,NaN,y,NaN,NaN,NaN,,,NaN
+Non-Invert Cell,NaN,138,514,NaN,y,NaN,NaN,NaN,,,NaN
+Counter,NaN,138,768,NaN,y,NaN,NaN,NaN,,,NaN
+Bus Transceiver,NaN,138,1024,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Indigo Flower,NaN,139,NaN,16,y,NaN,NaN,NaN,,,NaN
+Rubber Sapling,RedPower Rubber Sapling,139,1,16,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Ruby Ore,NaN,140,NaN,NaN,silk touch,NaN,NaN,NaN,,,NaN
+Emerald Ore,NaN,140,1,NaN,silk touch,NaN,NaN,NaN,,,NaN
+Sapphire Ore,NaN,140,2,NaN,silk touch,NaN,NaN,NaN,,,NaN
+Silver Ore,NaN,140,3,NaN,y,NaN,NaN,NaN,,,NaN
+Tin Ore,NaN,140,4,NaN,y,NaN,NaN,NaN,,,NaN
+Copper Ore,NaN,140,5,NaN,y,NaN,NaN,NaN,,,NaN
+Tungsten Ore,NaN,140,6,NaN,y,NaN,NaN,NaN,,,NaN
+Nikolite Ore,NaN,140,7,NaN,silk touch,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Leaves,RedPower Rubber Leaves,141,NaN,1,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Marble,NaN,142,NaN,1,y,NaN,NaN,NaN,,,y
+Basalt,NaN,142,1,1,y,NaN,NaN,NaN,,,y
+Marble Brick,Marble Bricks,142,2,1,y,NaN,NaN,NaN,,,y
+Basalt Cobblestone,NaN,142,3,1,y,NaN,NaN,NaN,,,y
+Basalt Brick,Basalt Bricks,142,4,1,y,NaN,NaN,NaN,,,y
+,,,,,,,,,,,
+Rubberwood,NaN,143,NaN,32,y,NaN,NaN,NaN,,,y
+,,,,,,,,,,,
+Ruby Block,NaN,145,NaN,NaN,y,NaN,NaN,NaN,,,y
+Emerald Block,NaN,145,1,NaN,y,NaN,NaN,NaN,,,y
+Sapphire Block,NaN,145,2,NaN,y,NaN,NaN,NaN,,,y
+,,,,,,,,,,,
+White Lamp,NaN,147,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Lamp,NaN,147,1,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Lamp,NaN,147,2,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Lamp,NaN,147,3,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Lamp,NaN,147,4,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Lamp,NaN,147,5,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Lamp,NaN,147,6,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Lamp,NaN,147,7,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Lamp,NaN,147,8,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Lamp,NaN,147,9,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Lamp,NaN,147,10,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Lamp,NaN,147,11,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Lamp,NaN,147,12,NaN,y,NaN,NaN,NaN,,,NaN
+Green Lamp,NaN,147,13,NaN,y,NaN,NaN,NaN,,,NaN
+Red Lamp,NaN,147,14,NaN,y,NaN,NaN,NaN,,,NaN
+Black Lamp,NaN,147,15,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+IO Expander,NaN,148,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Deployer,NaN,150,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Block Breaker,NaN,150,1,NaN,y,NaN,NaN,NaN,,,NaN
+Transposer,NaN,150,2,NaN,y,NaN,NaN,NaN,,,NaN
+Filter,NaN,150,3,NaN,y,NaN,NaN,NaN,,,NaN
+Item Detector,NaN,150,4,NaN,y,NaN,NaN,NaN,,,NaN
+Sorting Machine,NaN,150,5,NaN,y,NaN,NaN,NaN,,,NaN
+Battery Box,NaN,150,6,NaN,y,NaN,NaN,NaN,,,NaN
+Frame Motor,NaN,150,7,NaN,y,NaN,NaN,NaN,,,NaN
+Retriever,NaN,150,8,NaN,y,NaN,NaN,NaN,,,NaN
+Regulator,NaN,150,10,NaN,y,NaN,NaN,NaN,,,NaN
+Thermopile,NaN,150,11,NaN,y,NaN,NaN,NaN,,,NaN
+Igniter,NaN,150,12,NaN,y,NaN,NaN,NaN,,,NaN
+Assembler,NaN,150,13,NaN,y,NaN,NaN,NaN,,,NaN
+Ejector,NaN,150,14,NaN,y,NaN,NaN,NaN,,,NaN
+Relay,NaN,150,15,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Solar Panel,NaN,151,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Pump,NaN,151,1,NaN,y,NaN,NaN,NaN,,,NaN
+Accelerator,NaN,151,2,NaN,y,NaN,NaN,NaN,,,NaN
+Grate,NaN,151,3,NaN,y,NaN,NaN,NaN,,,NaN
+Support Frame,NaN,152,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Quarry,NaN,153,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Land Mark,NaN,154,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Filler,NaN,155,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Builder,NaN,157,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Template Drawing Table,NaN,158,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Frame,NaN,160,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Redstone Engine,NaN,161,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Steam Engine,NaN,161,1,NaN,y,NaN,NaN,NaN,,,NaN
+Combustion Engine,NaN,161,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Oil,NaN,162,NaN,NaN,?,NaN,NaN,NaN,,,NaN
+Oil,NaN,163,NaN,NaN,?,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Pump,NaN,164,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tank,NaN,165,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Refinery,NaN,167,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Automatic Crafting Table,NaN,169,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Mining Pipe,NaN,171,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Mining Well,NaN,174,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wireless Receiver,NaN,177,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Transmitter,NaN,177,256,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Jammer,NaN,177,512,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Ender Chest,NaN,178,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Teleport Tether,NaN,179,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iron Chest,NaN,181,NaN,2112,y,NaN,NaN,NaN,,,NaN
+Gold Chest,NaN,181,1,18496,y,NaN,NaN,NaN,,,NaN
+Diamond Chest,NaN,181,2,34886,y,NaN,NaN,NaN,,,NaN
+Copper Chest,NaN,181,3,744,y,NaN,NaN,NaN,,,NaN
+Silver Chest,NaN,181,4,4840,y,NaN,NaN,NaN,,,NaN
+Crystal Chest,NaN,181,5,34894,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Low Voltage Solar Array,NaN,183,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Medium Voltage Solar Array,NaN,183,1,NaN,y,NaN,NaN,NaN,,,NaN
+High Voltage Solar Array,NaN,183,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Charging Bench Mk1,NaN,187,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Charging Bench Mk2,NaN,187,1,NaN,y,NaN,NaN,NaN,,,NaN
+Charging Bench Mk3,NaN,187,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Rotary Macerator,NaN,188,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Singularity Compressor,NaN,188,1,NaN,y,NaN,NaN,NaN,,,NaN
+Centrifuge Extractor,NaN,188,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Engine Generator (LV),NaN,190,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Engine Generator (MV),NaN,190,1,NaN,y,NaN,NaN,NaN,,,NaN
+Engine Generator (HV),NaN,190,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Oil Fabricator,NaN,190,3,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Link,NaN,190,4,NaN,y,NaN,NaN,NaN,,,NaN
+Lava Fabricator,NaN,190,5,NaN,y,NaN,NaN,NaN,,,NaN
+Geothermal Generator Mk. 2,NaN,190,6,NaN,NaN,NaN,NaN,NaN,,,NaN
+Water Strainer,NaN,190,7,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Thermal Monitor,NaN,192,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Industrial Alarm,NaN,192,1,NaN,y,NaN,NaN,NaN,,,NaN
+Howler Alarm,NaN,192,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Remote Thermal Monitor,NaN,192,3,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Industrial Information Panel,NaN,192,4,NaN,y,NaN,NaN,NaN,,,NaN
+Information Panel Extender,NaN,192,5,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Buffer,NaN,194,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Automatic Crafting Table MkII,NaN,194,1,NaN,y,NaN,NaN,NaN,,,NaN
+Black Hole Chest,NaN,194,2,NaN,NaN,NaN,NaN,NaN,,,NaN
+Incinerator,NaN,194,3,NaN,y,NaN,NaN,NaN,,,NaN
+Duplicator,NaN,194,4,NaN,NaN,NaN,NaN,NaN,,,NaN
+Retrievulator,NaN,194,5,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Boarding Track,NaN,206,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Holding Track,NaN,206,1,NaN,y,NaN,NaN,NaN,,,NaN
+One-Way Track,NaN,206,2,NaN,y,NaN,NaN,NaN,,,NaN
+Control Track,NaN,206,3,NaN,y,NaN,NaN,NaN,,,NaN
+Launcher Track,NaN,206,4,NaN,y,NaN,NaN,NaN,,,NaN
+Priming Track,NaN,206,5,NaN,y,NaN,NaN,NaN,,,NaN
+Junction Track,NaN,206,6,NaN,y,NaN,NaN,NaN,,,NaN
+Switch Track,NaN,206,7,NaN,y,NaN,NaN,NaN,,,NaN
+Disembarking Track,NaN,206,8,NaN,y,NaN,NaN,NaN,,,NaN
+Suspended Track,NaN,206,9,NaN,y,NaN,NaN,NaN,,,NaN
+Gated One-Way Track,NaN,206,10,NaN,y,NaN,NaN,NaN,,,NaN
+Gated Track,NaN,206,11,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Track,NaN,206,12,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Booster Track,NaN,206,13,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Junction Track,NaN,206,14,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Switch Track,NaN,206,15,NaN,y,NaN,NaN,NaN,,,NaN
+H.S. Track,NaN,206,16,NaN,y,NaN,NaN,NaN,,,NaN
+H.S. Booster Track,NaN,206,17,NaN,y,NaN,NaN,NaN,,,NaN
+HS Transition Track,H.S. Transition Track,206,18,NaN,y,NaN,NaN,NaN,,,NaN
+H.S. Switch Track,NaN,206,19,NaN,y,NaN,NaN,NaN,,,NaN
+Train Boarding Track,NaN,206,20,NaN,y,NaN,NaN,NaN,,,NaN
+Train Holding Track,NaN,206,21,NaN,y,NaN,NaN,NaN,,,NaN
+Coupler Track,NaN,206,22,NaN,y,NaN,NaN,NaN,,,NaN
+Decoupler Track,NaN,206,23,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Computer,NaN,207,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Disk Drive,NaN,208,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Modem,NaN,208,1,NaN,y,NaN,NaN,NaN,,,NaN
+Monitor,NaN,208,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Duel-Head Block Signal,Dual-Head Block Signal,209,1,NaN,y,NaN,NaN,NaN,,,NaN
+Switch Motor,NaN,209,2,NaN,y,NaN,NaN,NaN,,,NaN
+Block Signal,NaN,209,3,NaN,y,NaN,NaN,NaN,,,NaN
+Switch Lever,NaN,209,4,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Post,NaN,209,5,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Post,NaN,209,6,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Signal Receiver Box,NaN,209,8,NaN,y,NaN,NaN,NaN,,,NaN
+Signal Controller Box,NaN,209,9,NaN,y,NaN,NaN,NaN,,,NaN
+Distant Signal,NaN,209,10,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Detector - Storage,NaN,211,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Any,NaN,211,1,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Empty,NaN,211,2,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Mob,NaN,211,3,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Powered,NaN,211,4,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Player,NaN,211,5,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Explosive,NaN,211,6,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Animal,NaN,211,7,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Tank,NaN,211,8,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Advanced,NaN,211,9,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Energy,NaN,211,10,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Growth,NaN,211,11,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Train,NaN,211,12,NaN,y,NaN,NaN,NaN,,,NaN
+Detector - Sheep,NaN,211,13,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Elevator Track,NaN,212,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Item Loader,NaN,213,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Item Unloader,NaN,213,1,NaN,y,NaN,NaN,NaN,,,NaN
+Adv. Item Loader,NaN,213,2,NaN,y,NaN,NaN,NaN,,,NaN
+Liquid Loader,NaN,213,3,NaN,y,NaN,NaN,NaN,,,NaN
+Liquid Unloader,NaN,213,4,NaN,y,NaN,NaN,NaN,,,NaN
+Adv. Item Unloader,NaN,213,5,NaN,y,NaN,NaN,NaN,,,NaN
+Cart Dispenser,NaN,213,6,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Coke Oven Brick,NaN,213,7,NaN,y,NaN,NaN,NaN,,,NaN
+Rolling Machine,NaN,213,8,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Loader,NaN,213,9,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Unloader,NaN,213,10,NaN,y,NaN,NaN,NaN,,,NaN
+Feed Station,NaN,213,11,NaN,y,NaN,NaN,NaN,,,NaN
+Blast Furnace Brick,NaN,213,12,NaN,y,NaN,NaN,NaN,,,NaN
+Train Dispenser,NaN,213,13,NaN,y,NaN,NaN,NaN,,,NaN
+Banded Planks,NaN,213,14,NaN,y,NaN,NaN,NaN,,,NaN
+World Anchor,NaN,214,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Block of Concrete,NaN,214,1,NaN,y,NaN,NaN,NaN,,,NaN
+Block of Steel,NaN,214,2,NaN,y,NaN,NaN,NaN,,,NaN
+Infernal Brick,NaN,214,3,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Sensor,NaN,215,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Sensor Controller,NaN,215,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Turtle,NaN,216,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Mining Turtle,NaN,216,1,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Turtle,NaN,216,2,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Mining Turtle,NaN,216,3,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Crop,NaN,218,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Luminator,NaN,219,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Scaffold,NaN,220,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Construction Foam,NaN,222,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Teleporter,NaN,223,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tesla Coil,NaN,223,1,NaN,y,NaN,NaN,NaN,,,NaN
+Crop-Matron,NaN,223,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Copper Block,NaN,224,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tin Block,NaN,224,1,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Block,NaN,224,2,NaN,y,NaN,NaN,NaN,,,NaN
+Uranium Block,NaN,224,3,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Personal Safe,NaN,225,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Trade-O-Mat,NaN,225,1,NaN,y,NaN,NaN,NaN,,,NaN
+Luminator,Luminator (Broken),226,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+BatBox,NaN,227,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+MFE,NaN,227,1,NaN,y,NaN,NaN,NaN,,,NaN
+MFSU,NaN,227,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+LV-Transformer,NaN,227,3,NaN,y,NaN,NaN,NaN,,,NaN
+MV-Transformer,NaN,227,4,NaN,y,NaN,NaN,NaN,,,NaN
+HV-Transformer,NaN,227,5,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Reinforced Glass,NaN,230,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Reinforced Stone,NaN,231,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iron Fence,NaN,232,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Reactor Chamber,NaN,233,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Rubber Sheet,NaN,234,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Scaffold,NaN,235,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Nuke,NaN,237,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Industrial TNT,NaN,239,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Rubber Tree Sapling,IndustrialCraft Rubber Sapling,241,NaN,32,y,NaN,NaN,NaN,,,NaN
+Leaves,IndustrialCraft Rubber Leaves,242,NaN,1,y,NaN,NaN,NaN,,,NaN
+Rubber Wood,IndustrialCraft Rubber Wood,243,NaN,32,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Mining Pipe,Mining Pipe End,244,NaN,NaN,silk touch,NaN,NaN,NaN,,,NaN
+Mining Pipe,Mining Pipe Middle,245,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Generator,NaN,246,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Geothermal Generator,NaN,246,1,NaN,y,NaN,NaN,NaN,,,NaN
+Water Mill,NaN,246,2,NaN,y,NaN,NaN,NaN,,,NaN
+Solar Panel,NaN,246,3,NaN,y,NaN,NaN,NaN,,,NaN
+Wind Mill,NaN,246,4,NaN,y,NaN,NaN,NaN,,,NaN
+Nuclear Reactor,NaN,246,5,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Uranium Ore,NaN,247,NaN,NaN,silk touch,NaN,NaN,NaN,,,NaN
+Tin Ore,NaN,248,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Copper Ore,NaN,249,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Machine Block,NaN,250,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Furnace,NaN,250,1,NaN,y,NaN,NaN,NaN,,,NaN
+Electric Furnace,NaN,250,2,NaN,y,NaN,NaN,NaN,,,NaN
+Macerator,NaN,250,3,NaN,y,NaN,NaN,NaN,,,NaN
+Extractor,NaN,250,4,NaN,y,NaN,NaN,NaN,,,NaN
+Compressor,NaN,250,5,NaN,y,NaN,NaN,NaN,,,NaN
+Canning Machine,NaN,250,6,NaN,y,NaN,NaN,NaN,,,NaN
+Miner,NaN,250,7,NaN,y,NaN,NaN,NaN,,,NaN
+Pump,NaN,250,8,NaN,y,NaN,NaN,NaN,,,NaN
+Magnetizer,NaN,250,9,NaN,y,NaN,NaN,NaN,,,NaN
+Electrolyzer,NaN,250,10,NaN,y,NaN,NaN,NaN,,,NaN
+Recycler,NaN,250,11,NaN,y,NaN,NaN,NaN,,,NaN
+Advanced Machine Block,NaN,250,12,NaN,y,NaN,NaN,NaN,,,NaN
+Induction Furnace,NaN,250,13,NaN,y,NaN,NaN,NaN,,,NaN
+Mass Fabricator,NaN,250,14,NaN,y,NaN,NaN,NaN,,,NaN
+Terraformer,NaN,250,15,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Forcefield core,Forcefield Core,253,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS area projector,MFFS Area Projector,253,1,NaN,y,NaN,NaN,NaN,,,NaN
+Directional forcefield projector,Directional Forcefield Projector,253,2,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS deflector,MFFS Deflector,253,3,NaN,y,NaN,NaN,NaN,,,NaN
+Tube forcefield projector,Tube Forcefield Projector,253,4,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS directional extender,MFFS Directional Extender,253,5,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield EU injector,Forcefield EU Injector,253,6,NaN,y,NaN,NaN,NaN,,,NaN
+Reactor containment field projector,Reactor Containment Field Projector,253,7,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS reactor heat control,MFFS Reactor Heat Control,253,8,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS reactor heat monitor server,MFFS Reactor Heat Monitor Server,253,9,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS reactor heat monitor client,MFFS Reactor Heat Monitor Client,254,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield underwater upgrade,Forcefield Underwater Upgrade,254,1,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield dome upgrade,Forcefield Dome Upgrade,254,2,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield block cutter upgrade,Forcefield Block Cutter Upgrade,254,3,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield core storage upgrade,Forcefield Core Storage Upgrade,254,4,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield core range upgrade,Forcefield Core Range Upgrade,254,5,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield zapper upgrade,Forcefield Zapper Upgrade,254,6,NaN,y,NaN,NaN,NaN,,,NaN
+Forcefield camouflage upgrade,Forcefield Camouflage Upgrade,254,7,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS reactor connector,MFFS Reactor Connector,254,8,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iron Shovel,NaN,256,NaN,264,y,NaN,NaN,y,,,NaN
+Iron Pickaxe,NaN,257,NaN,776,y,NaN,NaN,y,,,NaN
+Iron Axe,NaN,258,NaN,776,y,NaN,NaN,y,,,NaN
+Flint and Steel,NaN,259,NaN,260,y,NaN,NaN,y,,,NaN
+Apple,NaN,260,NaN,128,y,NaN,NaN,y,,,NaN
+Bow,NaN,261,NaN,48,y,NaN,NaN,y,,,NaN
+Arrow,NaN,262,NaN,14,y,NaN,NaN,y,,,NaN
+Coal,NaN,263,NaN,128,y,NaN,NaN,y,,,NaN
+Charcoal,NaN,263,1,32,y,NaN,NaN,y,,,NaN
+Diamond,NaN,264,NaN,8192,y,NaN,NaN,y,,,NaN
+Iron Ingot,NaN,265,NaN,256,y,NaN,NaN,y,,,NaN
+Gold Ingot,NaN,266,NaN,2048,y,NaN,NaN,y,,,NaN
+Iron Sword,NaN,267,NaN,516,y,NaN,NaN,y,,,NaN
+Wooden Sword,NaN,268,NaN,20,y,NaN,NaN,y,,,NaN
+Wooden Shovel,NaN,269,NaN,16,y,NaN,NaN,y,,,NaN
+Wooden Pickaxe,NaN,270,NaN,32,y,NaN,NaN,y,,,NaN
+Wooden Axe,NaN,271,NaN,32,y,NaN,NaN,y,,,NaN
+Stone Sword,NaN,272,NaN,6,y,NaN,NaN,y,,,NaN
+Stone Shovel,NaN,273,NaN,9,y,NaN,NaN,y,,,NaN
+Stone Pickaxe,NaN,274,NaN,11,y,NaN,NaN,y,,,NaN
+Stone Axe,NaN,275,NaN,11,y,NaN,NaN,y,,,NaN
+Diamond Sword,NaN,276,NaN,16388,y,NaN,NaN,y,,,NaN
+Diamond Shovel,NaN,277,NaN,8200,y,NaN,NaN,y,,,NaN
+Diamond Pickaxe,NaN,278,NaN,24584,y,NaN,NaN,y,,,NaN
+Diamond Axe,NaN,279,NaN,24584,y,NaN,NaN,y,,,NaN
+Stick,NaN,280,NaN,4,y,NaN,NaN,y,,,NaN
+Bowl,NaN,281,NaN,6,y,NaN,NaN,y,,,NaN
+Mushroom Stew,NaN,282,NaN,70,y,NaN,NaN,y,,,NaN
+Golden Sword,NaN,283,NaN,4100,y,NaN,NaN,y,,,NaN
+Golden Shovel,NaN,284,NaN,2056,y,NaN,NaN,y,,,NaN
+Golden Pickaxe,NaN,285,NaN,6152,y,NaN,NaN,y,,,NaN
+Golden Axe,NaN,286,NaN,6152,y,NaN,NaN,y,,,NaN
+String,NaN,287,NaN,12,y,NaN,NaN,y,,,NaN
+Feather,NaN,288,NaN,48,y,NaN,NaN,y,,,NaN
+Gunpowder,NaN,289,NaN,192,y,NaN,NaN,y,,,NaN
+Wooden Hoe,NaN,290,NaN,24,y,NaN,NaN,y,,,NaN
+Stone Hoe,NaN,291,NaN,10,y,NaN,NaN,y,,,NaN
+Iron Hoe,NaN,292,NaN,520,y,NaN,NaN,y,,,NaN
+Diamond Hoe,NaN,293,NaN,16392,y,NaN,NaN,y,,,NaN
+Golden Hoe,NaN,294,NaN,4104,y,NaN,NaN,y,,,NaN
+Seeds,NaN,295,NaN,16,y,NaN,NaN,y,,,NaN
+Wheat,NaN,296,NaN,24,y,NaN,NaN,y,,,NaN
+Bread,NaN,297,NaN,72,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Leather Cap,Leather Helmet,298,NaN,320,y,NaN,NaN,y,,,NaN
+Leather Tunic,Leather Chestplate,299,NaN,512,y,NaN,NaN,y,,,NaN
+Leather Pants,Leather Leggings,300,NaN,448,y,NaN,NaN,y,,,NaN
+Leather Boots,NaN,301,NaN,256,y,NaN,NaN,y,,,NaN
+Chain Helmet,NaN,302,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Chain Chestplate,NaN,303,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Chain Leggings,NaN,304,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Chain Boots,NaN,305,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Iron Helmet,NaN,306,NaN,1280,y,NaN,NaN,y,,,NaN
+Iron Chestplate,NaN,307,NaN,2048,y,NaN,NaN,y,,,NaN
+Iron Leggins,NaN,308,NaN,1792,y,NaN,NaN,y,,,NaN
+Iron Boots,NaN,309,NaN,1024,y,NaN,NaN,y,,,NaN
+Diamond Helmet,NaN,310,NaN,40960,y,NaN,NaN,y,,,NaN
+Diamond Chestplate,NaN,311,NaN,65536,y,NaN,NaN,y,,,NaN
+Diamond Leggings,NaN,312,NaN,57344,y,NaN,NaN,y,,,NaN
+Diamond Boots,NaN,313,NaN,32768,y,NaN,NaN,y,,,NaN
+Golden Helmet,NaN,314,NaN,10240,y,NaN,NaN,y,,,NaN
+Golden Chestplate,NaN,315,NaN,16384,y,NaN,NaN,y,,,NaN
+Golden Leggings,NaN,316,NaN,14336,y,NaN,NaN,y,,,NaN
+Golden Boots,NaN,317,NaN,8192,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Flint,NaN,318,NaN,4,y,NaN,NaN,y,,,NaN
+Raw Porkchop,NaN,319,NaN,64,y,NaN,NaN,y,,,NaN
+Cooked Porkchop,NaN,320,NaN,64,y,NaN,NaN,y,,,NaN
+Painting,NaN,321,NaN,80,y,NaN,NaN,y,,,NaN
+Golden Apple,NaN,322,NaN,1944,y,NaN,NaN,y,,,NaN
+Sign,NaN,323,NaN,52,y,NaN,NaN,y,,,NaN
+Wooden Door,NaN,324,NaN,48,y,NaN,NaN,y,,,NaN
+Bucket,NaN,325,NaN,768,y,NaN,NaN,y,,,NaN
+Water Bucket,NaN,326,NaN,769,y,NaN,NaN,y,,,NaN
+Lava Bucket,NaN,327,NaN,832,y,NaN,NaN,y,,,NaN
+Minecart,NaN,328,NaN,1280,y,NaN,NaN,y,,,NaN
+Saddle,NaN,329,NaN,192,y,NaN,NaN,y,,,NaN
+Iron Door,NaN,330,NaN,1536,y,NaN,NaN,y,,,NaN
+Redstone,Redstone Dust,331,NaN,64,y,NaN,NaN,y,,,NaN
+Snowball,NaN,332,NaN,NaN,y,NaN,NaN,y,,,NaN
+Boat,NaN,333,NaN,40,y,NaN,NaN,y,,,NaN
+Leather,NaN,334,NaN,64,y,NaN,NaN,y,,,NaN
+Milk,Milk Bucket,335,NaN,849,y,NaN,NaN,y,,,NaN
+Brick,NaN,336,NaN,16,y,NaN,NaN,y,,,NaN
+Clay,Clay Ball,337,NaN,16,y,NaN,NaN,y,,,NaN
+Sugar Canes,Sugar Cane,338,NaN,32,y,NaN,NaN,y,,,NaN
+Paper,NaN,339,NaN,32,y,NaN,NaN,y,,,NaN
+Book,NaN,340,NaN,96,y,NaN,NaN,y,,,NaN
+Slimeball,Slime Ball,341,NaN,24,y,NaN,NaN,y,,,NaN
+Chest Cart,NaN,342,NaN,1344,y,NaN,NaN,y,,,NaN
+Furnace Cart,NaN,343,NaN,1288,y,NaN,NaN,y,,,NaN
+Egg,NaN,344,NaN,32,y,NaN,NaN,y,,,NaN
+Compass,NaN,345,NaN,1088,y,NaN,NaN,y,,,NaN
+Fishing Rod,NaN,346,NaN,12,y,NaN,NaN,y,,,NaN
+Clock,NaN,347,NaN,8256,y,NaN,NaN,y,,,NaN
+Glowstone Dust,NaN,348,NaN,384,y,NaN,NaN,y,,,NaN
+Raw Fish,NaN,349,NaN,64,y,NaN,NaN,y,,,NaN
+Cooked Fish,NaN,350,NaN,64,y,NaN,NaN,y,,,NaN
+Ink Sac,NaN,351,NaN,8,y,NaN,NaN,y,,,NaN
+Rose Red,NaN,351,1,8,y,NaN,NaN,y,,,NaN
+Cactus Green,NaN,351,2,8,y,NaN,NaN,y,,,NaN
+Cocoa Beans,NaN,351,3,128,y,NaN,NaN,y,,,NaN
+Lapis Lazuli,NaN,351,4,864,y,NaN,NaN,y,,,NaN
+Purple Dye,NaN,351,5,8,y,NaN,NaN,y,,,NaN
+Cyan Dye,NaN,351,6,8,y,NaN,NaN,y,,,NaN
+Light Gray Dye,NaN,351,7,8,y,NaN,NaN,y,,,NaN
+Gray Dye,NaN,351,8,8,y,NaN,NaN,y,,,NaN
+Pink Dye,NaN,351,9,8,y,NaN,NaN,y,,,NaN
+Lime Dye,NaN,351,10,8,y,NaN,NaN,y,,,NaN
+Dandelion Yellow,NaN,351,11,8,y,NaN,NaN,y,,,NaN
+Light Blue Dye,NaN,351,12,8,y,NaN,NaN,y,,,NaN
+Magenta Dye,NaN,351,13,8,y,NaN,NaN,y,,,NaN
+Orange Dye,NaN,351,14,8,y,NaN,NaN,y,,,NaN
+Bone Meal,NaN,351,15,48,y,NaN,NaN,y,,,NaN
+Bone,NaN,352,NaN,144,y,NaN,NaN,y,,,NaN
+Sugar,NaN,353,NaN,32,y,NaN,NaN,y,,,NaN
+Cake,NaN,354,NaN,411,y,NaN,NaN,y,,,NaN
+Bed,NaN,355,NaN,144,y,NaN,NaN,y,,,NaN
+Redstone Repeater,NaN,356,NaN,203,y,NaN,NaN,y,,,NaN
+Cookie,NaN,357,NaN,22,y,NaN,NaN,y,,,NaN
+Map,NaN,358,NaN,1344,y,NaN,NaN,y,,,NaN
+Shears,NaN,359,NaN,512,y,NaN,NaN,y,,,NaN
+Melon,NaN,360,NaN,16,y,NaN,NaN,y,,,NaN
+Pumpkin Seeds,NaN,361,NaN,36,y,NaN,NaN,y,,,NaN
+Melon Seeds,NaN,362,NaN,16,y,NaN,NaN,y,,,NaN
+Raw Beef,NaN,363,NaN,64,y,NaN,NaN,y,,,NaN
+Steak,NaN,364,NaN,64,y,NaN,NaN,y,,,NaN
+Raw Chicken,NaN,365,NaN,64,y,NaN,NaN,y,,,NaN
+Cooked Chicken,NaN,366,NaN,64,y,NaN,NaN,y,,,NaN
+Rotten Flesh,NaN,367,NaN,24,y,NaN,NaN,y,,,NaN
+Ender Pearl,NaN,368,NaN,1024,y,NaN,NaN,y,,,NaN
+Blaze Rod,NaN,369,NaN,1536,y,NaN,NaN,y,,,NaN
+Ghast Tear,NaN,370,NaN,4096,y,NaN,NaN,y,,,NaN
+Gold Nugget,NaN,371,NaN,227,y,NaN,NaN,y,,,NaN
+Nether Wart,NaN,372,NaN,24,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Water Bottle,NaN,373,NaN,NaN,y,NaN,NaN,y,,,NaN
+Awkward Potion,NaN,373,16,NaN,y,No Effects,NaN,y,,,NaN
+Thick Potion,NaN,373,32,NaN,y,No Effects,NaN,y,,,NaN
+Mundane Potion,NaN,373,64,NaN,y,No Effects,NaN,y,,,NaN
+,,,,,,,,,,,
+Potion of Regeneration,NaN,373,8193,NaN,y,Regeneration (0:45),45,y,,,NaN
+Potion of Swiftness,NaN,373,8194,NaN,y,Speed (3:00),180,y,,,NaN
+Potion of Fire Resistance,NaN,373,8195,NaN,y,Fire Resistance (3:00),180,y,,,NaN
+Potion of Poison,NaN,373,8196,NaN,y,Poison (0:45),45,y,,,NaN
+Potion of Healing,NaN,373,8197,NaN,y,Instant Health,NaN,y,,,NaN
+Potion of Weakness,NaN,373,8200,NaN,y,Weakness (1:30),90,y,,,NaN
+Potion of Strength,NaN,373,8201,NaN,y,Strength (3:00),180,y,,,NaN
+Potion of Slowness,NaN,373,8202,NaN,y,Slowness (1:30),90,y,,,NaN
+Potion of Harming,NaN,373,8204,NaN,y,Instant Damage,NaN,y,,,NaN
+,,,,,,,,,,,
+Potion of Regeneration,NaN,373,8225,NaN,y,Regeneration II (0:22),22,y,,,NaN
+Potion of Swiftness,NaN,373,8226,NaN,y,Speed II (1:30),90,y,,,NaN
+Potion of Poison,NaN,373,8228,NaN,y,Poison II (0:22),22,y,,,NaN
+Potion of Healing,NaN,373,8229,NaN,y,Instant Health II,NaN,y,,,NaN
+Potion of Strength,NaN,373,8233,NaN,y,Strength II (1:30),90,y,,,NaN
+Potion of Harming,NaN,373,8236,NaN,y,Instant Damage II,NaN,y,,,NaN
+,,,,,,,,,,,
+Potion of Regeneration,NaN,373,8257,NaN,y,Regeneration (2:00),120,y,,,NaN
+Potion of Swiftness,NaN,373,8258,NaN,y,Speed (8:00),480,y,,,NaN
+Potion of Fire Resistance,NaN,373,8259,NaN,y,Fire Resistance (8:00),480,y,,,NaN
+Potion of Poison,NaN,373,8260,NaN,y,Poison (2:00),120,y,,,NaN
+Potion of Weakness,NaN,373,8264,NaN,y,Weaknes (4:00),240,y,,,NaN
+Potion of Strength,NaN,373,8265,NaN,y,Strength (8:00),480,y,,,NaN
+Potion of Slowness,NaN,373,8266,NaN,y,Slowness (4:00),240,y,,,NaN
+,,,,,,,,,,,
+Mundane Potion,Splash Mundane Potion,373,16384,NaN,y,No Effects,NaN,y,,,NaN
+,,,,,,,,,,,
+Splash Potion of Regeneration,NaN,373,16385,NaN,y,Regeneration (0:33),33,y,,,NaN
+Splash Potion of Swiftness,NaN,373,16386,NaN,y,Speed (2:15),135,y,,,NaN
+Splash Potion of Fire Resistance,NaN,373,16387,NaN,y,Fire Resistance (2:15),135,y,,,NaN
+Splash Potion of Poison,NaN,373,16388,NaN,y,Poison (0:33),33,y,,,NaN
+Splash Potion of Healing,NaN,373,16389,NaN,y,Instant Health,NaN,y,,,NaN
+Splash Potion of Weakness,NaN,373,16392,NaN,y,Weakness (1:07),67,y,,,NaN
+Splash Potion of Strength,NaN,373,16393,NaN,y,Strength (2:15),135,y,,,NaN
+Splash Potion of Slowness,NaN,373,16394,NaN,y,Slowness (1:07),67,y,,,NaN
+Splash Potion of Harming,NaN,373,16396,NaN,y,Instant Damage,NaN,y,,,NaN
+,,,,,,,,,,,
+Splash Potion of Regeneration,NaN,373,16417,NaN,y,Regeneration II (0:16),16,y,,,NaN
+Splash Potion of Swiftness,NaN,373,16418,NaN,y,Speed II (1:07),67,y,,,NaN
+Splash Potion of Poison,NaN,373,16420,NaN,y,Poison II (0:16),16,y,,,NaN
+Splash Potion of Healing,NaN,373,16421,NaN,y,Instant Health II,NaN,y,,,NaN
+Splash Potion of Strength,NaN,373,16425,NaN,y,Strength II (1:07),67,y,,,NaN
+Splash Potion of Harming,NaN,373,16428,NaN,y,Instant Damage II,NaN,y,,,NaN
+,,,,,,,,,,,
+Splash Potion of Regeneration,NaN,373,16449,NaN,y,Regeneration (1:30),90,y,,,NaN
+Splash Potion of Swiftness,NaN,373,16450,NaN,y,Speed (6:00),360,y,,,NaN
+Splash Potion of Fire Resistance,NaN,373,16451,NaN,y,Fire Resistance (6:00),360,y,,,NaN
+Splash Potion of Poison,NaN,373,16452,NaN,y,Poison (1:30),90,y,,,NaN
+Splash Potion of Weakness,NaN,373,16456,NaN,y,Weakness (3:00),180,y,,,NaN
+Splash Potion of Strength,NaN,373,16457,NaN,y,Strength (6:00),360,y,,,NaN
+Splash Potion of Slowness,NaN,373,16458,NaN,y,Slowness (3:00),180,y,,,NaN
+,,,,,,,,,,,
+Glass Bottle,NaN,374,NaN,1,y,NaN,NaN,y,,,NaN
+Spider Eye,NaN,375,NaN,128,y,NaN,NaN,y,,,NaN
+Fermented Spider Eye,NaN,376,NaN,192,y,NaN,NaN,y,,,NaN
+Blaze Powder,NaN,377,NaN,768,y,NaN,NaN,y,,,NaN
+Magma Cream,NaN,378,NaN,792,y,NaN,NaN,y,,,NaN
+Brewing Stand,NaN,379,NaN,NaN,y,NaN,NaN,y,,,NaN
+Cauldron,NaN,380,NaN,NaN,y,NaN,NaN,y,,,NaN
+Eye of Ender,NaN,381,NaN,1792,y,NaN,NaN,y,,,NaN
+Glistering Melon,NaN,382,NaN,243,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Spawn Creeper,NaN,383,50,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Skeleton,NaN,383,51,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Spider,NaN,383,52,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Zombie,NaN,383,54,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Slime,NaN,383,55,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Ghast,NaN,383,56,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Zombie Pigman,NaN,383,57,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Enderman,NaN,383,58,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Cave Spider,NaN,383,59,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Silverfish,NaN,383,60,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Blaze,NaN,383,61,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Magma Cube,NaN,383,62,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Pig,NaN,383,90,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Sheep,NaN,383,91,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Cow,NaN,383,92,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Chicken,NaN,383,93,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Squid,NaN,383,94,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Wolf,NaN,383,95,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Mooshroom,NaN,383,96,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Snow Golem,NaN,383,97,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Ocelot,NaN,383,98,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Iron Golem,NaN,383,99,NaN,NaN,NaN,NaN,y,,,NaN
+Spawn Villager,NaN,383,120,NaN,NaN,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+Bottle o' Enchanting,NaN,384,NaN,NaN,NaN,NaN,NaN,y,,,NaN
+Fire Charge,NaN,385,NaN,298,y,NaN,NaN,y,,,NaN
+,,,,,,,,,,,
+White Lumar,NaN,1256,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Lumar,NaN,1256,1,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Lumar,NaN,1256,2,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Lumar,NaN,1256,3,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Lumar,NaN,1256,4,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Lumar,NaN,1256,5,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Lumar,NaN,1256,6,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Lumar,NaN,1256,7,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Lumar,NaN,1256,8,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Lumar,NaN,1256,9,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Lumar,NaN,1256,10,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Lumar,NaN,1256,11,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Lumar,NaN,1256,12,NaN,y,NaN,NaN,NaN,,,NaN
+Green Lumar,NaN,1256,13,NaN,y,NaN,NaN,NaN,,,NaN
+Red Lumar,NaN,1256,14,NaN,y,NaN,NaN,NaN,,,NaN
+Black Lumar,NaN,1256,15,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Ruby,NaN,1257,NaN,1024,y,NaN,NaN,NaN,,,NaN
+Emerald,NaN,1257,1,1024,y,NaN,NaN,NaN,,,NaN
+Sapphire,NaN,1257,2,1024,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Silver Ingot,NaN,1257,3,512,y,NaN,NaN,NaN,,,NaN
+Tin Ingot,NaN,1257,4,256,y,NaN,NaN,NaN,,,NaN
+Copper Ingot,NaN,1257,5,85,y,NaN,NaN,NaN,,,NaN
+Nikolite,NaN,1257,6,128,y,NaN,NaN,NaN,,,NaN
+Red Alloy Ingot,NaN,1258,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Alloy Ingot,NaN,1258,1,NaN,y,NaN,NaN,NaN,,,NaN
+Brass Ingot,NaN,1258,2,NaN,y,NaN,NaN,NaN,,,NaN
+Silicon Boule,NaN,1258,3,NaN,y,NaN,NaN,NaN,,,NaN
+Silicon Wafer,NaN,1258,4,NaN,y,NaN,NaN,NaN,,,NaN
+Blue-Doped Wafer,NaN,1258,5,NaN,y,NaN,NaN,NaN,,,NaN
+Red-Doped Wafer,NaN,1258,6,NaN,y,NaN,NaN,NaN,,,NaN
+Tinplate,Tin Plate,1258,7,NaN,y,NaN,NaN,NaN,,,NaN
+Fine Copper Wire,NaN,1258,8,NaN,y,NaN,NaN,NaN,,,NaN
+Fine Iron Wire,NaN,1258,9,NaN,y,NaN,NaN,NaN,,,NaN
+Copper Coil,NaN,1258,10,NaN,y,NaN,NaN,NaN,,,NaN
+Blulectric Motor,NaN,1258,11,NaN,y,NaN,NaN,NaN,,,NaN
+Indigo Dye,NaN,1259,NaN,8,y,NaN,NaN,NaN,,,NaN
+Iron Handsaw,NaN,1260,NaN,1036,y,NaN,NaN,NaN,,,NaN
+Diamond Handsaw,NaN,1261,NaN,16908,y,NaN,NaN,NaN,,,NaN
+Screwdriver,NaN,1262,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Stone Wafer,NaN,1263,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Wire,NaN,1263,1,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Anode,NaN,1263,2,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Cathode,NaN,1263,3,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Pointer,NaN,1263,4,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Redwire,NaN,1263,5,NaN,y,NaN,NaN,NaN,,,NaN
+Plate Assembly,NaN,1263,6,NaN,y,NaN,NaN,NaN,,,NaN
+Silicon Chip,NaN,1263,7,NaN,y,NaN,NaN,NaN,,,NaN
+Tainted Silicon Chip,NaN,1263,8,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Bundle,NaN,1263,9,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Ruby Handsaw,NaN,1264,NaN,2572,y,NaN,NaN,NaN,,,NaN
+Emerald Handsaw,NaN,1265,NaN,2572,y,NaN,NaN,NaN,,,NaN
+Sapphire Handsaw,NaN,1266,NaN,2572,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wood Sickle,NaN,1267,NaN,28,y,NaN,NaN,NaN,,,NaN
+Stone Sickle,NaN,1268,NaN,7,y,NaN,NaN,NaN,,,NaN
+Iron Sickle,NaN,1269,NaN,772,y,NaN,NaN,NaN,,,NaN
+Diamond Sickle,NaN,1270,NaN,24580,y,NaN,NaN,NaN,,,NaN
+Gold Sickle,NaN,1271,NaN,6148,y,NaN,NaN,NaN,,,NaN
+Ruby Sickle,NaN,1272,NaN,3076,y,NaN,NaN,NaN,,,NaN
+Emerald Sickle,NaN,1273,NaN,3076,y,NaN,NaN,NaN,,,NaN
+Sapphire Sickle,NaN,1274,NaN,3076,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Ruby Sword,NaN,1275,NaN,2052,y,NaN,NaN,NaN,,,NaN
+Emerald Sword,NaN,1276,NaN,2052,y,NaN,NaN,NaN,,,NaN
+Sapphire Sword,NaN,1277,NaN,2052,y,NaN,NaN,NaN,,,NaN
+Ruby Shovel,NaN,1278,NaN,1032,y,NaN,NaN,NaN,,,NaN
+Emerald Shovel,NaN,1279,NaN,1032,y,NaN,NaN,NaN,,,NaN
+Sapphire Shovell,NaN,1280,NaN,1032,y,NaN,NaN,NaN,,,NaN
+Ruby Pickaxe,NaN,1281,NaN,3080,y,NaN,NaN,NaN,,,NaN
+Emerald Pickaxe,NaN,1282,NaN,3080,y,NaN,NaN,NaN,,,NaN
+Sapphire Pickaxe,NaN,1283,NaN,3080,y,NaN,NaN,NaN,,,NaN
+Ruby Axe,NaN,1284,NaN,3080,y,NaN,NaN,NaN,,,NaN
+Emerald Axe,NaN,1285,NaN,3080,y,NaN,NaN,NaN,,,NaN
+Sapphire Axe,NaN,1286,NaN,3080,y,NaN,NaN,NaN,,,NaN
+Ruby Hoe,NaN,1287,NaN,2056,y,NaN,NaN,NaN,,,NaN
+Emerald Hoe,NaN,1288,NaN,2056,y,NaN,NaN,NaN,,,NaN
+Sapphire Hoe,NaN,1289,NaN,2056,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Flax Seeds,NaN,1290,NaN,4,y,NaN,NaN,NaN,,,NaN
+Paint Can,NaN,1291,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+White Paint,NaN,1292,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Paint,NaN,1293,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Paint,NaN,1294,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Paint,NaN,1295,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Paint,NaN,1296,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Paint,NaN,1297,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Paint,NaN,1298,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Paint,NaN,1299,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Paint,NaN,1300,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Paint,NaN,1301,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Paint,NaN,1302,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Paint,NaN,1303,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Paint,NaN,1304,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Green Paint,NaN,1305,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Paint,NaN,1306,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Black Paint,NaN,1307,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Paint Brush,NaN,1308,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+White Paint Brush,NaN,1309,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Paint Brush,NaN,1310,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Paint Brush,NaN,1311,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Paint Brush,NaN,1312,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Paint Brush,NaN,1313,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Lime Paint Brush,NaN,1314,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Paint Brush,NaN,1315,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Gray Paint Brush,NaN,1316,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Light Gray Paint Brush,NaN,1317,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Paint Brush,NaN,1318,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Paint Brush,NaN,1319,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Paint Brush,NaN,1320,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Paint Brush,NaN,1321,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Green Paint Brush,NaN,1322,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Paint Brush,NaN,1323,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Black Paint Brush,NaN,1324,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Voltmeter,NaN,1325,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+BT Battery,NaN,1326,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Sonic Screwdriver,NaN,1327,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+BT Battery,BT Battery (Charged),1328,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Athame,NaN,1329,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Drawplate,NaN,1331,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wool Card,NaN,1332,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Floppy Disk,NaN,1333,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+FORTH Boot Disk,NaN,1333,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iron Nugget,NaN,1334,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Silver Nugget,NaN,1334,1,NaN,y,NaN,NaN,NaN,,,NaN
+Tin Nugget,NaN,1334,2,NaN,y,NaN,NaN,NaN,,,NaN
+Copper Nugget,NaN,1334,3,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blank Sensor Card,NaN,1492,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+World SensorModule,NaN,1492,1,NaN,y,NaN,NaN,NaN,,,NaN
+Inventory SensorModule,NaN,1492,2,NaN,y,NaN,NaN,NaN,,,NaN
+BuildCraft SensorModule,NaN,1492,3,NaN,y,NaN,NaN,NaN,,,NaN
+IndustrialCraft2 SensorModule,NaN,1492,4,NaN,y,NaN,NaN,NaN,,,NaN
+Forestry SensorModule,NaN,1492,5,NaN,y,NaN,NaN,NaN,,,NaN
+RedPower2 SensorModule,NaN,1492,6,NaN,y,NaN,NaN,NaN,,,NaN
+EquivalentExchange SensorModule,NaN,1492,7,NaN,y,NaN,NaN,NaN,,,NaN
+Advanced Power Systems SensorModule,NaN,1492,8,NaN,y,NaN,NaN,NaN,,,NaN
+Thaumcraft2 SensorModule,NaN,1492,9,NaN,y,NaN,NaN,NaN,,,NaN
+Proximity SensorModule,NaN,1492,10,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blank Transmitter Card,NaN,1493,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Red],NaN,1493,1,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Purple],NaN,1493,2,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Blue],NaN,1493,3,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Cyan],NaN,1493,4,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Green],NaN,1493,5,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Yellow],NaN,1493,6,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [White],NaN,1493,7,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Orange],NaN,1493,8,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Black],NaN,1493,9,NaN,y,NaN,NaN,NaN,,,NaN
+Transmitter Card [Pink],NaN,1493,10,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Computer Redstone Chip,NaN,1494,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Computer Iron Chip,NaN,1494,1,NaN,y,NaN,NaN,NaN,,,NaN
+Computer Gold Chip,NaN,1494,2,NaN,y,NaN,NaN,NaN,,,NaN
+Computer Diamond Chip,NaN,1494,3,NaN,y,NaN,NaN,NaN,,,NaN
+Computer Glass Chip,NaN,1494,4,NaN,y,NaN,NaN,NaN,,,NaN
+Computer Stone Chip,NaN,1494,5,NaN,y,NaN,NaN,NaN,,,NaN
+Computer Obsidian Chip,NaN,1494,6,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Music Disc,NaN,2256,NaN,2048,y,C418 - 13,NaN,y,,,NaN
+Music Disc,NaN,2257,NaN,2048,y,C418 - cat,NaN,y,,,NaN
+Music Disc,NaN,2258,NaN,2048,y,C418 - blocks,NaN,y,,,NaN
+Music Disc,NaN,2259,NaN,2048,y,C418 - chirp,NaN,y,,,NaN
+Music Disc,NaN,2260,NaN,2048,y,C418 - far,NaN,y,,,NaN
+Music Disc,NaN,2261,NaN,2048,y,C418 - mall,NaN,y,,,NaN
+Music Disc,NaN,2262,NaN,2048,y,C418 - mellohi,NaN,y,,,NaN
+Music Disc,NaN,2263,NaN,2048,y,C418 - stal,NaN,y,,,NaN
+Music Disc,NaN,2264,NaN,2048,y,C418 - strad,NaN,y,,,NaN
+Music Disc,NaN,2265,NaN,2048,y,C418 - ward,NaN,y,,,NaN
+Music Disc,NaN,2266,NaN,2048,y,C418 - 11,NaN,y,,,NaN
+,,,,,,,,,,,
+Wooden Gear,NaN,4056,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Gear,NaN,4057,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Gear,NaN,4058,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Gold Gear,NaN,4059,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Gear,NaN,4060,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blank Template,NaN,4061,NaN,NaN,y,#0,NaN,NaN,,,NaN
+Blank Template,NaN,4061,1,NaN,y,#1,NaN,NaN,,,NaN
+Blank Template,NaN,4061,2,NaN,y,#2,NaN,NaN,,,NaN
+Blank Template,NaN,4061,3,NaN,y,#3,NaN,NaN,,,NaN
+Blank Template,NaN,4061,4,NaN,y,#4,NaN,NaN,,,NaN
+Blank Template,NaN,4061,5,NaN,y,#5,NaN,NaN,,,NaN
+Blank Template,NaN,4061,6,NaN,y,#6,NaN,NaN,,,NaN
+Blank Template,NaN,4061,7,NaN,y,#7,NaN,NaN,,,NaN
+Blank Template,NaN,4061,8,NaN,y,#8,NaN,NaN,,,NaN
+Blank Template,NaN,4061,9,NaN,y,#9,NaN,NaN,,,NaN
+Blank Template,NaN,4061,10,NaN,y,#10,NaN,NaN,,,NaN
+Blank Template,NaN,4061,11,NaN,y,#11,NaN,NaN,,,NaN
+Blank Template,NaN,4061,12,NaN,y,#12,NaN,NaN,,,NaN
+Blank Template,NaN,4061,13,NaN,y,#13,NaN,NaN,,,NaN
+Blank Template,NaN,4061,14,NaN,y,#14,NaN,NaN,,,NaN
+Blank Template,NaN,4061,15,NaN,y,#15,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wrench,NaN,4062,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Oil Bucket,NaN,4063,NaN,2816,y,NaN,NaN,NaN,,,NaN
+Pipe Waterproof,NaN,4065,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Fuel Bucket,NaN,4066,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dimensional Anchor,NaN,4095,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Floppy Disk,NaN,4256,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Waterproof Redstone Pipe,NaN,4298,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Redstone Transport Pipe,NaN,4299,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Advanced Insertion Pipe,NaN,4300,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Advanced Wooden Transport Pipe,NaN,4301,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Distribution Transport Pipe,NaN,4302,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Item Teleport Pipe,NaN,4303,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Waterproof Teleport Pipe,NaN,4304,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Power Teleport Pipe,NaN,4305,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Transport Pipe,NaN,4306,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cobblestone Transport Pipe,NaN,4307,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Transport Pipe,NaN,4308,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Transport Pipe,NaN,4309,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Transport Pipe,NaN,4310,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Transport Pipe,NaN,4311,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Obsidian Transport Pipe,NaN,4312,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Waterproof Pipe,NaN,4313,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cobblestone Waterproof Pipe,NaN,4314,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Waterproof Pipe,NaN,4315,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Waterproof Pipe,NaN,4316,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Waterproof Pipe,NaN,4317,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wooden Conductive Pipe,NaN,4320,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Conductive Pipe,NaN,4322,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Conductive Pipe,NaN,4324,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Triangulator,NaN,6357,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Remote,NaN,6358,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Sniffer,NaN,6359,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Map,NaN,6360,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Tracker,NaN,6361,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+REP,NaN,6362,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Private Sniffer,NaN,6363,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Obsidian Stick,NaN,6406,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Bowl,NaN,6407,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+REther Pearl,NaN,6408,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wireless Transciever,NaN,6409,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blaze Transciever,NaN,6410,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Receiver Dish,NaN,6411,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blaze Receiver Dish,NaN,6412,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+MFSU Cart,NaN,7256,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Railbed,NaN,7257,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Signal Tuner,NaN,7260,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Signal Block Surveyor,NaN,7261,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Rebar,NaN,7262,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Metal Post,NaN,7266,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Black Metal Post,NaN,7266,1,NaN,y,NaN,NaN,NaN,,,NaN
+Red Metal Post,NaN,7266,2,NaN,y,NaN,NaN,NaN,,,NaN
+Green Metal Post,NaN,7266,3,NaN,y,NaN,NaN,NaN,,,NaN
+Brown Metal Post,NaN,7266,4,NaN,y,NaN,NaN,NaN,,,NaN
+Blue Metal Post,NaN,7266,5,NaN,y,NaN,NaN,NaN,,,NaN
+Purple Metal Post,NaN,7266,6,NaN,y,NaN,NaN,NaN,,,NaN
+Cyan Metal Post,NaN,7266,7,NaN,y,NaN,NaN,NaN,,,NaN
+Light Grey Metal Post,Light Gray Metal Post,7266,8,NaN,y,NaN,NaN,NaN,,,NaN
+Grey Metal Post,Gray Metal Post,7266,9,NaN,y,NaN,NaN,NaN,,,NaN
+Pink Metal Post,NaN,7266,10,NaN,y,NaN,NaN,NaN,,,NaN
+Light Green Metal Post,NaN,7266,11,NaN,y,NaN,NaN,NaN,,,NaN
+Yellow Metal Post,NaN,7266,12,NaN,y,NaN,NaN,NaN,,,NaN
+Light Blue Metal Post,NaN,7266,13,NaN,y,NaN,NaN,NaN,,,NaN
+Magenta Metal Post,NaN,7266,14,NaN,y,NaN,NaN,NaN,,,NaN
+Orange Metal Post,NaN,7266,15,NaN,y,NaN,NaN,NaN,,,NaN
+White Metal Post,NaN,7266,16,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Stone Tie,NaN,7267,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Controller Circuit,NaN,7268,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Creosote Oil,NaN,7269,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+TNT Cart,NaN,7270,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Steel Bore Head,NaN,7272,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Batbox Cart,BatBox Cart,7276,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Work Cart,NaN,7281,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Coal Coke,NaN,7291,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Steel Ingot,NaN,7292,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Standard Rail,NaN,7293,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+H.S. Rail,NaN,7294,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Advanced Rail,NaN,7300,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Tie,NaN,7302,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Anchor Cart,NaN,7303,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Receiver Circuit,NaN,7304,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Railbed,NaN,7306,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+MFE Cart,NaN,7307,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Bore Head,NaN,7308,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tunnel Bore,NaN,7310,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tank Cart,NaN,7312,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Signal Lamp,NaN,7313,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Bore Lamp,NaN,7314,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Crowbar,NaN,7315,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Lapotron Loader Upgrade,NaN,7316,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Ender Pouch,NaN,7493,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Retriever Jammer,NaN,7614,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+MFFS remote reactor link,MFFS Remote Reactor Link,11366,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+MFDevice <Debugger>,NaN,11367,NaN,NaN,NaN,NaN,NaN,NaN,,,NaN
+MFDevice <ID-Tool>,NaN,11368,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+MFDevice <Wrench>,NaN,11370,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blank MFFS card,Blank MFFS Card,11371,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+MFFS frequency card,MFFS Frequency Card,11372,NaN,NaN,?,NaN,NaN,NaN,,,NaN
+MFFS ID card,MFFS ID Card,11373,NaN,NaN,?,NaN,NaN,NaN,,,NaN
+MFFS link card,MFFS Link Card,11374,NaN,NaN,?,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Jetpack Fueller,Jetpack Fueler,18156,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iron to Gold Chest Upgrade,NaN,19757,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Gold to Diamond Chest Upgrade,NaN,19758,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Copper to Silver Chest Upgrade,NaN,19759,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Silver to Gold Chest Upgrade,NaN,19760,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Copper to Iron Chest Upgrade,NaN,19761,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond to Crystal Chest Upgrade,NaN,19762,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Spear,NaN,26483,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Spear,NaN,26484,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Spear,NaN,26485,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Spear,NaN,26486,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Spear,NaN,26487,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Halberd,NaN,26488,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Halberd,NaN,26489,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Halberd,NaN,26490,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Halberd,NaN,26491,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Halberd,NaN,26492,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Battleaxe,Wooden Battle Axe,26493,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Battleaxe,Stone Battle Axe,26494,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Battleaxe,Iron Battle Axe,26495,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Battleaxe,Diamond Battle Axe,26496,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Battleaxe,Golden Battle Axe,26497,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Warhammer,Wooden War Hammer,26498,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Warhammer,Stone War Hammer,26499,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Warhammer,Iron War Hammer,26500,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Warhammer,Diamond War Hammer,26501,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Warhammer,Golden War Hammer,26502,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Knife,NaN,26503,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Knife,NaN,26504,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Knife,NaN,26505,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Knife,NaN,26506,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Knife,NaN,26507,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Wooden Flail,NaN,26508,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Flail,NaN,26509,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Flail,NaN,26510,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Flail,NaN,26511,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Golden Flail,NaN,26512,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Javelin,NaN,26513,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Musket,NaN,26514,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Musket with Bayonet,NaN,26515,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Musket Barrel,NaN,26516,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Musket Round,NaN,26517,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Crossbow,NaN,26518,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Crossbow Bolt,NaN,26519,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blowgun,NaN,26520,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Poisonous Dart,NaN,26521,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Dynamite,NaN,26522,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Fire Rod,NaN,26523,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Cannon,NaN,26524,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cannon Ball,Cannonball,26525,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Blunderbuss,NaN,26526,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blunderbuss Shot,NaN,26527,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Blunderbuss Barrel,NaN,26528,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Training Dummy,NaN,26529,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Stock,NaN,26530,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Philosopher's Stone,NaN,27526,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Destruction Catalyst,NaN,27527,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Iron Band,NaN,27528,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Soul Stone,NaN,27529,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Soul Stone,Soul Stone (Active),27529,1,NaN,y,NaN,NaN,NaN,,,NaN
+Evertide Amulet,NaN,27530,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Volcanite Amulet,NaN,27531,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Black Hole Band,NaN,27532,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Black Hole Band,Black Hole Band (Active),27532,1,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Ignition,NaN,27533,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Ignition,Ring of Ignition (Active),27533,1,NaN,y,NaN,NaN,NaN,,,NaN
+Archangel's Smite,NaN,27534,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Hyperkinetic Lens,NaN,27535,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Swiftwolf's Rending Gale,NaN,27536,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Swiftwolf's Rending Gale,Swiftwolf's Rending Gale Flight,27536,1,NaN,y,NaN,NaN,NaN,,,NaN
+Swiftwolf's Rending Gale,Swiftwolf's Rending Gale Repulsion,27536,2,NaN,y,NaN,NaN,NaN,,,NaN
+Swiftwolf's Rending Gale,Swiftwolf's Rending Gale Flight Repulsion,27536,3,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Harvest Goddess Band,NaN,27537,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Harvest Goddess Band,Harvest Goddess Band (Active),27537,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Watch of Flowing Time,NaN,27538,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Watch of Flowing Time,Watch of Flowing Time (Active),27538,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Alchemical Coal,NaN,27539,NaN,512,y,NaN,NaN,NaN,,,NaN
+Mobius Fuel,NaN,27540,NaN,2048,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Dark Matter,NaN,27541,NaN,139264,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Covalence Dust,Low Covalence Dust,27542,NaN,1,y,NaN,NaN,NaN,,,NaN
+Covalence Dust,Medium Covalence Dust,27542,1,8,y,NaN,NaN,NaN,,,NaN
+Covalence Dust,High Covalence Dust,27542,2,208,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Dark Matter Pickaxe,NaN,27543,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Shovel,NaN,27544,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Hoe,NaN,27545,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Sword,NaN,27546,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Axe,NaN,27547,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Shears,NaN,27548,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Dark Matter Armor,Dark Matter Chestplate,27549,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Helmet,NaN,27550,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Greaves,Dark Matter Leggings,27551,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Boots,NaN,27552,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Gem of Eternal Density,NaN,27553,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Gem of Eternal Density,Gem of Eternal Density (Active),27553,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Talisman of Repair,NaN,27554,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Matter Hammer,NaN,27555,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Catalytic Lens,NaN,27556,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Klein Star Ein,NaN,27557,NaN,24576,y,NaN,NaN,NaN,,,NaN
+Klein Star Zwei,NaN,27558,NaN,98304,y,NaN,NaN,NaN,,,NaN
+Klein Star Drei,NaN,27559,NaN,393216,y,NaN,NaN,NaN,,,NaN
+Klein Star Vier,NaN,27560,NaN,1572864,y,NaN,NaN,NaN,,,NaN
+Klein Star Sphere,NaN,27561,NaN,6291456,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Alchemy Bag,White Alchemy Bag,27562,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Orange Alchemy Bag,27562,1,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Magenta Alchemy Bag,27562,2,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Light Blue Alchemy Bag,27562,3,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Yellow Alchemy Bag,27562,4,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Lime Alchemy Bag,27562,5,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Pink Alchemy Bag,27562,6,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Gray Alchemy Bag,27562,7,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Light Gray Alchemy Bag,27562,8,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Cyan Alchemy Bag,27562,9,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Purple Alchemy Bag,27562,10,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Blue Alchemy Bag,27562,11,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Brown Alchemy Bag,27562,12,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Green Alchemy Bag,27562,13,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Red Alchemy Bag,27562,14,NaN,y,NaN,NaN,NaN,,,NaN
+Alchemy Bag,Black Alchemy Bag,27562,15,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Red Matter,NaN,27563,NaN,466944,y,NaN,NaN,NaN,,,NaN
+Red Matter Pickaxe,NaN,27564,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Shovel,NaN,27565,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Hoe,NaN,27566,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Sword,NaN,27567,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Axe,NaN,27568,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Shears,NaN,27569,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Hammer,NaN,27570,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Aeternalis Fuel,NaN,27571,NaN,8192,y,NaN,NaN,NaN,,,NaN
+Red Katar,NaN,27572,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Morning Star,NaN,27573,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Zero Ring,NaN,27574,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Zero Ring,Zero Ring (Active),27574,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Red Matter Armor,Red Matter Chestplate,27575,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Helmet,NaN,27576,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Greaves,Red Matter Leggings,27577,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Red Matter Boots,NaN,27578,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Infernal Armor,Infernal Chestplate,27579,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Abyss Helmet,NaN,27580,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Gravity Greaves,Gravity Leggings,27581,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Hurricane Boots,NaN,27582,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Mercurial Eye,NaN,27583,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Ring of Arcana,Ring of Arcana Zero,27584,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Zero (Active),27584,1,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Ignition,27584,2,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Ignition (Active),27584,3,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Swiftwolf,27584,4,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Swiftwolf (Active),27584,5,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Harvest,27584,6,NaN,y,NaN,NaN,NaN,,,NaN
+Ring of Arcana,Ring of Arcana Harvest (Active),27584,7,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Divining Rod,Low Divining Rod,27585,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Divining Rod,Medium Divining Rod,27585,1,NaN,y,NaN,NaN,NaN,,,NaN
+Divining Rod,High Divining Rod,27585,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Body Stone,NaN,27588,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Body Stone,Body Stone (Active),27588,1,NaN,y,NaN,NaN,NaN,,,NaN
+Life Stone,NaN,27589,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Life Stone,Life Stone (Active),27589,1,NaN,y,NaN,NaN,NaN,,,NaN
+Mind Stone,NaN,27590,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Mind Stone,Mind Stone (Active),27590,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Klein Star Omega,NaN,27591,NaN,25165824,y,NaN,NaN,NaN,,,NaN
+Transmutation Tablet,Portable Transmutation Tablet,27592,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Void Ring,NaN,27593,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Void Ring,Void Ring (Active),27593,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Alchemical Tome,NaN,27594,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Normal chest to Iron Chest Upgrade,Normal Chest to Iron Chest Upgrade,29763,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Normal chest to Copper Chest Upgrade,Normal Chest to Copper Chest Upgrade,29764,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Refined Iron Dust,NaN,30031,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Debug Item,NaN,30104,NaN,NaN,NaN,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Weed-EX,NaN,30105,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Grin Powder,NaN,30106,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Zero,NaN,30107,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Watery Soup Brew,NaN,30107,1,NaN,y,NaN,NaN,NaN,,,NaN
+Rum,NaN,30107,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Empty Booze Barrel,NaN,30108,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+1L Booze Barrel,NaN,30108,1,NaN,?,NaN,NaN,NaN,,,NaN
+2L Booze Barrel,NaN,30108,5,NaN,?,NaN,NaN,NaN,,,NaN
+3L Booze Barrel,NaN,30108,9,NaN,?,NaN,NaN,NaN,,,NaN
+4L Booze Barrel,NaN,30108,13,NaN,?,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Hops,NaN,30109,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cold Coffee,NaN,30110,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dark Coffee,NaN,30110,1,NaN,y,NaN,NaN,NaN,,,NaN
+Coffee,NaN,30110,2,NaN,y,NaN,NaN,NaN,,,NaN
+Stone Mug,NaN,30111,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Coffee Powder,NaN,30112,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Coffee Beans,NaN,30113,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Terra Wart,NaN,30114,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Static Boots,NaN,30115,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Solar Helmet,NaN,30116,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Tool Box,NaN,30117,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tool Box,Tool Box (Storing),30117,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+TFBP - Mushroom,NaN,30118,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Electric Hoe,Electric Hoe (Charged),30119,1,NaN,y,NaN,NaN,NaN,,,NaN
+Electric Hoe,NaN,30119,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Hydration Cell,NaN,30120,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Fertilizer,NaN,30121,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Cropnalyzer,NaN,30122,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Electric Treetap,Electric Treetap (Charged),30124,1,NaN,y,NaN,NaN,NaN,,,NaN
+Electric Treetap,NaN,30124,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Overclocker Upgrade,NaN,30125,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Transformer Upgrade,NaN,30125,1,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Storage Upgrade,NaN,30125,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Seed is missing data - bug?,Seed Is Missing Data - Bug?,30126,NaN,NaN,?,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Lappack,Lappack (Charged),30127,1,NaN,y,NaN,NaN,NaN,,,NaN
+Lappack,NaN,30127,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iridium Ore,NaN,30128,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+CF Backpack,NaN,30129,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Silver Dust,NaN,30130,NaN,512,y,NaN,NaN,NaN,,,NaN
+CF Sprayer,NaN,30131,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+CF Pellet,NaN,30132,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Clay Dust,NaN,30133,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Frequency Transmitter,NaN,30134,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Industrial Diamond,NaN,30135,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Coal Chunk,NaN,30136,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Compressed Coal Ball,NaN,30137,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Coal Ball,NaN,30138,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Scrap Box,NaN,30139,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Electric Wrench,Electric Wrench (Charged),30140,1,NaN,y,NaN,NaN,NaN,,,NaN
+Electric Wrench,NaN,30140,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+TFBP - Flatification,NaN,30141,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+TFBP - Desertification,NaN,30142,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+TFBP - Chilling,NaN,30143,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+TFBP - Irrigation,NaN,30144,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+TFBP - Cultivation,NaN,30145,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+TFBP - Empty,NaN,30146,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Iridium Plate,NaN,30147,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Nano Saber,Nano Saber (Charged),30148,1,NaN,y,NaN,NaN,NaN,,,NaN
+Nano Saber,NaN,30148,27,NaN,y,NaN,NaN,NaN,,,NaN
+Nano Saber,Nano Saber (Active),30149,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Nano Saber,Nano Saber (Charged) (Active),30149,2,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Carbon Plate,NaN,30150,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Raw Carbon Mesh,NaN,30151,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Raw Carbon Fibre,Raw Carbon Fiber,30152,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Insulation Cutter,NaN,30153,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Painter,White Painter,30154,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Orange Painter,30155,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Magenta Painter,30156,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Light Blue Painter,30157,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Yellow Painter,30158,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Lime Painter,30159,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Pink Painter,30160,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Gray Painter,30161,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Light Gray Painter,30162,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Cyan Painter,30163,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Purple Painter,30164,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Blue Painter,30165,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Brown Painter,30166,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Green Painter,30167,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Red Painter,30168,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Black Painter,30169,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Painter,Painter,30170,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+QuantumSuit Boots,QuantumSuit Boots (Charged),30171,1,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Boots,QuantumSuit Boots,30171,27,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Leggings,QuantumSuit Leggings (Charged),30172,1,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Leggings,QuantumSuit Leggings,30172,27,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Bodyarmor,QuantumSuit Chestplate (Charged),30173,1,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Bodyarmor,QuantumSuit Chestplate,30173,27,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Helmet,QuantumSuit Helmet (Charged),30174,1,NaN,y,NaN,NaN,NaN,,,NaN
+QuantumSuit Helmet,QuantumSuit Helmet,30174,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+NanoSuit Boots,NanoSuit Boots (Charged),30175,1,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Boots,NanoSuit Boots,30175,27,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Leggings,NanoSuit Leggings (Charged),30176,1,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Leggings,NanoSuit Leggings,30176,27,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Bodyarmor,NanoSuit Chestplate (Charged),30177,1,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Bodyarmor,NanoSuit Chestplate,30177,27,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Helmet,NanoSuit Helmet (Charged),30178,1,NaN,y,NaN,NaN,NaN,,,NaN
+NanoSuit Helmet,NanoSuit Helmet,30178,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Composite Vest,NaN,30179,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+BatPack,BatPack (Charged),30180,1,NaN,y,NaN,NaN,NaN,,,NaN
+BatPack,NaN,30180,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Electrolyzed Water Cell,NaN,30181,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+EU-Reader,NaN,30182,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Wrench,NaN,30183,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Copper Cable,NaN,30184,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Uninsulated Copper Cable,NaN,30184,1,NaN,y,NaN,NaN,NaN,,,NaN
+Gold Cable,Uninsulated Gold Cable,30184,2,NaN,y,NaN,NaN,NaN,,,NaN
+Insulated Gold Cable,NaN,30184,3,NaN,y,NaN,NaN,NaN,,,NaN
+2xIns. Gold Cable,NaN,30184,4,NaN,y,NaN,NaN,NaN,,,NaN
+HV Cable,Uninsulated HV Cable,30184,5,NaN,y,NaN,NaN,NaN,,,NaN
+Insulated HV Cable,NaN,30184,6,NaN,y,NaN,NaN,NaN,,,NaN
+2xIns. HV Cable,NaN,30184,7,NaN,y,NaN,NaN,NaN,,,NaN
+4xIns. HV Cable,NaN,30184,8,NaN,y,NaN,NaN,NaN,,,NaN
+Glass Fibre Cable,Glass Fiber Cable,30184,9,NaN,y,NaN,NaN,NaN,,,NaN
+Ultra-Low-Current Cable,NaN,30184,10,NaN,y,NaN,NaN,NaN,,,NaN
+EU-Detector Cable,NaN,30184,11,NaN,y,NaN,NaN,NaN,,,NaN
+Eu-Splitter Cable,NaN,30184,12,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Reinforced Door,NaN,30185,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Industrial Credit,NaN,30186,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Advanced Alloy,NaN,30187,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+UU-Matter,NaN,30188,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Scrap,NaN,30189,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Advanced Circuit,NaN,30190,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Electronic Circuit,NaN,30191,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Bronze Boots,NaN,30192,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Legs,Bronze Leggings,30193,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Chestplate,NaN,30194,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Helmet,NaN,30195,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Bronze Hoe,NaN,30196,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Shovel,NaN,30197,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Sword,NaN,30198,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Axe,NaN,30199,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Pickaxe,NaN,30200,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Near-depleted Uranium Cell,NaN,30201,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Re-Enriched Uranium Cell,Re-enriched Uranium Cell,30202,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Depleted Isotope Cell,NaN,30203,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Integrated Heat Disperser,NaN,30204,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Integrated Reactor Plating,NaN,30205,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Coolant Cell,NaN,30206,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Uranium Cell,NaN,30207,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Mining Laser,Mining Laser (Charged),30208,1,NaN,y,NaN,NaN,NaN,,,NaN
+Mining Laser,NaN,30208,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Electric Jetpack,Electric Jetpack (Charged),30209,1,NaN,y,NaN,NaN,NaN,,,NaN
+Jetpack,NaN,30210,1,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Rubber Boots,NaN,30211,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Treetap,NaN,30212,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Dynamite-O-Mote,NaN,30213,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Sticky Dynamite,NaN,30214,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Dynamite,NaN,30215,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Rubber,NaN,30216,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Sticky Resin,NaN,30217,NaN,24,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Water Cell,NaN,30218,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+OV Scanner,OV Scanner (Charged),30219,1,NaN,y,NaN,NaN,NaN,,,NaN
+OV Scanner,NaN,30219,27,NaN,y,NaN,NaN,NaN,,,NaN
+OD Scanner,OD Scanner (Charged),30220,1,NaN,y,NaN,NaN,NaN,,,NaN
+OD Scanner,NaN,30220,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+(Filled) Tin Can,Filled Tin Can,30221,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Tin Can,NaN,30222,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Compressed Plants,NaN,30223,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Plantball,Plant Ball,30224,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+H. Coal,Hydrated Coal,30225,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Hydrated Coal Dust,NaN,30226,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Biofuel Cell,NaN,30227,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Coalfuel Cell,NaN,30228,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bio Cell,NaN,30229,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+H. Coal Cell,Hydrated Coal Cell,30230,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+(Empty) Fuel Can,Fuel Can (Empty),30231,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Filled Fuel Can,Fuel Can,30232,15288,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Chainsaw,Chainsaw (Charged),30233,1,NaN,y,NaN,NaN,NaN,,,NaN
+Chainsaw,NaN,30233,27,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Drill,Diamond Drill (Charged),30234,1,NaN,y,NaN,NaN,NaN,,,NaN
+Diamond Drill,NaN,30234,27,NaN,y,NaN,NaN,NaN,,,NaN
+Mining Drill,Mining Drill (Charged),30235,1,NaN,y,NaN,NaN,NaN,,,NaN
+Mining Drill,NaN,30235,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Lava Cell,NaN,30236,NaN,128,y,NaN,NaN,NaN,,,NaN
+Empty Cell,NaN,30237,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Single-Use Battery,NaN,30238,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+RE-Battery,RE-Battery (Stackable),30239,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Lapotron Crystal,Lapotron Crystal (Charged),30240,1,NaN,y,NaN,NaN,NaN,,,NaN
+Lapotron Crystal,NaN,30240,27,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Crystal,Energy Crystal (Charged),30241,1,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Crystal,NaN,30241,27,NaN,y,NaN,NaN,NaN,,,NaN
+RE-Battery,RE-Battery (Charged),30242,1,NaN,y,NaN,NaN,NaN,,,NaN
+RE-Battery,NaN,30242,27,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Uranium Ore,NaN,30243,NaN,4096,y,NaN,NaN,NaN,,,NaN
+Refined Uranium,Refined Uranium Ingot,30244,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Mixed Metal Ingot,NaN,30245,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze,Bronze Ingot,30246,NaN,255,y,NaN,NaN,NaN,,,NaN
+Tin,Tin Ingot,30247,NaN,256,y,NaN,NaN,NaN,,,NaN
+Copper,Copper Ingot,30248,NaN,85,y,NaN,NaN,NaN,,,NaN
+Refined Iron,Refined Iron Ingot,30249,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Small Pile of Iron Dust,NaN,30250,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Bronze Dust,NaN,30251,NaN,255,y,NaN,NaN,NaN,,,NaN
+Tin Dust,NaN,30252,NaN,256,y,NaN,NaN,NaN,,,NaN
+Copper Dust,NaN,30253,NaN,85,y,NaN,NaN,NaN,,,NaN
+Gold Dust,NaN,30254,NaN,2048,y,NaN,NaN,NaN,,,NaN
+Iron Dust,NaN,30255,NaN,256,y,NaN,NaN,NaN,,,NaN
+Coal Dust,NaN,30256,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+,,,,,,,,,,,
+Thermometer,NaN,31256,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Digital Thermometer,Digital Thermometer (Charged),31257,1,NaN,y,NaN,NaN,NaN,,,NaN
+Digital Thermometer,NaN,31257,101,NaN,y,NaN,NaN,NaN,,,NaN
+Remote Sensor Kit,NaN,31258,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Reactor Sensor Location Card,NaN,31259,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Range Upgrade,NaN,31260,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Time Card,NaN,31261,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Sensor Kit,NaN,31262,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Sensor Location Card,NaN,31263,NaN,NaN,y,NaN,NaN,NaN,,,NaN
+Energy Array Location Card,NaN,31264,NaN,NaN,y,NaN,NaN,NaN,,,NaN
