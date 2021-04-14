@@ -4,29 +4,38 @@ const Database = require("nedb")
 const path = require("path")
 
 
-const nedb_filepath = path.join("../synced/extra", "items.db")
-const csv_filepath = "Every item in Tekkit Classic - Data.csv"
+const items_filepath = "items.db"
+const recipes_filepath = "recipes.db"
+const items_csv_filepath = "Every item in Tekkit Classic - Data.csv"
+
 
 const db = new Database({
-	filename: nedb_filepath,
+	filename: items_filepath,
 	autoload: true,
 })
 
-init_db_if_empty()
+const recipes = new Database({
+	filename: recipes_filepath,
+	autoload: true,
+})
 
 
-function init_db_if_empty() {
-	// Counts all documents in the datastore.
+init_items_db_if_empty()
+add_recipe("Oak Planks", ["Oak Wood"])
+
+
+function init_items_db_if_empty() {
+	// If the db is empty, initialize it with the csv.
 	db.count({}, function (err, count) {
-		console.log(count)
 		if (count === 0) {
-			// Initialize the database with the csv's data
 			const csv_items = []
-			fs.createReadStream(csv_filepath)
+			
+			fs.createReadStream(items_csv_filepath)
 				.pipe(csv())
 				.on("data", row => csv_items.push(row))
 				.on("end", () => {
 					const items = cleanup_csv_items(csv_items)
+					
 					db.insert(items, (err, new_doc) => {
 						if (err) {
 							throw err
@@ -92,6 +101,15 @@ function replace_periods(str) {
 }
 
 
-function add_recipe() {
-	
+function add_recipe(name, recipe) {
+	// If the item already has a recipe, don't add another recipe for it.
+	recipes.find({ name }, (err, docs) => {
+		if (docs.length === 0) {
+			recipes.insert({ name, recipe }, (err, new_doc) => {
+				if (err) {
+					throw err
+				}
+			})
+		}
+	})
 }
