@@ -3,47 +3,12 @@ const path = require("path");
 const read = require("fs-readdir-recursive");
 
 
-// Local JS files.
-const longPollFunctions = require("./longPollFunctions");
-
-// TODO: Move to globals file, as it's also in js/longPollFunctions.js
-const httpTimeoutMs = 10 * 1000;
+const startConnectionTimeout = require("../server/startConnectionTimeout");
+const printStats = require("../server/printStats");
+const longPollFunctions = require("../server/longPollFunctions");
 
 
 module.exports = app => {
-
-
-function printStats(path) {
-	console.log("'" + path + "' request received on", new Date());
-}
-
-
-function startConnectionTimeout(res) {
-	setTimeout(() => {
-		if (!res.writableEnded) { // If res.end() hasn't been called yet.
-			res.end();
-		}
-	}, httpTimeoutMs);
-}
-
-
-app.get("/never-closes", (req, res) => {
-	startConnectionTimeout(res);
-	console.log("never-closes called");
-});
-
-
-app.post("/server-print", (req, res) => {
-	console.log("'server-print': " + req.body.msg);
-	res.send(true);
-});
-
-
-app.get("/is-online", (req, res) => {
-	startConnectionTimeout(res);
-	printStats("is-online");
-	res.send(true)
-});
 
 
 app.get("/file", (req, res) => {
@@ -173,18 +138,6 @@ function printAddAndRemoveCounts(diffFilesData) {
 		console.log("Already up to date.");
 	}
 }
-
-
-app.get("/long_poll", (req, res) => {
-	const fnName = req.query.fn_name;
-	//printStats("long_poll?fn_name=" + fnName);
-	
-	if (longPollFunctions.hasOwnProperty(fnName)) {
-		longPollFunctions[fnName](res);
-	} else {
-		res.end("longPollFunctions doesn't contain the function '" + fnName + "'.");
-	}
-});
 
 
 }

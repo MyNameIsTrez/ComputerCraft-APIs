@@ -1,14 +1,12 @@
 const chokidar = require("chokidar");
 
+const constants = require("constants");
+
 
 const chokidarOptions = {
 	ignoreInitial: true,
 };
 const watcher = chokidar.watch("synced", chokidarOptions);
-
-
-// TODO: Move to globals file, as it's also in server.js
-const httpTimeoutMs = 10 * 1000;
 
 
 module.exports = {
@@ -18,7 +16,7 @@ module.exports = {
 				res.end();
 				watcher.removeAllListeners("all");
 			}
-		}, httpTimeoutMs);
+		}, constants.httpTimeoutMs);
 		
 		watcher.once("all", (event, path) => {
 			if (!res.writableEnded) {
