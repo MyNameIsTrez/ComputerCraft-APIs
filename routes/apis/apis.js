@@ -1,29 +1,16 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const https = require("https");
 const fs = require("fs");
 const path = require("path");
 const read = require("fs-readdir-recursive");
-const util = require("util"); // For printing circular JSON.
+
 
 // Local JS files.
-const longPollFunctions = require("./js/longPollFunctions");
-
+const longPollFunctions = require("./longPollFunctions");
 
 // TODO: Move to globals file, as it's also in js/longPollFunctions.js
 const httpTimeoutMs = 10 * 1000;
 
 
-const app = express();
-
-app.listen(1338, () => {
-	console.log("Listening...");
-});
-
-// Fixes app.post()
-// ComputerCraft versions below 1.63 don't support custom headers,
-// so the content-type of those is always 'application/x-www-form-urlencoded'.
-app.use(bodyParser.urlencoded({ extended: true }));
+module.exports = app => {
 
 
 function printStats(path) {
@@ -198,3 +185,6 @@ app.get("/long_poll", (req, res) => {
 		res.end("longPollFunctions doesn't contain the function '" + fnName + "'.");
 	}
 });
+
+
+}
