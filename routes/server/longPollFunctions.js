@@ -1,6 +1,6 @@
 const chokidar = require("chokidar");
 
-const constants = require("constants");
+const constants = require("../../constants");
 
 
 const chokidarOptions = {

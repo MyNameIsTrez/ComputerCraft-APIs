@@ -1,6 +1,3 @@
-//const bodyParser = require("body-parser");
-
-const constants = require("constants")
 const startConnectionTimeout = require("./startConnectionTimeout");
 const printStats = require("./printStats");
 const longPollFunctions = require("./longPollFunctions");
@@ -30,8 +27,9 @@ app.get("/is-online", (req, res) => {
 
 app.get("/long_poll", (req, res) => {
 	const fnName = req.query.fn_name;
-	//printStats("long_poll?fn_name=" + fnName);
+	printStats("long_poll?fn_name=" + fnName);
 	
+	console.log(longPollFunctions.hasOwnProperty(fnName));
 	if (longPollFunctions.hasOwnProperty(fnName)) {
 		longPollFunctions[fnName](res);
 	} else {
