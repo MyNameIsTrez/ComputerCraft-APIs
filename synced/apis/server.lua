@@ -21,6 +21,22 @@ function post_table(server_path, query, tab)
 end
 
 
+function post(server_path, query, str)
+	local p = path.join(url, server_path)
+	local payload = query .. "=" .. str
+	
+	local t = http.post(p, payload)
+	
+	if t == nil then
+		_G.print("Server is offline!")
+		return false
+	end
+	
+	local response = t.readAll()
+	return response
+end
+
+
 function print(msg)
 	local h = http.post(server_print_url, "msg=" .. json.encode(msg))
 	

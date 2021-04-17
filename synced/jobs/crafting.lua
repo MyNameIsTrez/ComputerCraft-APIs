@@ -10,15 +10,28 @@ end
 
 
 function add_recipe(item_name)
-	server.post_table("add-recipe", "recipe", { ["Oak Planks"] = {
-		"Oak Wood", nil, nil,
-		nil, nil, nil,
-		nil, nil, nil
-	}})
+	server.post_table("add-recipe", "recipe_info", {
+		crafting = "Oak Planks",
+		recipe = {
+			"Oak Wood", nil, nil,
+			nil, nil, nil,
+			nil, nil, nil
+		},
+		crafting_count = 4
+	})
+end
+
+
+function remove_recipe(item_name)
+	server.post("remove-recipe", "item", "Oak Planks")
 end
 
 
 read_items()
-if not items["Oak Planks"].recipe then
+
+if items["Oak Planks"].recipe_info then
+	remove_recipe("Oak Planks")
+end
+if not items["Oak Planks"].recipe_info then
 	add_recipe("Oak Planks")
 end
