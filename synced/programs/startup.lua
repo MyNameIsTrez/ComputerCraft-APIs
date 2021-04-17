@@ -45,7 +45,7 @@ end
 
 function check_first_run()
 	if not fs.exists(bw_os_name) then
-		print("Downloading, this'll take around 10 seconds...")
+		print("Downloading, this'll take around 3 seconds...")
 	end
 end
 

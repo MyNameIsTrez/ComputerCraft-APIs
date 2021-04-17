@@ -124,7 +124,10 @@ end
 
 function parseString(str)
 	str = str:sub(2)
-	local s = ""
+	
+	local str_tab = {}
+	local i = 1
+	
 	while str:sub(1,1) ~= "\"" do
 		local next = str:sub(1,1)
 		str = str:sub(2)
@@ -136,10 +139,32 @@ function parseString(str)
 
 			next = assert(decodeControls[next..escape], "Invalid escape character")
 		end
-
-		s = s .. next
+		
+		str_tab[i] = next
+		
+		if i % 10000 == 0 then
+			try_yield()
+		end
+		
+		i = i + 1
 	end
-	return s, removeWhite(str:sub(2))
+	
+	return table.concat(str_tab), removeWhite(str:sub(2))
+end
+
+local previous_time = 0
+function try_yield(t)
+	t = t or 4
+	local current_time = os.clock()
+	if current_time - previous_time > t then
+		previous_time = current_time
+		yield()
+	end
+end
+
+function yield()
+	os.queueEvent("yield")
+	os.pullEvent("yield")
 end
 
 function parseArray(str)
@@ -181,8 +206,6 @@ function parseMember(str)
 end
 
 function parseValue(str)
-	yield() -- Necessary for decoding the ~200 KB items.lua string in diff_metadata.
-	
 	local fchar = str:sub(1, 1)
 	if fchar == "{" then
 		return parseObject(str)
@@ -198,11 +221,6 @@ function parseValue(str)
 		return parseNull(str)
 	end
 	return nil
-end
-
-function yield()
-	os.queueEvent("yield")
-	os.pullEvent("yield")
 end
 
 function decode(str)
