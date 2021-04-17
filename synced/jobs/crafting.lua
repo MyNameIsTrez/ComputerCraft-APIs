@@ -10,14 +10,15 @@ end
 
 
 function add_recipe(item_name)
-	server.post_table("add-recipe", "recipe", {
+	server.post_table("add-recipe", "recipe", { ["Oak Planks"] = {
 		"Oak Wood", nil, nil,
 		nil, nil, nil,
 		nil, nil, nil
-	})
+	}})
 end
 
 
 read_items()
-print(items["Oak Planks"].emc)
-add_recipe("Oak Planks")
+if not items["Oak Planks"].recipe then
+	add_recipe("Oak Planks")
+end

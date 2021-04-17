@@ -12,10 +12,15 @@ app.post("/add-recipe", (req, res) => {
 	startConnectionTimeout(res);
 	printStats("add-recipe?recipe=" + ""); // TODO: Print recipe name.
 	
-	const recipe = JSON.parse(req.body.recipe);
-	//console.log(recipe);
-	
 	readItems()
+	.then(items => {
+		console.log("will add recipe");
+		const recipe_obj = JSON.parse(req.body.recipe);
+		const item_name = Object.keys(recipe_obj)[0];
+		const recipe = recipe_obj[item_name];
+		
+		return addRecipe(items, item_name, recipe);
+	})
 	.then(items => {
 		//console.log(items);
 		console.log("will start writing items");
@@ -50,15 +55,24 @@ function readItems() {
 }
 
 
+function addRecipe(items, item_name, recipe) {
+	return new Promise((resolve, reject) => {
+		console.log(item_name, recipe);
+		items[item_name].recipe = recipe;
+		resolve(items);
+	});
+}
+
+
 function writeItems(itemsJSON) {
 	return new Promise((resolve, reject) => {
 		// .substring(6) removes "return" that's automatically prepended.
 		const itemsLua = format(itemsJSON, { spaces: 0 }).substring(6);
-		fs.writeFile("synced/jobs/items2.lua", itemsLua, err => {
+		fs.writeFile("synced/jobs/items.lua", itemsLua, err => {
 			if (err) {
 				reject(err);
 			}
-			console.log("written items2.lua");
+			console.log("written items.lua");
 			resolve();
 		});
 	});

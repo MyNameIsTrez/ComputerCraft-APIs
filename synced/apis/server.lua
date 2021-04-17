@@ -10,7 +10,6 @@ function post_table(server_path, query, tab)
 	local payload = query .. "=" .. json.encode(tab)
 	
 	local t = http.post(p, payload)
-	_G.print(type(t))
 	
 	if t == nil then
 		_G.print("Server is offline!")
