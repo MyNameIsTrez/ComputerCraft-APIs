@@ -70,13 +70,13 @@ function readItems() {
 
 function addRecipe(items, recipeInfo) {
 	return new Promise((resolve, reject) => {
-		const crafting = recipeInfo.crafting;
+		const craft = recipeInfo.craft;
 		const recipe = recipeInfo.recipe;
-		const craftingCount = recipeInfo.crafting_count;
+		const craftCount = recipeInfo.craft_count;
 		
-		items[crafting].recipe_info = {
+		items[craft].recipe_info = {
 			recipe,
-			crafting_count: craftingCount
+			craft_count: craftCount
 		};
 		
 		resolve(items);
