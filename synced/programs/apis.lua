@@ -4,6 +4,7 @@ local synced_metadata_path = fs.combine(bw_os_name, "synced_metadata")
 local apis_path = fs.combine(synced_path, "apis")
 
 local get_latest_files_url = "http://h2896147.stratoserver.net:1338/get-latest-files"
+local print_synced_clear_delay = 0.5 -- Move to globals file.
 
 -- TODO: Once there's a "programs" folder, place startup in there. Copy startup from there to . path.
 -- startup downloads itself to . instead of backwards_os/apis, as that's where CC looks for the startup file.
@@ -75,7 +76,8 @@ function get_diff_metadata(local_metadata)
 	
 	local diff_msg = h.readAll()
 	h.close()
-	return json.decode(diff_msg)
+	local diff_metadata = json.decode(diff_msg)
+	return diff_metadata
 end
 
 
@@ -92,17 +94,16 @@ function print_synced(diff_metadata)
 		if any_added then write(", ") end
 		write("Removed " .. #removed_names .. " file" .. (#removed_names > 1 and "s." or "."))
 	end
-
+	
 	if not any_added and not any_removed then
 		write("Already up to date.")
 	end
 	
 	write("\n")
 	
-	local print_synced_clear_delay = 0.5 -- Move to globals file.
 	sleep(print_synced_clear_delay)
 	term.setCursorPos(1, 1)
-	term.clearLine()
+	term.clear()
 end
 
 

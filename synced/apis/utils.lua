@@ -6,7 +6,6 @@
 
 -- NOT EDITABLE VARIABLES --------------------------------------------------------
 
-local previousClock = 0
  
 -- FUNCTIONS --------------------------------------------------------
 
@@ -86,21 +85,23 @@ function tableRemove(t, e)
 	return t
 end
 
+-- Yields when more than t seconds have passed since the last yield.
+-- t is 4 by default.
+local previous_time = 0
+function try_yield(t)
+    t = t or 4
+    local current_time = os.clock()
+    if current_time - previous_time > t then
+        previous_time = current_time
+        yield()
+    end
+end
+
 -- Prevents the program from crashing after 5 seconds.
--- Executes faster than 'sleep(0.05)'.
+-- Executes faster than 'sleep(0.05)'
 function yield()
 	os.queueEvent('yield')
 	os.pullEvent('yield')
-end
-
--- Yields when more than t seconds have passed since the last yield. t is 4 by default.
-function tryYield(t)
-    t = t or 4
-    local currentClock = os.clock()
-    if currentClock - previousClock > t then
-        previousClock = currentClock
-        yield()
-    end
 end
 
 -- Re-maps a number from one range to another.

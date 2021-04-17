@@ -181,6 +181,8 @@ function parseMember(str)
 end
 
 function parseValue(str)
+	yield() -- Necessary for decoding the ~200 KB items.lua string in diff_metadata.
+	
 	local fchar = str:sub(1, 1)
 	if fchar == "{" then
 		return parseObject(str)
@@ -196,6 +198,11 @@ function parseValue(str)
 		return parseNull(str)
 	end
 	return nil
+end
+
+function yield()
+	os.queueEvent("yield")
+	os.pullEvent("yield")
 end
 
 function decode(str)

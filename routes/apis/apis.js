@@ -122,14 +122,14 @@ function printAddAndRemoveCounts(diffFilesData) {
 	const addedNames = Object.keys(diffFilesData.add);
 	const anyAdded = addedNames.length > 0;
 	if (anyAdded) {
-		changesString += `Added/modified ${addedNames.length} file.`;
+		changesString += `Added/modified ${addedNames.length} file${addedNames.length > 1 ? "s" : ""}.`;
 	}
 
 	const removedNames = diffFilesData.remove;
 	const anyRemoved = removedNames.length > 0;
 	if (anyRemoved) {
 		if (anyAdded) changesString += ", ";
-		changesString += `Removed ${removedNames.length} file.`;
+		changesString += `Removed ${removedNames.length} file${removedNames.length > 1 ? "s" : ""}.`;
 	}
 
 	if (anyAdded || anyRemoved) {

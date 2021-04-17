@@ -19,9 +19,8 @@ local bw_os_program_path = fs.combine(programs_path, "backwards_os")
 
 function main()
 	remove_craftos_watermark()
-	
-	-- TODO: Support offline usage.
-	if not is_server_online() then error("Server offline.") end
+	check_offline()
+	check_first_run()
 	
 	create_dirs()
 	download_and_load_required_apis()
@@ -33,6 +32,21 @@ function remove_craftos_watermark()
 	term.setCursorPos(1, 1)
 	write("           ")
 	term.setCursorPos(1, 1)
+end
+
+
+function check_offline()
+	-- TODO: Support offline usage.
+	if not is_server_online() then
+		error("Server offline.")
+	end
+end
+
+
+function check_first_run()
+	if not fs.exists(bw_os_name) then
+		print("Downloading, this'll take around 10 seconds...")
+	end
 end
 
 
