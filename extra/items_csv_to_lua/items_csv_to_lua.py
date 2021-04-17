@@ -1,8 +1,8 @@
-import csv, json
+import csv, luadata
 
 
 def add_item(rows, items):
-    # print(rows)
+    #print(rows)
 
     csv_id = rows["ID"]
 
@@ -43,8 +43,8 @@ def add_item(rows, items):
             "lore": lore,
             "potion_duration": potion_duration,
             "vanilla": vanilla,
-            # "stack_size": stack_size,
-            # "durability": durability,
+            #"stack_size": stack_size,
+            #"durability": durability,
             "microblockable": microblockable,
         }
 
@@ -61,5 +61,6 @@ if __name__ == "__main__":
         for rows in csv_reader:
             add_item(rows, items)
     
-    with open("items.json", "w") as f:
-        json.dump(items, f)
+    # prefix="" circumvents the default "Return " prefix.
+    luadata.write(lua_filepath, items, encoding="utf-8", prefix="")
+    #luadata.write(lua_filepath, items, encoding="utf-8", indent="\t", prefix="")

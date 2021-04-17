@@ -17,6 +17,9 @@ app.listen(1338, () => {
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+requireAll(app);
+
+
 function requireAll(app) {
 	const dirs = getDirectories("./routes");
 	dirs.forEach(dir => {
@@ -27,11 +30,9 @@ function requireAll(app) {
 	});
 }
 
+
 function getDirectories(path) {
 	return fs.readdirSync(path).filter(file => {
 		return fs.statSync(path+'/'+file).isDirectory();
 	});
 }
-
-
-requireAll(app);

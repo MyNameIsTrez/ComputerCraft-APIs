@@ -29,7 +29,6 @@ app.get("/long_poll", (req, res) => {
 	const fnName = req.query.fn_name;
 	printStats("long_poll?fn_name=" + fnName);
 	
-	console.log(longPollFunctions.hasOwnProperty(fnName));
 	if (longPollFunctions.hasOwnProperty(fnName)) {
 		longPollFunctions[fnName](res);
 	} else {
