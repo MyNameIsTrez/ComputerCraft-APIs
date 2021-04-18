@@ -177,14 +177,14 @@ function print_table(tab, recursive, depth)
 	
 	-- Print the keys and values, with extra spaces so the values line up.
 	for key, value in pairs(tab) do
-		tryYield() -- Need to yield, as the next bit of code can be recursive.
+		try_yield() -- Need to yield, as the next bit of code can be recursive.
 		
 		local spacingCount = longestKey - #tostring(key) -- How many spaces are added between the key and value.
 		print(
 			string.rep('    ', depth).. -- Shift tables that are deep inside the original table.
-			tostring(key)..
 			string.rep(' ', spacingCount)..
-			', '..
+			tostring(key)..
+			' | '..
 			tostring(type(value) == 'table' and 'table' or value)
 		)
 		
@@ -252,7 +252,7 @@ function frameWrite(string, offsetX, offsetY, sleepTime)
 	if type(sleepTime) == 'number' then
 		sleep(sleepTime)
 	elseif sleepTime == 'tryYield' then
-		tryYield()
+		try_yield()
 	end
 end
 
@@ -356,4 +356,16 @@ function matchBetween(str, startStr, endStr)
 		i = i + 1
 	end
 	return tab
+end
+
+function starts_with(str, start)
+	return str:sub(1, #start) == start
+end
+
+function ends_with(str, ending)
+	return ending == "" or str:sub(-#ending) == ending
+end
+
+function sort_alphabetically(tab)
+	table.sort(tab, function(a, b) return string.lower(a) < string.lower(b) end)
 end

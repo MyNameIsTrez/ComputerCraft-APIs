@@ -50,7 +50,7 @@ function main()
 	term.write("> ")
 	term.setCursorBlink(true)
 	
-	shell.run("backwards_os/synced/jobs/crafting")
+	shell.run("backwards_os/synced/programs/crafting_gui")
 	
 	--[[
 	write(string.rep("a", 25) .. "\n\n\n")

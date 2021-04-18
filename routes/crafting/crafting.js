@@ -58,7 +58,7 @@ app.post("/remove-recipe", (req, res) => {
 function readItems() {
 	return new Promise((resolve, reject) => {
 		// TODO: Remove "utf8"?
-		fs.readFile("synced/jobs/items.lua", "utf8", (err, itemsLuaStr) => {
+		fs.readFile("synced/data/items.lua", "utf8", (err, itemsLuaStr) => {
 			if (err) {
 				reject(err);
 			}
@@ -97,7 +97,7 @@ function writeItems(itemsJSON) {
 		// .substring(6) removes "return" that's automatically prepended.
 		const itemsLua = format(itemsJSON, { spaces: 0 }).substring(6);
 		
-		fs.writeFile("synced/jobs/items.lua", itemsLua, err => {
+		fs.writeFile("synced/data/items.lua", itemsLua, err => {
 			if (err) {
 				reject(err);
 			}

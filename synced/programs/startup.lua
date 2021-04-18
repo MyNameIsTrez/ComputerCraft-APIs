@@ -10,6 +10,7 @@ local synced_path = fs.combine(bw_os_name, "synced")
 local apis_path = fs.combine(synced_path, "apis")
 local programs_path = fs.combine(synced_path, "programs")
 local jobs_path = fs.combine(synced_path, "jobs")
+local data_path = fs.combine(synced_path, "data")
 
 local json_api_path = fs.combine(apis_path, "json")
 
@@ -65,6 +66,7 @@ function create_dirs()
 	create_dir(apis_path)
 	create_dir(programs_path)
 	create_dir(jobs_path)
+	create_dir(data_path)
 end
 
 

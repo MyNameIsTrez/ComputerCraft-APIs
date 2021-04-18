@@ -16,4 +16,4 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 * Overwrite print() and write() so the passed strings are written to a table.
     * The table shouldn't hold an infinite amount of elements.
     * ctrl+f.
-* Ability to play any kind game using Xvfb.
+* Ability to use any application/game using Xvfb inside CC.
