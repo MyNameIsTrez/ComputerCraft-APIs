@@ -72,3 +72,8 @@ function listen_char(on_char)
 	local event, char = os.pullEvent("char")
 	on_char(char, string.byte(char))
 end
+
+
+
+
+typed = ""

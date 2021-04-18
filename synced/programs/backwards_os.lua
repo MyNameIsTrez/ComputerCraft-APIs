@@ -7,7 +7,6 @@ local width = fake_width - 1
 
 local typing_start_x = 3
 --local typing_start_y = 1
-local typed = ""
 local typed_history = {}
 local typed_history_index = 0
 local running_program = false
@@ -116,8 +115,8 @@ function on_key(key, key_num)
 	
 	if key == "enter" then
 		local previously_typed = typed_history[#typed_history]
-		if typed ~= previously_typed then
-			table.insert(typed_history, typed)
+		if keyboard.typed ~= previously_typed then
+			table.insert(typed_history, keyboard.typed)
 		end
 		
 		-- "+ 1", because the first up arrow press shows the most recent command.
@@ -126,7 +125,7 @@ function on_key(key, key_num)
 		write("\n")
 		
 		running_program = true
-		shell.run(typed)
+		shell.run(keyboard.typed)
 		running_program = false
 		
 		term.write("> ")
@@ -135,43 +134,43 @@ function on_key(key, key_num)
 		typing_start_x = x
 		--typing_start_y = y
 		
-		typed = ""
+		keyboard.typed = ""
 	end
 	
 	-- TODO: Move into function.
 	if key == "backspace" or key == "delete" then
-		if #typed > 0 then
+		if #keyboard.typed > 0 then
 			local cursor_x, cursor_y = term.getCursorPos()
 			local typed_cursor_index = cursor_x - typing_start_x
 			--local y = 
 			
 			if key == "backspace" then
 				-- Clears the last character of the line.
-				term.setCursorPos(typing_start_x + #typed - 1, cursor_y)
+				term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
 				term.write(" ")
 				
 				-- Moves the cursor back by 1.
 				term.setCursorPos(cursor_x - 1, cursor_y)
 				-- Moves the characters after the cursor back by 1.
-				term.write(typed:sub(typed_cursor_index + 1, -1))
+				term.write(keyboard.typed:sub(typed_cursor_index + 1, -1))
 				
 				-- Moves the cursor to its final position.
 				term.setCursorPos(cursor_x - 1, cursor_y)
 				
-				typed = typed:sub(1, typed_cursor_index - 1) .. typed:sub(typed_cursor_index + 1, -1)
+				keyboard.typed = keyboard.typed:sub(1, typed_cursor_index - 1) .. keyboard.typed:sub(typed_cursor_index + 1, -1)
 			elseif key == "delete" then
 				-- Clears the last character of the line.
-				term.setCursorPos(typing_start_x + #typed - 1, cursor_y)
+				term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
 				term.write(" ")
 				
 				-- Moves the characters after the cursor back by 1.
 				term.setCursorPos(cursor_x, cursor_y)
-				term.write(typed:sub(typed_cursor_index + 2, -1))
+				term.write(keyboard.typed:sub(typed_cursor_index + 2, -1))
 				
 				-- Moves the cursor to its final position.
 				term.setCursorPos(cursor_x, cursor_y)
 				
-				typed = typed:sub(1, typed_cursor_index) .. typed:sub(typed_cursor_index + 2, -1)
+				keyboard.typed = keyboard.typed:sub(1, typed_cursor_index) .. keyboard.typed:sub(typed_cursor_index + 2, -1)
 			end
 		end
 	end
@@ -182,6 +181,8 @@ function on_key(key, key_num)
 			move_cursor(key)
 		end
 	end
+	
+	events.fire("key")
 end
 
 
@@ -192,14 +193,16 @@ function on_char(char, char_num)
 	local typed_cursor_index = cursor_x - typing_start_x
 	--server.print("typed_cursor_index: " .. typed_cursor_index)
 	
-	--typed = typed .. char
-	typed = typed:sub(1, typed_cursor_index) .. char .. typed:sub(typed_cursor_index + 1, -1)
-	--server.print("typed: " .. typed)
+	--keyboard.typed = keyboard.typed .. char
+	keyboard.typed = keyboard.typed:sub(1, typed_cursor_index) .. char .. keyboard.typed:sub(typed_cursor_index + 1, -1)
+	--server.print("keyboard.typed: " .. keyboard.typed)
 	
 	if not running_program then
-		write(typed:sub(typed_cursor_index + 1, -1))
+		write(keyboard.typed:sub(typed_cursor_index + 1, -1))
 		term.setCursorPos(cursor_x + 1, cursor_y)
 	end
+	
+	events.fire("char")
 end
 
 
@@ -207,52 +210,52 @@ function move_cursor(key)
 	local x, y = term.getCursorPos()
 	if key == "up" then
 		if typed_history[typed_history_index - 1] ~= nil then
-			local prev_typed = typed
+			local prev_typed = keyboard.typed
 			
-			typed = typed_history[typed_history_index - 1]
+			keyboard.typed = typed_history[typed_history_index - 1]
 			typed_history_index = typed_history_index - 1
 			
 			--server.print(prev_typed)
-			--server.print(typed)
-			--server.print(#prev_typed - #typed)
+			--server.print(keyboard.typed)
+			--server.print(#prev_typed - #keyboard.typed)
 			
 			term.setCursorPos(typing_start_x, y)
-			term.write(typed)
-			local clear_char_count = #prev_typed - #typed
+			term.write(keyboard.typed)
+			local clear_char_count = #prev_typed - #keyboard.typed
 			if clear_char_count > 0 then
 				term.write(string.rep(" ", clear_char_count))
 			end
-			term.setCursorPos(typing_start_x + #typed, y)
+			term.setCursorPos(typing_start_x + #keyboard.typed, y)
 		end
 	end
 	if key == "down" then
 		if typed_history_index == #typed_history then -- Clear the cursor line.
 			term.setCursorPos(typing_start_x, y)
-			local clear_char_count = #typed
+			local clear_char_count = #keyboard.typed
 			if clear_char_count > 0 then
 				term.write(string.rep(" ", clear_char_count))
 			end
 			term.setCursorPos(typing_start_x, y)
 			
-			typed = ""
+			keyboard.typed = ""
 			typed_history_index = typed_history_index + 1
 		elseif typed_history[typed_history_index + 1] ~= nil then
-			local prev_typed = typed
+			local prev_typed = keyboard.typed
 			
-			typed = typed_history[typed_history_index + 1]
+			keyboard.typed = typed_history[typed_history_index + 1]
 			typed_history_index = typed_history_index + 1
 			
 			--server.print(prev_typed)
-			--server.print(typed)
-			--server.print(#prev_typed - #typed)
+			--server.print(keyboard.typed)
+			--server.print(#prev_typed - #keyboard.typed)
 			
 			term.setCursorPos(typing_start_x, y)
-			term.write(typed)
-			local clear_char_count = #prev_typed - #typed
+			term.write(keyboard.typed)
+			local clear_char_count = #prev_typed - #keyboard.typed
 			if clear_char_count > 0 then
 				term.write(string.rep(" ", clear_char_count))
 			end
-			term.setCursorPos(typing_start_x + #typed, y)
+			term.setCursorPos(typing_start_x + #keyboard.typed, y)
 		end
 	end
 	if key == "left" then
@@ -261,7 +264,7 @@ function move_cursor(key)
 		end
 	end
 	if key == "right" then
-		if x < typing_start_x + #typed then
+		if x < typing_start_x + #keyboard.typed then
 			term.setCursorPos(x + 1, y)
 		end
 	end
