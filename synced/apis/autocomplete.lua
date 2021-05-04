@@ -16,9 +16,13 @@ end
 
 
 function autocomplete_until_enter()
+	--local a = 0
+	--a = a + 1
+	
 	--server.print(type(keyboard))
-	--sleep(1)
-	--write("a")
+	sleep(1)
+	--write("\n")
+	--write("foo")
 	--print("foo")
 	--server.print("foo")
 	--server.print(keyboard.typed)

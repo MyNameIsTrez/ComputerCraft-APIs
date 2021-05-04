@@ -14,9 +14,9 @@ local running_program = false
 
 function premain()
 	parallel.waitForAny(
-		--listen_file_update,
-		--keyboard.listen,
-		--main
+		listen_file_update,
+		keyboard.listen,
+		main
 	)
 end
 

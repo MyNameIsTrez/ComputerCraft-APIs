@@ -1,98 +1,6 @@
---local events = {}
-
-function listen() end -- TODO: REMOVE!!
+local events = {}
 
 
-local queue = {}
-local callback_fns = {}
-local callbacks = {}
-
-
-function new_listen(event, callback_fn)
-	-- TODO: Combine into a single if-statement?
-	if callback_fns[event] == nil then
-		callback_fns[event] = {}
-	end
-	if callbacks[event] == nil then
-		callbacks[event] = {}
-	end
-	
-	table.insert(callback_fns[event], callback_fn)
-end
-
-
-function runner()
-	while true do
-		print("queue[1]: ", queue[1] ~= nil)
-		
-		if queue[1] then
-			-- TODO: Rename eventData ot event_data everywhere.
-			local eventData = table.remove(queue, 1)
-			local event = eventData[1]
-			print("event: ", event)
-			print("callback_fns[event]: ", callback_fns[event])
-			
-			-- TODO: Try storing indexed values in variables.
-			if callback_fns[event] then
-				print("#callback_fns[event]: ", #callback_fns[event])
-				
-				for i = 1, #callback_fns[event] do
-					-- TODO: USE TABLE.UNPACK()!!
-					-- If one of the params is nil, it won't
-					-- return the params after it.
-					
-					if callbacks[event][i] == nil or
-						-- TODO: Store status in variable.
-							coroutine.status(callbacks[event][i]) == "dead" then
-						--print("creating coroutine")
-						callbacks[event][i] = coroutine.create(callback_fns[event][i])
-					end
-					
-					--print(type(unpack(eventData)))
-					coroutine.resume(callbacks[event][i], unpack(eventData))
-				end
-			end
-		end
-		
-		coroutine.yield()
-	end
-end
-
-
--- TODO: queueHandler -> queue_handler
-function queueHandler()
-	while true do
-		--print("starting os.pullEvent()")
-		-- TODO: USE TABLE.PACK()!!!
-		table.insert(queue, { os.pullEvent() } )
-		--print("inserted os.pullEvent(): ", queue[#queue][1])
-	end
-end
-
-
-new_listen("key", function()
-	print("key callback fired")
-	sleep(2)
-end)
-
-
-new_listen("char", function()
-	print("char callback fired")
-	sleep(4)
-end)
-
-
-parallel.waitForAny(queueHandler, runner)
-
-
---[[
-function remove_event(event)
-	events[event] = nil
-end
-]]--
-
-
---[[
 function listen(event_arg, callback_arg)
 	if type(event_arg) == "table" then
 		--server.print("Loop through table of callbacks.")
@@ -123,23 +31,8 @@ function add_event(event, callback)
 	end
 	table.insert(events[event], callback)
 end
-]]--
 
 
--- TODO: Allow "event" to be a table.
---[[
-function remove_listener(event, callback)
-	for i, found_callback in pairs(events[event]) do
-		if callback == found_callback then
-			--found_callback = nil -- TODO: This may work!
-			events[event][i] = nil
-		end
-	end
-end
-]]--
-
-
---[[
 -- TODO: Allow "event" to be a table.
 function fire(event, ...)
 	if not events[event] then
@@ -156,7 +49,6 @@ function fire(event, ...)
 		callback(...)
 	end
 end
-]]--
 
 
 --function print_event_callbacks(event)
@@ -164,3 +56,111 @@ end
 --		print(callback)
 --	end
 --end
+
+
+-- TODO: Allow the "event" argument to be a table.
+--[[
+function remove_listener(event, callback)
+	for i, found_callback in pairs(events[event]) do
+		if callback == found_callback then
+			--found_callback = nil -- TODO: This may work!
+			events[event][i] = nil
+		end
+	end
+end
+]]--
+
+
+
+
+
+
+
+
+
+
+
+--[[
+function listen() end -- TODO: REMOVE!!
+
+
+local queue = {}
+local coroutine_fns = {}
+local coroutines = {}
+local suspended_coroutines = {}
+
+
+function new_listen(event, callback_fn)
+	-- TODO: Combine into a single if-statement?
+	if coroutine_fns[event] == nil then
+		coroutine_fns[event] = {}
+	end
+	if coroutines[event] == nil then
+		coroutines[event] = {}
+	end
+	
+	table.insert(coroutine_fns[event], callback_fn)
+end
+
+
+function queue_handler()
+	while true do
+		-- TODO: USE TABLE.PACK()!
+		table.insert(queue, { os.pullEvent() } )
+	end
+end
+
+
+function runner()
+	while true do
+		print("queue[1]: ", queue[1] ~= nil)
+		
+		if queue[1] then
+			local event_data = table.remove(queue, 1) -- Handles the oldest event first.
+			local event = event_data[1]
+			
+			-- TODO: Try storing indexed values in variables.
+			if coroutine_fns[event] then
+				for i = 1, #coroutine_fns[event] do
+					if coroutines[event][i] == nil or coroutine.status(coroutines[event][i]) == "dead" then
+						coroutines[event][i] = coroutine.create(coroutine_fns[event][i])
+					end
+					
+					-- TODO: USE TABLE.UNPACK()!
+					-- If one of the params is nil, it won't
+					-- return the params after it.
+					local _, returned_event = coroutine.resume(coroutines[event][i], unpack(event_data))
+					print("returned event from coroutine.resume(): ", returned_event)
+					
+					local status = coroutine.status(coroutines[event][i])
+					if status == "suspended" then -- If os.yield() was called.
+						if suspended_coroutines[returned_event] == nil then
+							suspended_coroutines[returned_event] = {}
+						end
+						table.insert(suspended_coroutines[returned_event], coroutines[event][i])
+					end
+				end
+			end
+		end
+		
+		coroutine.yield()
+	end
+end
+
+
+new_listen("key", function()
+	print("key callback fired")
+	sleep(2)
+	print("key success!")
+end)
+
+
+new_listen("char", function()
+	print("char callback fired")
+	sleep(4)
+	print("char success!")
+end)
+
+
+parallel.waitForAny(queue_handler, runner)
+]]--
