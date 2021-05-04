@@ -6,3 +6,15 @@ function os.pullEvent(sFilter)
 	end
 	return event, p1, p2, p3, p4, p5
 end
+
+
+--[[
+table.unpack = unpack
+]]--
+
+
+--[[
+function table.pack(...)
+  return { n = select("#", ...), ... }
+end 
+]]--

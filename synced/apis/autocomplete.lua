@@ -4,7 +4,9 @@ local all_choices_tab
 function on(tab)
 	all_choices_tab = tab
 	
-	_autocomplete_until_enter()
+	events.listen("typed", autocomplete_until_enter)
+	--events.listen("key", autocomplete_until_enter) -- Also triggers on shift.
+	--events.listen("char", autocomplete_until_enter) -- Doesn't trigger on arrow keys.
 end
 
 
@@ -13,16 +15,16 @@ function off()
 end
 
 
-function _autocomplete_until_enter()
-	--events.listen("key", autocomplete_until_enter)
-	events.listen("char", autocomplete_until_enter)
-end
-
-
 function autocomplete_until_enter()
-	server.print(keyboard.typed)
-	local choices_tab = autocomplete(keyboard.typed)
-	server.print(choices_tab)
+	--server.print(type(keyboard))
+	--sleep(1)
+	--write("a")
+	--print("foo")
+	--server.print("foo")
+	--server.print(keyboard.typed)
+	--local choices_tab = autocomplete(keyboard.typed)
+	
+	--server.print(choices_tab)
 	--utils.print_table(choices_tab)
 end
 

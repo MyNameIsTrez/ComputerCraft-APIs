@@ -14,10 +14,9 @@ local running_program = false
 
 function premain()
 	parallel.waitForAny(
-		listen_file_update,
-		listen_key,
-		listen_char,
-		main
+		--listen_file_update,
+		--keyboard.listen,
+		--main
 	)
 end
 
@@ -31,162 +30,109 @@ function listen_file_update()
 end
 
 
-function listen_key()
-	while true do
-		keyboard.listen_key(on_key)
-	end
-end
-
-
-function listen_char()
-	while true do
-		keyboard.listen_char(on_char)
-	end
-end
-
-
 function main()
 	term.write("> ")
 	term.setCursorBlink(true)
 	
 	shell.run("backwards_os/synced/programs/crafting_gui")
 	
-	--[[
-	write(string.rep("a", 25) .. "\n\n\n")
-	--write(string.rep("a", 25))
-	--write("\n")
-	--write("\n")
-	--write("\n")
-	write(string.rep("b", 75))
-	write(string.rep("c", 51))
-	write(string.rep("d", 50))
-	--write(string.rep("d", 50) .. "\n")
-	server.print(subterm.history)
-	]]--
-	
-	--[[
-	write(string.rep("a", 45))
-	while true do
-		write(string.rep("b", 1))
-		sleep(1)
-		--server.print(subterm.history)
-	end
-	]]--
-	
-	--[[
-	write(string.rep("b", 50) .. "\n")
-	write(string.rep("b", 50) .. "\n")
-	server.print(subterm.history)
-	]]--
-	
-	--[[
-	--subterm.disable_history_recording()
-	print("xd")
-	write("foo")
-	write("bar")
-	--server.print("subterm.history:")
-	--server.print(subterm.history)
-	]]--
-	
 	sleep(1e6)
 end
 
 
-function on_key(key, key_num)
-	if key == "r" then
-		os.reboot()
-	end
-	
-	if key == "t" then
-		sleep(0.05) -- So the "t" isn't printed.
-		error("Terminated")
-	end
-	
-	-- Function of synced/apis/subterm.lua
-	if key == "pageUp" then
-		subterm.scroll_up(1)
-		--server.print("typed pageUp")
-	end
-	
-	if key == "pageDown" then
-		subterm.scroll_down(1)
-		--server.print("typed pageDown")
-	end
-	
-	if key == "enter" then
-		local previously_typed = typed_history[#typed_history]
-		if keyboard.typed ~= previously_typed then
-			table.insert(typed_history, keyboard.typed)
-		end
-		
-		-- "+ 1", because the first up arrow press shows the most recent command.
-		typed_history_index = #typed_history + 1
-		
-		write("\n")
-		
-		running_program = true
-		shell.run(keyboard.typed)
-		running_program = false
-		
-		term.write("> ")
-		
-		local x, y = term.getCursorPos()
-		typing_start_x = x
-		--typing_start_y = y
-		
-		keyboard.typed = ""
-	end
-	
-	-- TODO: Move into function.
-	if key == "backspace" or key == "delete" then
-		if #keyboard.typed > 0 then
-			local cursor_x, cursor_y = term.getCursorPos()
-			local typed_cursor_index = cursor_x - typing_start_x
-			--local y = 
-			
-			if key == "backspace" then
-				-- Clears the last character of the line.
-				term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
-				term.write(" ")
-				
-				-- Moves the cursor back by 1.
-				term.setCursorPos(cursor_x - 1, cursor_y)
-				-- Moves the characters after the cursor back by 1.
-				term.write(keyboard.typed:sub(typed_cursor_index + 1, -1))
-				
-				-- Moves the cursor to its final position.
-				term.setCursorPos(cursor_x - 1, cursor_y)
-				
-				keyboard.typed = keyboard.typed:sub(1, typed_cursor_index - 1) .. keyboard.typed:sub(typed_cursor_index + 1, -1)
-			elseif key == "delete" then
-				-- Clears the last character of the line.
-				term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
-				term.write(" ")
-				
-				-- Moves the characters after the cursor back by 1.
-				term.setCursorPos(cursor_x, cursor_y)
-				term.write(keyboard.typed:sub(typed_cursor_index + 2, -1))
-				
-				-- Moves the cursor to its final position.
-				term.setCursorPos(cursor_x, cursor_y)
-				
-				keyboard.typed = keyboard.typed:sub(1, typed_cursor_index) .. keyboard.typed:sub(typed_cursor_index + 2, -1)
-			end
-		end
-	end
-	
-	-- TODO: Move into function.
-	if key == "up" or key == "down" or key == "left" or key == "right" then
-		if not running_program then
-			move_cursor(key)
-		end
-	end
-	
-	events.fire("key")
+local events_tab = {}
+
+
+events_tab["r"] = function()
+	os.reboot()
 end
 
+events_tab["t"] = function()
+	sleep(0.05) -- So the "t" isn't printed.
+	error("Terminated")
+end
 
-function on_char(char, char_num)
+-- Function of synced/apis/subterm.lua
+events_tab["pageUp"] = function()
+	subterm.scroll_up(1)
+	--server.print("typed pageUp")
+end
+
+events_tab["pageDown"] = function()
+	subterm.scroll_down(1)
+	--server.print("typed pageDown")
+end
+
+events_tab["enter"] = function()
+	local previously_typed = typed_history[#typed_history]
+	if keyboard.typed ~= previously_typed then
+		table.insert(typed_history, keyboard.typed)
+	end
+	
+	-- "+ 1", because the first up arrow press shows the most recent command.
+	typed_history_index = #typed_history + 1
+	
+	write("\n")
+	
+	running_program = true
+	shell.run(keyboard.typed)
+	running_program = false
+	
+	term.write("> ")
+	
+	local x, y = term.getCursorPos()
+	typing_start_x = x
+	--typing_start_y = y
+	
+	keyboard.typed = ""
+end
+
+-- TODO: Move into function.
+events_tab[ { "backspace", "delete" } ] = function()
+	if #keyboard.typed > 0 then
+		local cursor_x, cursor_y = term.getCursorPos()
+		local typed_cursor_index = cursor_x - typing_start_x
+		--local y = 
+		
+		if key == "backspace" then
+			-- Clears the last character of the line.
+			term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
+			term.write(" ")
+			
+			-- Moves the cursor back by 1.
+			term.setCursorPos(cursor_x - 1, cursor_y)
+			-- Moves the characters after the cursor back by 1.
+			term.write(keyboard.typed:sub(typed_cursor_index + 1, -1))
+			
+			-- Moves the cursor to its final position.
+			term.setCursorPos(cursor_x - 1, cursor_y)
+			
+			keyboard.typed = keyboard.typed:sub(1, typed_cursor_index - 1) .. keyboard.typed:sub(typed_cursor_index + 1, -1)
+		elseif key == "delete" then
+			-- Clears the last character of the line.
+			term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
+			term.write(" ")
+			
+			-- Moves the characters after the cursor back by 1.
+			term.setCursorPos(cursor_x, cursor_y)
+			term.write(keyboard.typed:sub(typed_cursor_index + 2, -1))
+			
+			-- Moves the cursor to its final position.
+			term.setCursorPos(cursor_x, cursor_y)
+			
+			keyboard.typed = keyboard.typed:sub(1, typed_cursor_index) .. keyboard.typed:sub(typed_cursor_index + 2, -1)
+		end
+	end
+end
+
+events_tab[ { "up", "down", "left", "right" } ] = function(key)
+	if not running_program then
+		move_cursor(key)
+	end
+end
+
+events_tab["char"] = function(char)
+	--server.print("bar")
 	--server.print("")
 	local cursor_x, cursor_y = term.getCursorPos()
 	--server.print("cursor_x: " .. cursor_x .. ", cursor_y: " .. cursor_y)
@@ -201,9 +147,11 @@ function on_char(char, char_num)
 		write(keyboard.typed:sub(typed_cursor_index + 1, -1))
 		term.setCursorPos(cursor_x + 1, cursor_y)
 	end
-	
-	events.fire("char")
+	--server.print(keyboard.typed)
 end
+
+
+events.listen(events_tab)
 
 
 function move_cursor(key)
@@ -269,6 +217,9 @@ function move_cursor(key)
 		end
 	end
 end
+
+
+
 
 
 --[[
