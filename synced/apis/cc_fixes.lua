@@ -19,7 +19,7 @@ end
 
 
 function wrapRequest( _url, _post )
-	local signals = {}
+	local unused_events = {}
 	
 	local requestID = http.request( _url, _post )
 	
@@ -27,23 +27,25 @@ function wrapRequest( _url, _post )
 		local event, param1, param2 = os.pullEvent()
 		
 		if event == "http_success" and param1 == _url then
-			queue_signals(signals)
+			requeue(unused_events)
 			return param2
 		elseif event == "http_failure" and param1 == _url then
-			queue_signals(signals)
+			requeue(unused_events)
 			return nil
 		else
-			local signal = { event, param1, param2 }
-			table.insert(signals, signal)
+			local unused_event = { event, param1, param2 }
+			table.insert(unused_events, unused_event)
 		end
 	end
 end
 
 
-function queue_signals(signals)
-	for i = 1, #signals do -- queues the oldest signal first
-		local n = table.maxn(signals[i])
-		os.queueEvent(unpack(signals[i], 1, n))
+function requeue(unused_events)
+	for i = 1, #unused_events do -- TODO: Loop in opposite direction?
+		local n = table.maxn(unused_events[i]) -- TODO: Necessary?
+		
+		-- TODO: This line somehow queues an already placed "a" character.
+		os.queueEvent(unpack(unused_events[i], 1, n))
 	end
 end
 
@@ -51,15 +53,15 @@ end
 --[[
 -- This implementation pushes and pops queued events,
 -- which means os.pulLEvent() won't destroy events anymore.
---local signals = {}
+--local unused_events = {}
 function _G.sleep(time)
 	local id = os.startTimer(time) -- id is a table.
 	
 	-- TODO: Move down above push_events().
 	-- Not sure why removing the "local" breaks things.
-	local signals = {}
+	local unused_events = {}
 	
-	--push_events(signals)
+	--push_events(unused_events)
 	
 	repeat
 		local signal = { os.pullEvent() }
@@ -68,16 +70,16 @@ function _G.sleep(time)
 		-- AS IT'S POSSIBLE THAT A SLEEP(10) GETS PROCESSED
 		-- BEFORE A SLEEP(2)!
 		if signal[1] ~= "timer" or signal[2] ~= id then
-			table.insert(signals, signal)
+			table.insert(unused_events, signal)
 		end
 	until signal[1] == "timer" and signal[2] == id
 	
-	pop_events(signals)
+	pop_events(unused_events)
 end
 
 
 -- TODO: Move into different file!
-function push_events(signals)
+function push_events(unused_events)
 	repeat
 		local signal = { os.pullEvent() }
 		
@@ -85,18 +87,18 @@ function push_events(signals)
 		-- AS IT'S POSSIBLE THAT A SLEEP(10) GETS PROCESSED
 		-- BEFORE A SLEEP(2)!
 		if signal[1] ~= "timer" or signal[2] ~= id then
-			table.insert(signals, signal)
+			table.insert(unused_events, signal)
 		end
 	until signal[1] == "timer" and signal[2] == id
 end
 
 
 -- TODO: Move into different file!
-function pop_events(signals)
+function pop_events(unused_events)
 	
 	local a, b = term.getCursorPos()
 	term.setCursorPos(1, b + 1)
-	for k, v in pairs(signals) do
+	for k, v in pairs(unused_events) do
 		if v[1] == "timer" then
 			print(v[1] .. ", " .. type(v[2]))
 		else
@@ -105,10 +107,10 @@ function pop_events(signals)
 	end
 	term.setCursorPos(a, b)
 	
-	for i = 1, #signals do
-		os.queueEvent(unpack(signals[i], 1, table.maxn(signals[i])))
+	for i = 1, #unused_events do
+		os.queueEvent(unpack(unused_events[i], 1, table.maxn(unused_events[i])))
 	end
-	--signals = {}
+	--unused_events = {}
 end
 ]]--
 

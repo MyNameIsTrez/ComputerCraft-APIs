@@ -5,7 +5,7 @@ local cfg_path = fs.combine(apis, "backwards_os_cfg")
 local fake_width, height = term.getSize()
 local width = fake_width - 1
 
-local typing_start_x = 3
+local typing_start_x -- Initialized in main()
 --local typing_start_y = 1
 local typed_history = {}
 local typed_history_index = 0
@@ -21,6 +21,7 @@ function premain()
 end
 
 
+-- TODO: Replace with events.listen call.
 function listen_file_update()
 	while true do
 		if long_poll.listen("file_change") == "true" then
@@ -32,9 +33,13 @@ end
 
 function main()
 	term.write("> ")
+	-- This line below is in case the string above gets changed.
+	typing_start_x = term.getCursorPos()
+	
 	term.setCursorBlink(true)
 	
-	shell.run("backwards_os/synced/programs/crafting_gui")
+	-- TODO: If you type a single "a" character, commenting this back in makes n+1 "a" characters appear every 10s, instead of just +1. So somehow this program is making copies of fired "a" character events API events, or of vanilla queued events.
+	--shell.run("backwards_os/synced/programs/crafting_gui")
 	
 	sleep(1e6)
 end
@@ -134,13 +139,25 @@ end
 events_tab["char"] = function(char)
 	--server.print("bar")
 	--server.print("")
+	
+	--[[ Showcase of how it's possible to print before typing chars.
+	local a, b = term.getCursorPos()
+	term.setCursorPos(1, 2)
+	write(char)
+	term.setCursorPos(a, b)
+	]]--
+	
 	local cursor_x, cursor_y = term.getCursorPos()
 	--server.print("cursor_x: " .. cursor_x .. ", cursor_y: " .. cursor_y)
+	--print(char)
 	local typed_cursor_index = cursor_x - typing_start_x
 	--server.print("typed_cursor_index: " .. typed_cursor_index)
 	
 	--keyboard.typed = keyboard.typed .. char
-	keyboard.typed = keyboard.typed:sub(1, typed_cursor_index) .. char .. keyboard.typed:sub(typed_cursor_index + 1, -1)
+	--print(char)
+	local back = keyboard.typed:sub(1, typed_cursor_index)
+	local front = keyboard.typed:sub(typed_cursor_index + 1, -1)
+	keyboard.typed = back .. char .. front
 	--server.print("keyboard.typed: " .. keyboard.typed)
 	
 	if not running_program then
