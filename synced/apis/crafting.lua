@@ -38,6 +38,12 @@ function remove_recipe(item_name)
 end
 
 
+function init()
+	crafting.read_items()
+	crafting.read_item_names()
+end
+
+
 
 --read_items()
 

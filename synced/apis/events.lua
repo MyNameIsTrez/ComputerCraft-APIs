@@ -1,21 +1,13 @@
 local events = {}
 
 
-function listen(event_arg, callback_arg)
+function listen(event_arg, callback)
 	if type(event_arg) == "table" then
-		-- Loop through table of callbacks.
-		for event_result, callback in pairs(event_arg) do
-			if type(event_result) == "table" then
-				-- Loop through table of keys that call the callback.
-				for _, event in ipairs(event_result) do
-					add_event(event, callback)
-				end
-			else
-				add_event(event_result, callback)
-			end
+		for _, event in pairs(event_arg) do
+			add_event(event, callback)
 		end
 	else
-		add_event(event_arg, callback_arg)
+		add_event(event_arg, callback)
 	end
 end
 

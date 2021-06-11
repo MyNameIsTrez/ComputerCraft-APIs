@@ -39,34 +39,31 @@ function main()
 	
 	term.setCursorBlink(true)
 	
-	shell.run("backwards_os/synced/programs/crafting_gui")
+	--shell.run("backwards_os/synced/programs/crafting_gui")
 	
 	sleep(1e6)
 end
 
 
-local events_tab = {}
-
-
-events_tab["r"] = function()
+events.listen("r", function()
 	os.reboot()
-end
+end)
 
-events_tab["t"] = function()
+events.listen("t", function()
 	sleep(0.05) -- So the "t" isn't printed.
 	error("Terminated")
-end
+end)
 
 -- Function of synced/apis/subterm.lua
-events_tab["pageUp"] = function()
+events.listen("pageUp", function()
 	subterm.scroll_up(1)
-end
+end)
 
-events_tab["pageDown"] = function()
+events.listen("pageDown", function()
 	subterm.scroll_down(1)
-end
+end)
 
-events_tab["enter"] = function()
+events.listen("enter", function()
 	local previously_typed = typed_history[#typed_history]
 	if keyboard.typed ~= previously_typed then
 		table.insert(typed_history, keyboard.typed)
@@ -88,10 +85,10 @@ events_tab["enter"] = function()
 	--typing_start_y = y
 	
 	keyboard.typed = ""
-end
+end)
 
 -- TODO: Move into function.
-events_tab[ { "backspace", "delete" } ] = function(key)
+events.listen( { "backspace", "delete" }, function(key)
 	if #keyboard.typed > 0 then
 		local cursor_x, cursor_y = term.getCursorPos()
 		local typed_cursor_index = cursor_x - typing_start_x
@@ -126,15 +123,15 @@ events_tab[ { "backspace", "delete" } ] = function(key)
 			keyboard.typed = keyboard.typed:sub(1, typed_cursor_index) .. keyboard.typed:sub(typed_cursor_index + 2, -1)
 		end
 	end
-end
+end)
 
-events_tab[ { "up", "down", "left", "right" } ] = function(key)
+events.listen( { "up", "down", "left", "right" }, function(key)
 	if not running_program then
 		move_cursor(key)
 	end
-end
+end)
 
-events_tab["char"] = function(_, char)
+events.listen("char", function(_, char)
 	local cursor_x, cursor_y = term.getCursorPos()
 	local typed_cursor_index = cursor_x - typing_start_x
 	
@@ -146,10 +143,7 @@ events_tab["char"] = function(_, char)
 		write(keyboard.typed:sub(typed_cursor_index + 1, -1))
 		term.setCursorPos(cursor_x + 1, cursor_y)
 	end
-end
-
-
-events.listen(events_tab)
+end)
 
 
 function move_cursor(key)
@@ -290,4 +284,4 @@ end
 ]]--
 
 
-premain()
+premain() -- TODO: Move to startup?
