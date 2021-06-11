@@ -8,14 +8,18 @@ function os.pullEvent(sFilter)
 end
 
 
-http.get = function( _url )
+rawset(http, "get_lossy", http.get)
+http.get = nil
+rawset(http, "get_lossless", function( _url )
 	return wrapRequest( _url, nil )
-end
+end)
 
 
-http.post = function( _url, _post )
+rawset(http, "post_lossy", http.post)
+http.post = nil
+rawset(http, "post_lossless", function( _url, _post )
 	return wrapRequest( _url, _post or "" )
-end
+end)
 
 
 function wrapRequest( _url, _post )
@@ -44,7 +48,6 @@ function requeue(unused_events)
 	for i = 1, #unused_events do -- TODO: Loop in opposite direction?
 		local n = table.maxn(unused_events[i]) -- TODO: Necessary?
 		
-		-- TODO: This line somehow queues an already placed "a" character.
 		os.queueEvent(unpack(unused_events[i], 1, n))
 	end
 end
