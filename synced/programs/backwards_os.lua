@@ -40,7 +40,7 @@ function main()
 	term.setCursorBlink(true)
 	
 	-- TODO: If you type a single "a" character, commenting this back in makes n+1 "a" characters appear every 10s, instead of just +1. So somehow this program is making copies of fired "a" character events API events, or of vanilla queued events.
-	--shell.run("backwards_os/synced/programs/crafting_gui")
+	shell.run("backwards_os/synced/programs/crafting_gui")
 	
 	sleep(1e6)
 end
