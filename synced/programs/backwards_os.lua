@@ -255,7 +255,7 @@ function downloadCfg()
 
 	local url = 'https://raw.githubusercontent.com/MyNameIsTrez/ComputerCraft-APIs/master/backwardsos_cfg.lua'
 
-	local handleHttps = http.post(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
+	local handleHttps = http.post_lossless(httpToHttpsUrl, '{"url": "' .. url .. '"}' )
 
 	if not handleHttps then
 		handleHttps.close()

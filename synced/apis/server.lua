@@ -9,7 +9,7 @@ function post_table(server_path, query, tab)
 	local p = path.join(url, server_path)
 	local payload = query .. "=" .. json.encode(tab)
 	
-	local t = http.post(p, payload)
+	local t = http.post_lossless(p, payload)
 	
 	if t == nil then
 		_G.print("Server is offline!")
@@ -25,7 +25,7 @@ function post(server_path, query, str)
 	local p = path.join(url, server_path)
 	local payload = query .. "=" .. str
 	
-	local t = http.post(p, payload)
+	local t = http.post_lossless(p, payload)
 	
 	if t == nil then
 		_G.print("Server is offline!")
@@ -38,7 +38,7 @@ end
 
 
 function print(msg)
-	local h = http.post(server_print_url, "msg=" .. json.encode(msg))
+	local h = http.post_lossless(server_print_url, "msg=" .. json.encode(msg))
 	
 	if h == nil then
 		h.close()
