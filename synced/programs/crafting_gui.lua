@@ -1,7 +1,7 @@
 autocomplete.on(crafting.item_names)
 
---local choices_remaining = autocomplete.autocomplete("Oak")
+local choices_remaining = autocomplete.autocomplete("Oak")
 
---autocomplete.off()
+autocomplete.off()
 
---utils.print_table(choices_remaining)
+utils.print_table(choices_remaining)
