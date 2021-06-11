@@ -40,7 +40,7 @@ function main()
 	term.setCursorBlink(true)
 	
 	-- TODO: If you type a single "a" character, commenting this back in makes n+1 "a" characters appear every 10s, instead of just +1. So somehow this program is making copies of fired "a" character events API events, or of vanilla queued events.
-	shell.run("backwards_os/synced/programs/crafting_gui")
+	--shell.run("backwards_os/synced/programs/crafting_gui")
 	
 	sleep(1e6)
 end
@@ -94,7 +94,7 @@ events_tab["enter"] = function()
 end
 
 -- TODO: Move into function.
-events_tab[ { "backspace", "delete" } ] = function()
+events_tab[ { "backspace", "delete" } ] = function(key)
 	if #keyboard.typed > 0 then
 		local cursor_x, cursor_y = term.getCursorPos()
 		local typed_cursor_index = cursor_x - typing_start_x
@@ -137,7 +137,7 @@ events_tab[ { "up", "down", "left", "right" } ] = function(key)
 	end
 end
 
-events_tab["char"] = function(char)
+events_tab["char"] = function(_, char)
 	--server.print("bar")
 	--server.print("")
 	

@@ -39,14 +39,8 @@ function fire(event, ...)
 		return
 	end
 	
-	--server.print(#events[event])
-	--for _, callback in ipairs(events[event]) do
-	--	server.print(tostring(callback))
-	--end
-	
 	for _, callback in ipairs(events[event]) do
-		--server.print(_)
-		callback(...)
+		callback(event, ...)
 	end
 end
 
