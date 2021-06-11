@@ -108,8 +108,9 @@ keys_string_number["return"] = keys_string_number.enter
 
 function listen()
 	while true do
+		--utils.debug_write_random()
+		
 		local event, value = os.pullEvent()
-		--print(event)
 		
 		if event == "key" then
 			local key_num = value

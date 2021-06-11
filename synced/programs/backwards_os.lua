@@ -14,8 +14,8 @@ local running_program = false
 
 function premain()
 	parallel.waitForAny(
-		listen_file_update,
 		keyboard.listen,
+		listen_file_update,
 		main
 	)
 end
@@ -24,7 +24,8 @@ end
 -- TODO: Replace with events.listen call.
 function listen_file_update()
 	while true do
-		if long_poll.listen("file_change") == "true" then
+		-- The server responds every N seconds.
+		if long_poll.listen() == "true" then
 			os.reboot()
 		end
 	end

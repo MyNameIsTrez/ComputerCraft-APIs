@@ -362,10 +362,36 @@ function starts_with(str, start)
 	return str:sub(1, #start) == start
 end
 
+
 function ends_with(str, ending)
 	return ending == "" or str:sub(-#ending) == ending
 end
 
+
 function sort_alphabetically(tab)
 	table.sort(tab, function(a, b) return string.lower(a) < string.lower(b) end)
+end
+
+
+function debug_write_random()
+	local w, h = term.getSize()
+	debug_write(math.random(), h)
+end
+
+
+-- arg can be a string or table and will be printed at (1, debug_y)
+function debug_write(arg, debug_y)
+	local str
+	if type(arg) == "table" then
+		str = textutils.serialize(arg)
+	else
+		str = arg
+	end
+	
+	local x, y = term.getCursorPos()
+	
+	term.setCursorPos(1, debug_y)
+	write(str)
+	
+	term.setCursorPos(x, y)
 end
