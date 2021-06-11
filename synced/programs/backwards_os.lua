@@ -1,15 +1,3 @@
-local bw_os_dir = "backwards_os"
-local apis = fs.combine(bw_os_dir, "apis")
-local cfg_path = fs.combine(apis, "backwards_os_cfg")
-
-local fake_width, height = term.getSize()
-local width = fake_width - 1
-
-local typed_history = {}
-local typed_history_index = 0
-local running_program = false
-
-
 function premain()
 	parallel.waitForAny(
 		keyboard.listen,
@@ -33,7 +21,7 @@ end
 function main()
 	term.write("> ")
 
-	terminal_events.add_listeners()
+	terminal_events.add_listeners(shell)
 	
 	term.setCursorBlink(true)
 	

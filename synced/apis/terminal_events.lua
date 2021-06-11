@@ -1,8 +1,19 @@
+local bw_os_dir = "backwards_os"
+local apis = fs.combine(bw_os_dir, "apis")
+local cfg_path = fs.combine(apis, "backwards_os_cfg")
+
+local fake_width, height = term.getSize()
+local width = fake_width - 1
+
+local typed_history = {}
+local typed_history_index = 0
+local running_program = false
+
 local typing_start_x
 --local typing_start_y = 1
 
 
-function add_listeners()
+function add_listeners(shell)
 
 
 -- TODO: Hardcoding this here doesn't seem like a good idea.
