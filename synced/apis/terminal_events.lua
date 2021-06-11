@@ -28,6 +28,7 @@ events.listen("pageDown", function()
 end)
 
 events.listen("enter", function()
+	server.print(typed_history)
 	local previously_typed = typed_history[#typed_history]
 	if keyboard.typed ~= previously_typed then
 		table.insert(typed_history, keyboard.typed)

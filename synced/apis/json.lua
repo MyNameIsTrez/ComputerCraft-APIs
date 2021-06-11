@@ -27,6 +27,8 @@ end
 ------------------------------------------------------------------ encoding
 
 local function encodeCommon(val, pretty, tabLevel, tTracking)
+	if val == nil then return "nil" end
+
 	local str = ""
 
 	-- Tabbing util
