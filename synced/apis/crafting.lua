@@ -2,7 +2,7 @@ local items
 item_names = {}
 
 
-local function read_items()
+function read_items()
 	local h = io.open("backwards_os/synced/data/items", "r")
 	local items_str = h:read()
 	h:close()
@@ -10,7 +10,7 @@ local function read_items()
 end
 
 
-local function read_item_names()
+function read_item_names()
 	local i = 1
 	for item_name, _ in pairs(items) do
 		item_names[i] = item_name
@@ -38,8 +38,6 @@ function remove_recipe(item_name)
 end
 
 
-read_items()
-read_item_names()
 
 --read_items()
 
