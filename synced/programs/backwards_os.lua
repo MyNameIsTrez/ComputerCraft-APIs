@@ -61,12 +61,10 @@ end
 -- Function of synced/apis/subterm.lua
 events_tab["pageUp"] = function()
 	subterm.scroll_up(1)
-	--server.print("typed pageUp")
 end
 
 events_tab["pageDown"] = function()
 	subterm.scroll_down(1)
-	--server.print("typed pageDown")
 end
 
 events_tab["enter"] = function()
@@ -138,34 +136,17 @@ events_tab[ { "up", "down", "left", "right" } ] = function(key)
 end
 
 events_tab["char"] = function(_, char)
-	--server.print("bar")
-	--server.print("")
-	
-	--[[ Showcase of how it's possible to print before typing chars.
-	local a, b = term.getCursorPos()
-	term.setCursorPos(1, 2)
-	write(char)
-	term.setCursorPos(a, b)
-	]]--
-	
 	local cursor_x, cursor_y = term.getCursorPos()
-	--server.print("cursor_x: " .. cursor_x .. ", cursor_y: " .. cursor_y)
-	--print(char)
 	local typed_cursor_index = cursor_x - typing_start_x
-	--server.print("typed_cursor_index: " .. typed_cursor_index)
 	
-	--keyboard.typed = keyboard.typed .. char
-	--print(char)
 	local back = keyboard.typed:sub(1, typed_cursor_index)
 	local front = keyboard.typed:sub(typed_cursor_index + 1, -1)
 	keyboard.typed = back .. char .. front
-	--server.print("keyboard.typed: " .. keyboard.typed)
 	
 	if not running_program then
 		write(keyboard.typed:sub(typed_cursor_index + 1, -1))
 		term.setCursorPos(cursor_x + 1, cursor_y)
 	end
-	--server.print(keyboard.typed)
 end
 
 
@@ -180,10 +161,6 @@ function move_cursor(key)
 			
 			keyboard.typed = typed_history[typed_history_index - 1]
 			typed_history_index = typed_history_index - 1
-			
-			--server.print(prev_typed)
-			--server.print(keyboard.typed)
-			--server.print(#prev_typed - #keyboard.typed)
 			
 			term.setCursorPos(typing_start_x, y)
 			term.write(keyboard.typed)
@@ -210,10 +187,6 @@ function move_cursor(key)
 			
 			keyboard.typed = typed_history[typed_history_index + 1]
 			typed_history_index = typed_history_index + 1
-			
-			--server.print(prev_typed)
-			--server.print(keyboard.typed)
-			--server.print(#prev_typed - #keyboard.typed)
 			
 			term.setCursorPos(typing_start_x, y)
 			term.write(keyboard.typed)

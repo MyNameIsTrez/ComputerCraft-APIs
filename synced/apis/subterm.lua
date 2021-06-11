@@ -21,8 +21,6 @@ _G.write = function(str)
 	for i = 1, #str_tab do
 		local str = str_tab[i]
 		
-		--server.print("x: " .. x .. ", y: " .. y .. ", #str_tab: " .. #str_tab .. ", str: " .. str)
-		
 		if str == "\n" then
 			n_lines_printed = n_lines_printed + 1
 		else
@@ -49,7 +47,6 @@ _G.write = function(str)
 	end
 	
 	term.setCursorPos(x, y)
-	--server.print("n_lines_printed: " .. n_lines_printed)
 	
 	return n_lines_printed
 end
@@ -58,14 +55,11 @@ end
 function get_str_tab(str, x)
 	local str_tab = {}
 	for _, str2 in ipairs(split_but_keep_newlines(str)) do
-		--server.print("str2: " .. str2)
 		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
-			--server.print("str3: " .. str3)
 			str_tab[#str_tab+1] = str3
 		end
 	end
 	return str_tab
-	--server.print(str_tab)
 end
 
 
@@ -119,7 +113,6 @@ end
 
 
 function scroll_up(scroll_amount)
-	--server.print(#history)
 	if start_line - scroll_amount >= 1 then
 		start_line = start_line - scroll_amount
 		print_history()
@@ -128,7 +121,6 @@ end
 
 
 function scroll_down(scroll_amount)
-	--server.print(#history)
 	if start_line + scroll_amount <= #history - h then
 		start_line = start_line + scroll_amount
 		print_history()

@@ -3,23 +3,18 @@ local events = {}
 
 function listen(event_arg, callback_arg)
 	if type(event_arg) == "table" then
-		--server.print("Loop through table of callbacks.")
 		-- Loop through table of callbacks.
 		for event_result, callback in pairs(event_arg) do
 			if type(event_result) == "table" then
-				--server.print("Loop through table of keys that call the callback.")
 				-- Loop through table of keys that call the callback.
 				for _, event in ipairs(event_result) do
-					--server.print("event: " .. event .. ", callback: " .. tostring(callback))
 					add_event(event, callback)
 				end
 			else
-				--server.print("single event: " .. event_result .. ", callback: " .. tostring(callback))
 				add_event(event_result, callback)
 			end
 		end
 	else
-		--server.print("single event: " .. event_arg .. ", single callback: " .. tostring(callback_arg))
 		add_event(event_arg, callback_arg)
 	end
 end
