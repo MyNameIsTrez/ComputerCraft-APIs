@@ -39,19 +39,17 @@ events.listen("pageDown", function()
 end)
 
 events.listen("enter", function()
-	server.print(typed_history)
-	local previously_typed = typed_history[#typed_history]
-	if keyboard.typed ~= previously_typed then
-		table.insert(typed_history, keyboard.typed)
-	end
+	store_typed_in_history()
 	
 	-- "+ 1", because the first up arrow press shows the most recent command.
+	-- TODO: Only do this if a different word was typed?
 	typed_history_index = #typed_history + 1
 	
 	write("\n")
 	
 	running_program = true
-	shell.run(keyboard.typed)
+	shell.run(keyboard.typed) -- Can write "No such program\n"
+	term.setCursorBlink(true)
 	running_program = false
 	
 	term.write("> ")
@@ -101,6 +99,15 @@ end)
 end
 
 
+function store_typed_in_history()
+	-- server.print(typed_history)
+	local previously_typed = typed_history[#typed_history]
+	if keyboard.typed ~= previously_typed then
+		table.insert(typed_history, keyboard.typed)
+	end
+end
+
+
 function backspace_key_pressed(cursor_x, cursor_y, typed_cursor_index)
 	-- Clears the last character of the line.
 	term.setCursorPos(typing_start_x + #keyboard.typed - 1, cursor_y)
@@ -137,46 +144,10 @@ end
 function move_cursor(key)
 	local x, y = term.getCursorPos()
 	if key == "up" then
-		if typed_history[typed_history_index - 1] ~= nil then
-			local prev_typed = keyboard.typed
-			
-			keyboard.typed = typed_history[typed_history_index - 1]
-			typed_history_index = typed_history_index - 1
-			
-			term.setCursorPos(typing_start_x, y)
-			term.write(keyboard.typed)
-			local clear_char_count = #prev_typed - #keyboard.typed
-			if clear_char_count > 0 then
-				term.write(string.rep(" ", clear_char_count))
-			end
-			term.setCursorPos(typing_start_x + #keyboard.typed, y)
-		end
+		move_cursor_up(x, y)
 	end
 	if key == "down" then
-		if typed_history_index == #typed_history then -- Clear the cursor line.
-			term.setCursorPos(typing_start_x, y)
-			local clear_char_count = #keyboard.typed
-			if clear_char_count > 0 then
-				term.write(string.rep(" ", clear_char_count))
-			end
-			term.setCursorPos(typing_start_x, y)
-			
-			keyboard.typed = ""
-			typed_history_index = typed_history_index + 1
-		elseif typed_history[typed_history_index + 1] ~= nil then
-			local prev_typed = keyboard.typed
-			
-			keyboard.typed = typed_history[typed_history_index + 1]
-			typed_history_index = typed_history_index + 1
-			
-			term.setCursorPos(typing_start_x, y)
-			term.write(keyboard.typed)
-			local clear_char_count = #prev_typed - #keyboard.typed
-			if clear_char_count > 0 then
-				term.write(string.rep(" ", clear_char_count))
-			end
-			term.setCursorPos(typing_start_x + #keyboard.typed, y)
-		end
+		move_cursor_down(x, y)
 	end
 	if key == "left" then
 		if x > typing_start_x then
@@ -187,5 +158,53 @@ function move_cursor(key)
 		if x < typing_start_x + #keyboard.typed then
 			term.setCursorPos(x + 1, y)
 		end
+	end
+end
+
+
+-- TODO: Shares a lot of duplicate code with move_cursor_down()
+function move_cursor_up(x, y)
+	-- server.print(typed_history_index - 1)
+	if typed_history[typed_history_index - 1] ~= nil then
+		local prev_typed = keyboard.typed
+		
+		keyboard.typed = typed_history[typed_history_index - 1]
+		typed_history_index = typed_history_index - 1
+		
+		term.setCursorPos(typing_start_x, y)
+		term.write(keyboard.typed)
+		local clear_char_count = #prev_typed - #keyboard.typed
+		if clear_char_count > 0 then
+			term.write(string.rep(" ", clear_char_count))
+		end
+		term.setCursorPos(typing_start_x + #keyboard.typed, y)
+	end
+end
+
+
+function move_cursor_down(x, y)
+	if typed_history_index == #typed_history then -- Clear the cursor line.
+		term.setCursorPos(typing_start_x, y)
+		local clear_char_count = #keyboard.typed
+		if clear_char_count > 0 then
+			term.write(string.rep(" ", clear_char_count))
+		end
+		term.setCursorPos(typing_start_x, y)
+		
+		keyboard.typed = ""
+		typed_history_index = typed_history_index + 1
+	elseif typed_history[typed_history_index + 1] ~= nil then
+		local prev_typed = keyboard.typed
+		
+		keyboard.typed = typed_history[typed_history_index + 1]
+		typed_history_index = typed_history_index + 1
+		
+		term.setCursorPos(typing_start_x, y)
+		term.write(keyboard.typed)
+		local clear_char_count = #prev_typed - #keyboard.typed
+		if clear_char_count > 0 then
+			term.write(string.rep(" ", clear_char_count))
+		end
+		term.setCursorPos(typing_start_x + #keyboard.typed, y)
 	end
 end

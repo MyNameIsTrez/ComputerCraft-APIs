@@ -28,6 +28,7 @@ end
 
 local function encodeCommon(val, pretty, tabLevel, tTracking)
 	if val == nil then return "nil" end
+	if type(val) == "function" then return "function" end
 
 	local str = ""
 
