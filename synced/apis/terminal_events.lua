@@ -96,13 +96,11 @@ end
 
 
 function store_typed_in_history()
-	-- server.print(typed_history)
 	local previously_typed = typed_history[#typed_history]
 	if keyboard.typed ~= previously_typed then
 		table.insert(typed_history, keyboard.typed)
-		typed_history_index = typed_history_index + 1
-		-- server.print("typed_history_index", typed_history_index)
 	end
+	typed_history_index = #typed_history + 1 -- Resetting the index to the last typed.
 end
 
 
@@ -162,7 +160,6 @@ end
 
 -- TODO: Shares a lot of duplicate code with move_cursor_down()
 function move_cursor_up(x, y)
-	server.print("typed_history_index - 1", typed_history_index - 1)
 	if typed_history[typed_history_index - 1] ~= nil then
 		local prev_typed = keyboard.typed
 		
@@ -181,7 +178,6 @@ end
 
 
 function move_cursor_down(x, y)
-	server.print("typed_history_index + 1", typed_history_index + 1)
 	if typed_history_index == #typed_history then -- Clear the cursor line.
 		term.setCursorPos(typing_start_x, y)
 		local clear_char_count = #keyboard.typed
