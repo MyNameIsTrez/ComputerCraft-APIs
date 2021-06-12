@@ -3,8 +3,10 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 
 # TODO
 
-* The server doesn't always respond to the long poll GET on file being saved.
-* Fix scrolling. (Maybe replacing term.write with a version that saves history?)
+* The server doesn't always respond to the long poll GET on a file being saved.
+* Maybe replacing term.write with a version that saves history?
+* If the user types anything while scrolled up, scroll the user to the bottom.
+
 * Change special "r" and "t" keys to ones that are never used in typing.
 	* Maybe replace vanilla ctrl+r and ctrl+t?
 * Crafting program prototype.

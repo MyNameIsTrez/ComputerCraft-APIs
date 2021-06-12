@@ -9,13 +9,13 @@ local w, h = term.getSize() -- TODO: Move in globals file.
 
 -- The original write function has a bug where it can't write to the rightmost position,
 -- 	unless the entire line is written at once.
--- It also has a bug where write(string.rep("a", 50) .. "\n") moves the string.rep("a", 50) down with it.
+-- It also has a bug where write(string.rep("a", w) .. "\n") moves the string.rep("a", w) down with it.
 -- This version is also hopefully a little faster due to being dumbed down.
-_G.write = function(str)
-	local str = tostring(str)
+_G.write = function(str_arg)
+	local str_arg = tostring(str_arg)
 	local x, y = term.getCursorPos()
 	
-	local str_tab = get_str_tab(str, x)
+	local str_tab = get_str_tab(str_arg, x)
 	
 	local n_lines_printed = 0
 	for i = 1, #str_tab do
@@ -34,10 +34,10 @@ _G.write = function(str)
 		end
 		--sleep(0.5)
 		
-		-- and str ~= "" is just there to reproduce vanilla CC behavior.
-		if (x > 50 and str ~= "") or str == "\n" then
+		-- and str ~= "" reproduces vanilla CC behavior.
+		if (x > w and str ~= "") or str == "\n" then
 			x = 1
-			y = y + 1
+			y = y == h and h or y + 1
 			
 			if record_history then
 				history[#history + 1] = ""
@@ -86,7 +86,7 @@ end
 
 
 function scroll_after_write()
-	local scroll_amount = #history - h - start_line
+	local scroll_amount = #history - h - start_line + 1 -- 19 - 18 - 1 + 1 = 1
 	if scroll_amount >= 1 then
 		scroll_down(scroll_amount)
 	end
@@ -122,7 +122,7 @@ end
 
 
 function scroll_down(scroll_amount)
-	if start_line + scroll_amount <= #history - h then
+	if start_line + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
 		start_line = start_line + scroll_amount
 		print_history()
 	end
@@ -133,11 +133,10 @@ function print_history()
 	local start_x, start_y = term.getCursorPos()
 	for i = 1, h do
 		local line = history[i + start_line - 1]
-		if (line ~= nil) then
+		if line ~= nil then
 			term.setCursorPos(1, i)
 			term.clearLine()
 			term.write(line)
 		end
 	end
-	term.setCursorPos(start_x, start_y)
 end
