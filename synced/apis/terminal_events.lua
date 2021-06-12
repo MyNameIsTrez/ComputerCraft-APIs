@@ -48,8 +48,6 @@ events.listen("enter", function()
 	write("\n")
 	
 	running_program = true
-	local backup = events.events
-	events.events = nil
 	shell.run(keyboard.typed) -- Can write "No such program\n"
 	term.setCursorBlink(true)
 	running_program = false

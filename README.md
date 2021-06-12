@@ -3,9 +3,8 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 
 # TODO
 
-* Move programs/backwardsos its keyboard functions into the keyboard API.
-	* This is so programs/autocomplete can access keyboard.typed
-* Toggleable autocompletion, where toggling it on requires a passed table.
+* The server doesn't always respond to the long poll GET on file being saved.
+* Fix scrolling. (Maybe replacing term.write with a version that saves history?)
 * Crafting program prototype.
 * Allow recursive directories in the synced/jobs/ and any other synced/ folder.
 	* Currently there's jobs/crafting.lua and jobs/items in CC.
