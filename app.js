@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
 
@@ -14,7 +13,7 @@ app.listen(1338, () => {
 // Fixes app.post()
 // ComputerCraft versions below 1.63 don't support custom headers,
 // so the content-type of those is always 'application/x-www-form-urlencoded'.
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 
 requireAll(app);
@@ -31,8 +30,8 @@ function requireAll(app) {
 }
 
 
-function getDirectories(path) {
-	return fs.readdirSync(path).filter(file => {
-		return fs.statSync(path+'/'+file).isDirectory();
+function getDirectories(dirPath) {
+	return fs.readdirSync(dirPath).filter(file => {
+		return fs.statSync(path.join(dirPath, file)).isDirectory();
 	});
 }

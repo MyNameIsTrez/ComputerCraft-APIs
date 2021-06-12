@@ -38,7 +38,10 @@ end
 
 
 function print(...)
-	local h = http.post_lossless(server_print_url, "msg=" .. json.encode({...}))
+	-- Prevents + getting converted to a space character in JS.
+	local msg = textutils.urlEncode(json.encode({...}))
+	
+	local h = http.post_lossless(server_print_url, "msg=" .. msg)
 	
 	if h == nil then
 		h.close()

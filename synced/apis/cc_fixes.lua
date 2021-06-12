@@ -45,10 +45,9 @@ end
 
 
 function requeue(unused_events)
-	for i = 1, #unused_events do -- TODO: Loop in opposite direction?
-		local n = table.maxn(unused_events[i]) -- TODO: Necessary?
-		
-		os.queueEvent(unpack(unused_events[i], 1, n))
+	for _, unused_event in ipairs(unused_events) do
+		local n = table.maxn(unused_event) -- TODO: Necessary in case of nil values?
+		os.queueEvent(unpack(unused_event, 1, n))
 	end
 end
 

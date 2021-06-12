@@ -6,7 +6,7 @@ local fake_width, height = term.getSize()
 local width = fake_width - 1
 
 local typed_history = {}
-local typed_history_index = 0
+local typed_history_index = 1 -- 1, because the first up arrow press shows the most recent command.
 local running_program = false
 
 local typing_start_x
@@ -40,10 +40,6 @@ end)
 
 events.listen("enter", function()
 	store_typed_in_history()
-	
-	-- "+ 1", because the first up arrow press shows the most recent command.
-	-- TODO: Only do this if a different word was typed?
-	typed_history_index = #typed_history + 1
 	
 	write("\n")
 	
@@ -104,6 +100,8 @@ function store_typed_in_history()
 	local previously_typed = typed_history[#typed_history]
 	if keyboard.typed ~= previously_typed then
 		table.insert(typed_history, keyboard.typed)
+		typed_history_index = typed_history_index + 1
+		-- server.print("typed_history_index", typed_history_index)
 	end
 end
 
