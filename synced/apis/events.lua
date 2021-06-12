@@ -1,4 +1,4 @@
-local events = {}
+events = {}
 
 
 function listen(event_arg, callback)

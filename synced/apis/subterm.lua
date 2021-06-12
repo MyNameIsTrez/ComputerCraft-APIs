@@ -34,7 +34,8 @@ _G.write = function(str)
 		end
 		--sleep(0.5)
 		
-		if x > 50 or str == "\n" then
+		-- and str ~= "" is just there to reproduce vanilla CC behavior.
+		if (x > 50 and str ~= "") or str == "\n" then
 			x = 1
 			y = y + 1
 			
