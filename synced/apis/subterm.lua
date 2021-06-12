@@ -1,10 +1,10 @@
+start_line = 1
 history = { "" } -- Initializing with an empty string so it can be concatenated with.
 
 
 local record_history = true
-local start_line = 1
 
-local w, h = term.getSize() -- TODO: Move in globals file.
+local w, h = term.getSize() -- TODO: Move to globals file.
 
 
 -- The original write function has a bug where it can't write to the rightmost position,
@@ -86,7 +86,7 @@ end
 
 
 function scroll_after_write()
-	local scroll_amount = #history - h - start_line + 1 -- 19 - 18 - 1 + 1 = 1
+	local scroll_amount = #history - h - subterm.start_line + 1 -- 19 - 18 - 1 + 1 = 1
 	if scroll_amount >= 1 then
 		scroll_down(scroll_amount)
 	end
@@ -114,16 +114,16 @@ end
 
 
 function scroll_up(scroll_amount)
-	if start_line - scroll_amount >= 1 then
-		start_line = start_line - scroll_amount
+	if subterm.start_line - scroll_amount >= 1 then
+		subterm.start_line = subterm.start_line - scroll_amount
 		print_history()
 	end
 end
 
 
 function scroll_down(scroll_amount)
-	if start_line + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
-		start_line = start_line + scroll_amount
+	if subterm.start_line + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
+		subterm.start_line = subterm.start_line + scroll_amount
 		print_history()
 	end
 end
@@ -132,7 +132,7 @@ end
 function print_history()
 	local start_x, start_y = term.getCursorPos()
 	for i = 1, h do
-		local line = history[i + start_line - 1]
+		local line = history[i + subterm.start_line - 1]
 		if line ~= nil then
 			term.setCursorPos(1, i)
 			term.clearLine()
