@@ -37,8 +37,8 @@ function post(server_path, query, str)
 end
 
 
-function print(msg)
-	local h = http.post_lossless(server_print_url, "msg=" .. json.encode(msg))
+function print(...)
+	local h = http.post_lossless(server_print_url, "msg=" .. json.encode({...}))
 	
 	if h == nil then
 		h.close()

@@ -12,7 +12,8 @@ module.exports = app => {
 
 
 	app.post("/server-print", (req, res) => {
-		console.log("server-print: " + req.body.msg);
+		const msgArr = JSON.parse(req.body.msg);
+		console.log("server-print: " + msgArr.join(", "));
 		res.send(true);
 	});
 

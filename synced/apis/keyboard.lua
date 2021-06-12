@@ -99,6 +99,7 @@ local typed_index_bool = {
 }
 
 
+-- TODO: Remove this?
 --[[
 local keys_string_number = {}
 for n_key, s_key in pairs(keys_index_name) do
@@ -109,9 +110,7 @@ keys_string_number["return"] = keys_string_number.enter
 
 
 function listen()
-	while true do
-		--utils.debug_write_random()
-		
+	while true do		
 		local event, value = os.pullEvent()
 		
 		if event == "key" then

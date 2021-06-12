@@ -19,7 +19,7 @@ end
 
 
 function main()
-	term.write("> ")
+	write("> ")
 
 	shell.setDir("backwards_os/synced/programs") -- Makes shell.run recognize BWOS programs.
 	terminal_events.add_listeners(shell)

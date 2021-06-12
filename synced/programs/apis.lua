@@ -46,34 +46,7 @@ function add_files(diff_metadata)
 end
 
 
--- TODO: Remove these temporarily debug pasted functions.
-function pathjoin(...)
-	if arg.n == 0 then error("path.join() expects at least 1 arg.") end
-	local str = arg[1]
-	for i = 2, arg.n do
-		str = str .. "/" .. arg[i]
-	end
-	return str
-end
-function serverprint(msg)
-	url = "http://h2896147.stratoserver.net:1338"
-	local server_print_url = pathjoin(url, "server-print")
-	local h = http.post(server_print_url, "msg=" .. json.encode(msg))
-	
-	if h == nil then
-		h.close()
-		return false
-	end
-	
-	local response = h.readAll()
-	h.close()
-	return response
-end
-
-
-
 function remove_files(diff_metadata)
-	serverprint(diff_metadata)
 	for name, data in pairs(diff_metadata.remove) do
 		local file_path = fs.combine(synced_path, fs.combine(data.dir, name))
 		fs.delete(file_path)

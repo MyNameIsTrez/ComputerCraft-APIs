@@ -5,6 +5,8 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 
 * The server doesn't always respond to the long poll GET on file being saved.
 * Fix scrolling. (Maybe replacing term.write with a version that saves history?)
+* Change special "r" and "t" keys to ones that are never used in typing.
+	* Maybe replace vanilla ctrl+r and ctrl+t?
 * Crafting program prototype.
 * Allow recursive directories in the synced/jobs/ and any other synced/ folder.
 	* Currently there's jobs/crafting.lua and jobs/items in CC.
