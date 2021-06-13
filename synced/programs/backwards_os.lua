@@ -23,7 +23,7 @@ end
 
 
 function main()
-	write("> ")
+	utils.draw_cursor_prompt()
 
 	shell.setDir("backwards_os/synced/programs") -- Makes shell.run recognize BWOS programs.
 	terminal_events.add_listeners(shell)
@@ -31,7 +31,7 @@ function main()
 	term.setCursorBlink(true)
 	
 	-- shell.run("crafting_gui")
-	shell.run("floodfill_demo")
+	-- shell.run("floodfill_demo")
 	
 	sleep(1e6)
 end

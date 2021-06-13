@@ -4,11 +4,10 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 # TODO
 
 * Fix wrapping when typing past terminal width.
-* Characters removed with backspace and delete don't get updated in subterm.history.
 * Characters selected with arrow key history don't get saved to line history.
-* lua program doesn't draw right while scrolling.
+* lua program doesn't draw correctly while scrolling.
 * The server doesn't always respond to the long poll GET on a file being saved.
-* Maybe replacing term.write with a version that saves history?
+* Replace term.write with a version that saves history?
 * If the user types anything while scrolled up, scroll the user to the bottom.
 
 * Change special "r" and "t" keys to ones that are never used in typing.
