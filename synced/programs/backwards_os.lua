@@ -11,7 +11,11 @@ end
 function listen_file_update()
 	while true do
 		-- The server responds every N seconds.
-		if long_poll.listen() == "true" then
+		local h = http.get_lossy("http://h2896147.stratoserver.net:1338/long_poll?fn_name=file_change")
+		if h == nil then error("Server offline.") end
+		local response = h.readAll()
+		h.close()
+		if response == "true" then
 			os.reboot()
 		end
 	end
@@ -26,7 +30,8 @@ function main()
 	
 	term.setCursorBlink(true)
 	
-	--shell.run("backwards_os/synced/programs/crafting_gui")
+	-- shell.run("crafting_gui")
+	shell.run("maze_solve")
 	
 	sleep(1e6)
 end

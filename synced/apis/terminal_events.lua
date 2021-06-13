@@ -10,7 +10,6 @@ local typed_history_index = 1 -- 1, because the first up arrow press shows the m
 local running_program = false
 
 local typing_start_x
---local typing_start_y = 1
 
 local w, h = term.getSize() -- TODO: Move to globals file.
 
@@ -64,13 +63,13 @@ end)
 events.listen( { "backspace", "delete" }, function(key)
 	if #keyboard.typed > 0 then
 		local cursor_x, cursor_y = term.getCursorPos()
-		local cursor_index = cursor_x - typing_start_x
+		local typed_index = cursor_x - typing_start_x
 		--local y = 
 		
 		if key == "backspace" then
-			backspace_key_pressed(cursor_x, cursor_y, cursor_index)
+			backspace_key_pressed(cursor_x, cursor_y, typed_index)
 		elseif key == "delete" then
-			delete_key_pressed(cursor_x, cursor_y, cursor_index)
+			delete_key_pressed(cursor_x, cursor_y, typed_index)
 		end
 	end
 end)
@@ -83,14 +82,14 @@ end)
 
 events.listen("char", function(_, char)
 	local cursor_x, cursor_y = term.getCursorPos()
-	local cursor_index = cursor_x - typing_start_x
+	local typed_index = cursor_x - typing_start_x
 	
-	local back = keyboard.typed:sub(1, cursor_index)
-	local front = keyboard.typed:sub(cursor_index + 1, -1)
+	local back = keyboard.typed:sub(1, typed_index)
+	local front = keyboard.typed:sub(typed_index + 1, -1)
 	keyboard.typed = back .. char .. front
 	
 	if not running_program then
-		write(keyboard.typed:sub(cursor_index + 1, -1))
+		write(keyboard.typed:sub(typed_index + 1, -1))
 		term.setCursorPos(cursor_x + 1, cursor_y)
 	end
 end)
@@ -108,37 +107,41 @@ function store_typed_in_history()
 end
 
 
-function backspace_key_pressed(cursor_x, cursor_y, cursor_index)
+function backspace_key_pressed(cursor_x, cursor_y, typed_index)
 	clear_last_char(cursor_y)
 	
 	-- Moves the cursor back by 1.
 	term.setCursorPos(cursor_x - 1, cursor_y)
 	-- Moves the characters after the cursor back by 1.
-	term.write(keyboard.typed:sub(cursor_index + 1, -1))
+	term.write(keyboard.typed:sub(typed_index + 1, -1))
 	
 	-- Moves the cursor to its final position.
 	term.setCursorPos(cursor_x - 1, cursor_y)
 	
-	keyboard.typed = keyboard.typed:sub(1, cursor_index - 1) .. keyboard.typed:sub(cursor_index + 1, -1)
+	keyboard.typed = keyboard.typed:sub(1, typed_index - 1) .. keyboard.typed:sub(typed_index + 1, -1)
 
-	server.print("subterm.start_line", subterm.start_line)
-	-- server.print("subterm.start_line", subterm.start_line, "#subterm.history", #subterm.history, "h", h)
-	-- server.print(#subterm.history)
-	-- server.print(subterm.history[])
+	-- TODO: Editing the history.
+	local cursor_y_history = get_cursor_y_history(cursor_y)
+	server.print(cursor_y_history, typed_index, subterm.history[cursor_y_history])
 end
 
 
-function delete_key_pressed(cursor_x, cursor_y, cursor_index)
+function delete_key_pressed(cursor_x, cursor_y, typed_index)
 	clear_last_char(cursor_y)
 	
 	-- Moves the characters after the cursor back by 1.
 	term.setCursorPos(cursor_x, cursor_y)
-	term.write(keyboard.typed:sub(cursor_index + 2, -1))
+	term.write(keyboard.typed:sub(typed_index + 2, -1))
 	
 	-- Moves the cursor to its final position.
 	term.setCursorPos(cursor_x, cursor_y)
 	
-	keyboard.typed = keyboard.typed:sub(1, cursor_index) .. keyboard.typed:sub(cursor_index + 2, -1)
+	keyboard.typed = keyboard.typed:sub(1, typed_index) .. keyboard.typed:sub(typed_index + 2, -1)
+end
+
+
+function get_cursor_y_history(cursor_y)
+	return subterm.start_line - 1 + cursor_y
 end
 
 

@@ -1,13 +1,5 @@
--- README --------------------------------------------------------
+local w, h = term.getSize()
 
--- Collection of LUA functions I commonly use.
-
--- pastebin get p9tSSWcB cf
-
--- NOT EDITABLE VARIABLES --------------------------------------------------------
-
- 
--- FUNCTIONS --------------------------------------------------------
 
 -- Constrains value between min and max.
 function clamp(n, min, max)
@@ -43,7 +35,7 @@ end
 -- Written with help from Brutal_McLegend.
 function round(input, decimals)
 	decimals = decimals or 0
-	if decimals < 0 then error("cf.round(n, d) doesn't take a negative decimal count") end
+	if decimals < 0 then error("utils.round(n, d) doesn't take a negative decimal count") end
 	local mult = math.pow(10, decimals)
     return math.floor(input * mult + 0.5) / mult
 end
@@ -191,7 +183,7 @@ function print_table(tab, recursive, depth)
 		local isTable = type(value) == 'table'
 		local valueIsTable = (tab == value)
 		if recursive and isTable and not valueIsTable then
-			printTable(value, recursive, depth + 1) -- Go into the table.
+			print_table(value, recursive, depth + 1) -- Go into the table.
 		end
 	end
 	
@@ -266,14 +258,14 @@ the arithmetic right shift is sign-preserving.
 function barshift(n, bits)
 	if n < 0 then
 		n = n and bit.brshift(-1, 1)
-		-- printTable(bit.tobits(n))
+		-- print_table(bit.tobits(n))
 		n = bit.brshift(n, bits)
-		-- printTable(bit.tobits(n))
+		-- print_table(bit.tobits(n))
 		n = n or bit.blshift(1, 31)
-		-- printTable(bit.tobits(n))
+		-- print_table(bit.tobits(n))
 	else
 		n = bit.brshift(n, bits)
-		-- printTable(bit.tobits(n))
+		-- print_table(bit.tobits(n))
 	end
 	return n
 end
@@ -394,4 +386,41 @@ function debug_write(arg, debug_y)
 	write(str)
 	
 	term.setCursorPos(x, y)
+end
+
+
+function save_file(path, str)
+	local h = fs.open(path, "w")
+	h.write(str)
+	h.close()
+end
+
+
+function shuffle_table(tab, n)
+	local length = #tab
+	local n = n or length
+	for i = 1, n do
+		local ri = math.random(length)
+		local temp = tab[i]
+		tab[i] = tab[ri]
+		tab[ri] = temp
+	end
+end
+
+
+function shallow_copy_table(t)
+	local t2 = {}
+	for k, v in pairs(t) do
+		t2[k] = v
+	end
+	return t2
+end
+
+
+function fill_screen(char)
+	local line = string.rep(char, w)
+	for y = 1, h do
+		term.setCursorPos(1, y)
+		term.write(line)
+	end
 end

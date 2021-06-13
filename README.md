@@ -27,3 +27,5 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
     * The table shouldn't hold an infinite amount of elements.
     * ctrl+f.
 * Ability to use any application/game using Xvfb inside CC.
+* Backport require()
+* synced_metadata can't have separate keys for an API and program with the same name.
