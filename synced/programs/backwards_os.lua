@@ -31,7 +31,7 @@ function main()
 	term.setCursorBlink(true)
 	
 	-- shell.run("crafting_gui")
-	shell.run("maze_solve")
+	shell.run("floodfill_demo")
 	
 	sleep(1e6)
 end

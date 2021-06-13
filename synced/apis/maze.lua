@@ -2,9 +2,9 @@ local cardinal_x = { 0, 1, 0, -1 }
 local cardinal_y = { -1, 0, 1, 0 }
 
 
-function get_solved_maze(width, height)
+function get_solved_maze(width, height, start_x, start_y)
 	local unsolved_maze = get_unsolved_maze(width, height)
-	return solve_cell(unsolved_maze, width, height, math.random(width), math.random(height))
+	return solve_cell(unsolved_maze, width, height, start_x, start_y)
 end
 
 
