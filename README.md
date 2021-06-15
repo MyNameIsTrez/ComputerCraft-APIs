@@ -9,6 +9,7 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 * The server doesn't always respond to the long poll GET on a file being saved.
 * Replace term.write with a version that saves history?
 * If the user types anything while scrolled up, scroll the user to the bottom.
+* Move utils.cursor_prompt, utils.cursor_prompt to a globals file.
 
 * Change special "r" and "t" keys to ones that are never used in typing.
 	* Maybe replace vanilla ctrl+r and ctrl+t?

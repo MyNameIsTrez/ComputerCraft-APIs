@@ -426,7 +426,7 @@ function fill_screen(char)
 end
 
 
-local cursor_prompt = "> " -- TODO: More accurate variable name that makes it clear that this isn't the blinking part of the cursor.
+cursor_prompt = "> " -- TODO: More accurate variable name that makes it clear that this isn't the blinking part of the cursor.
 typing_start_x = #cursor_prompt + 1 -- First typed char is at x=3.
 
 function draw_cursor_prompt()

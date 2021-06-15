@@ -7,6 +7,20 @@ local record_history = true
 local w, h = term.getSize() -- TODO: Move to globals file.
 
 
+
+
+_G.print = function(...)
+	local n_lines_printed = 0
+	for n, v in ipairs({...}) do
+		n_lines_printed = n_lines_printed + write(v)
+	end
+	n_lines_printed = n_lines_printed + write("\n")
+	return n_lines_printed
+end
+
+
+
+
 -- The original write function has a bug where it can't write to the rightmost position,
 -- 	unless the entire line is written at once.
 -- It also has a bug where write(string.rep("a", w) .. "\n") moves the string.rep("a", w) down with it.
@@ -93,14 +107,27 @@ function scroll_after_write()
 end
 
 
-_G.print = function(...)
-	local n_lines_printed = 0
-	for n, v in ipairs({...}) do
-		n_lines_printed = n_lines_printed + write(v)
+function scroll_down(scroll_amount)
+	if subterm.start_line + scroll_amount - 1 <= #subterm.history - h then -- 1 + 1 - 1 <= 19 - 18
+		subterm.start_line = subterm.start_line + scroll_amount
+		draw_history()
 	end
-	n_lines_printed = n_lines_printed + write("\n")
-	return n_lines_printed
 end
+
+
+function draw_history()
+	local start_x, start_y = term.getCursorPos()
+	for i = 1, h do
+		local line = subterm.history[i + subterm.start_line - 1]
+		if line ~= nil then
+			term.setCursorPos(1, i)
+			term.clearLine()
+			term.write(line)
+		end
+	end
+end
+
+
 
 
 function enable_history_recording()
@@ -113,30 +140,5 @@ function disable_history_recording()
 end
 
 
-function scroll_up(scroll_amount)
-	if subterm.start_line - scroll_amount >= 1 then
-		subterm.start_line = subterm.start_line - scroll_amount
-		print_history()
-	end
-end
 
 
-function scroll_down(scroll_amount)
-	if subterm.start_line + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
-		subterm.start_line = subterm.start_line + scroll_amount
-		print_history()
-	end
-end
-
-
-function print_history()
-	local start_x, start_y = term.getCursorPos()
-	for i = 1, h do
-		local line = history[i + subterm.start_line - 1]
-		if line ~= nil then
-			term.setCursorPos(1, i)
-			term.clearLine()
-			term.write(line)
-		end
-	end
-end
