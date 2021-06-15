@@ -26,7 +26,7 @@ function main()
 	utils.draw_cursor_prompt()
 
 	shell.setDir("backwards_os/synced/programs") -- Makes shell.run recognize BWOS programs.
-	terminal_events.add_listeners(shell)
+	subterm_events.add_listeners(shell)
 	
 	term.setCursorBlink(true)
 	
