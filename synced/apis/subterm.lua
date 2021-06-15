@@ -30,9 +30,9 @@ end
 -- This version is also hopefully a little faster due to being dumbed down.
 _G.write = function(str_arg)
 	local str_arg = tostring(str_arg)
-	local x, y = term.getCursorPos()
+	local cursor_x, cursor_y = term.getCursorPos()
 	
-	local str_tab = get_str_tab(str_arg, x)
+	local str_tab = get_str_tab(str_arg, cursor_x)
 	
 	local n_lines_printed = 0
 	for i = 1, #str_tab do
@@ -41,9 +41,9 @@ _G.write = function(str_arg)
 		if str == "\n" then
 			n_lines_printed = n_lines_printed + 1
 		else
-			term.setCursorPos(x, y)
+			term.setCursorPos(cursor_x, cursor_y)
 			term.write(str)
-			x = x + #str
+			cursor_x = cursor_x + #str
 			
 			if record_history then
 				history[#history] = history[#history] .. str
@@ -52,9 +52,9 @@ _G.write = function(str_arg)
 		--sleep(0.5)
 		
 		-- and str ~= "" reproduces vanilla CC behavior.
-		if (x > w and str ~= "") or str == "\n" then
-			x = 1
-			y = y == h and h or y + 1
+		if (cursor_x > w and str ~= "") or str == "\n" then
+			cursor_x = 1
+			cursor_y = cursor_y == h and h or cursor_y + 1
 			
 			if record_history then
 				history[#history + 1] = ""
@@ -64,16 +64,16 @@ _G.write = function(str_arg)
 		end
 	end
 	
-	term.setCursorPos(x, y)
+	term.setCursorPos(cursor_x, cursor_y)
 	
 	return n_lines_printed
 end
 
 
-function get_str_tab(str, x)
+function get_str_tab(str, cursor_x)
 	local str_tab = {}
 	for _, str2 in ipairs(split_but_keep_newlines(str)) do
-		for _, str3 in ipairs(split_by_terminal_width(str2, x)) do
+		for _, str3 in ipairs(split_by_terminal_width(str2, cursor_x)) do
 			str_tab[#str_tab+1] = str3
 		end
 	end
@@ -195,11 +195,15 @@ function pressed_backspace_or_delete_overseer(key)
 			pressed_backspace_or_delete(1, cursor_x, cursor_y, typed_index)
 		end
 		
-		-- Editing the history.
-		local cursor_y_history = get_cursor_y_history(cursor_y)
-		local line = utils.cursor_prompt .. keyboard.typed
-		history[cursor_y_history] = line
+		overwrite_history_with_typed(cursor_y)
 	end
+end
+
+
+function overwrite_history_with_typed(cursor_y)
+	local cursor_y_history = get_cursor_y_history(cursor_y)
+	local line = utils.cursor_prompt .. keyboard.typed
+	history[cursor_y_history] = line
 end
 
 
@@ -235,25 +239,25 @@ end
 
 function move_cursor(key)
 	if not running_program then
-		local x, y = term.getCursorPos()
+		local cursor_x, cursor_y = term.getCursorPos()
 
 		if key == "up" then
 			if typed_history[typed_history_index - 1] ~= nil then
-				move_cursor_up_or_down(-1, y)
+				move_cursor_up_or_down(-1, cursor_y)
 			end
 		elseif key == "down" then
 			if typed_history[typed_history_index + 1] ~= nil then
-				move_cursor_up_or_down(1, y)
+				move_cursor_up_or_down(1, cursor_y)
 			elseif typed_history_index == #typed_history then
-				move_cursor_down_clear_cursor(y)
+				move_cursor_down_clear_cursor(cursor_y)
 			end
 		elseif key == "left" then
-			if x > utils.typing_start_x then
-				term.setCursorPos(x - 1, y)
+			if cursor_x > utils.typing_start_x then
+				term.setCursorPos(cursor_x - 1, cursor_y)
 			end
 		elseif key == "right" then
-			if x < utils.typing_start_x + #keyboard.typed then
-				term.setCursorPos(x + 1, y)
+			if cursor_x < utils.typing_start_x + #keyboard.typed then
+				term.setCursorPos(cursor_x + 1, cursor_y)
 			end
 		end
 	end
@@ -262,13 +266,13 @@ end
 
 
 
-function move_cursor_up_or_down(direction, y)
+function move_cursor_up_or_down(direction, cursor_y)
 	local prev_typed = keyboard.typed
 	
 	keyboard.typed = typed_history[typed_history_index + direction]
 	typed_history_index = typed_history_index + direction
 	
-	term.setCursorPos(utils.typing_start_x, y)
+	term.setCursorPos(utils.typing_start_x, cursor_y)
 	term.write(keyboard.typed)
 
 	local clear_char_count = #prev_typed - #keyboard.typed
@@ -276,19 +280,21 @@ function move_cursor_up_or_down(direction, y)
 		term.write(string.rep(" ", clear_char_count))
 	end
 
-	term.setCursorPos(utils.typing_start_x + #keyboard.typed, y)
+	term.setCursorPos(utils.typing_start_x + #keyboard.typed, cursor_y)
+	
+	overwrite_history_with_typed(cursor_y)
 end
 
 
-function move_cursor_down_clear_cursor(y)
-	term.setCursorPos(utils.typing_start_x, y)
+function move_cursor_down_clear_cursor(cursor_y)
+	term.setCursorPos(utils.typing_start_x, cursor_y)
 
 	local clear_char_count = #keyboard.typed
 	if clear_char_count > 0 then
 		term.write(string.rep(" ", clear_char_count))
 	end
 
-	term.setCursorPos(utils.typing_start_x, y)
+	term.setCursorPos(utils.typing_start_x, cursor_y)
 	
 	keyboard.typed = ""
 	typed_history_index = typed_history_index + 1
