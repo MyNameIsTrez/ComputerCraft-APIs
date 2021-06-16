@@ -38,7 +38,7 @@ end
 
 
 function print(...)
-	-- Prevents + getting converted to a space character in JS.
+	-- urlEncode prevents + getting converted to a space character in JS.
 	local msg = textutils.urlEncode(json.encode({...}))
 	
 	local h = http.post_lossless(server_print_url, "msg=" .. msg)

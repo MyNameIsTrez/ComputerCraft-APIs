@@ -17,6 +17,18 @@ local w, h = term.getSize() -- TODO: Move to globals file.
 
 
 
+local old_term_write = term.write
+function term.write(...)
+	if record_history then
+		server.print(...)
+		history[#history] = history[#history] .. ...
+	end
+	return old_term_write(...)
+end
+
+
+
+
 _G.print = function(...)
 	local n_lines_printed = 0
 	for n, v in ipairs({...}) do
@@ -50,13 +62,12 @@ _G.write = function(str_arg)
 			term.write(str)
 			cursor_x = cursor_x + #str
 			
-			if record_history then
-				history[#history] = history[#history] .. str
-			end
+			-- if record_history then
+			-- 	history[#history] = history[#history] .. str
+			-- end
 		end
 		--sleep(0.5)
 		
-		-- and str ~= "" reproduces vanilla CC behavior.
 		if (cursor_x > w and str ~= "") or str == "\n" then
 			cursor_x = 1
 			cursor_y = cursor_y == h and h or cursor_y + 1
@@ -136,7 +147,7 @@ function draw_history()
 		if line ~= nil then
 			term.setCursorPos(1, i)
 			term.clearLine()
-			term.write(line)
+			old_term_write(line)
 		end
 	end
 end
@@ -230,7 +241,10 @@ function pressed_backspace_or_delete(is_delete, cursor_x, cursor_y, typed_index)
 	term.setCursorPos(cursor_x - 1 + is_delete, cursor_y)
 	
 	-- Moves the characters after the cursor back by 1.
-	term.write(keyboard.typed:sub(typed_index + 1 + is_delete, -1))
+	local chars_moved_back = keyboard.typed:sub(typed_index + 1 + is_delete, -1)
+	if chars_moved_back ~= "" then
+		term.write(chars_moved_back)
+	end
 	
 	-- Moves the cursor to its final position for backspace, does nothing for delete.
 	term.setCursorPos(cursor_x - 1 + is_delete, cursor_y)
@@ -345,7 +359,6 @@ end
 function pressed_char(char)
 	scroll_to_bottom()
 
-	-- TODO: 2. Get the cursor_x and cursor_y from the history.
 	local cursor_x, cursor_y = get_last_typed_cursor_xy()
 
 	local typed_index = cursor_x - utils.typing_start_x

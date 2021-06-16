@@ -13,7 +13,7 @@ module.exports = app => {
 
 	app.post("/server-print", (req, res) => {
 		const msgArr = JSON.parse(req.body.msg);
-		console.log("server-print: " + msgArr.join(", "));
+		console.log("server-print: '" + msgArr.join(", ") + "'");
 		res.send(true);
 	});
 

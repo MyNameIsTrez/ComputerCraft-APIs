@@ -26,7 +26,7 @@ function autocomplete_until_enter()
 	--write("foo")
 	--print("foo")
 	--server.print("foo")
-	server.print(keyboard.typed)
+	--server.print(keyboard.typed)
 	--local choices_tab = autocomplete(keyboard.typed)
 	
 	--server.print(choices_tab)

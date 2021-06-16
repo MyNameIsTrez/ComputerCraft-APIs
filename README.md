@@ -3,10 +3,11 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 
 # TODO
 
-* Fix wrapping when typing past terminal width.
-* lua program doesn't draw correctly while scrolling.
-* The server doesn't always respond to the long poll GET on a file being saved.
 * Replace term.write with a version that saves history?
+* lua program doesn't draw correctly while scrolling.
+
+* Fix wrapping when typing past terminal width.
+* The server doesn't always respond to the long poll GET on a file being saved.
 * If the user types anything while scrolled up, scroll the user to the bottom.
 * Move utils.cursor_prompt, utils.cursor_prompt to a globals file.
 
@@ -28,3 +29,4 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 * Ability to use any application/game using Xvfb inside CC.
 * Backport require()
 * synced_metadata can't have separate keys for an API and program with the same name.
+* Allow user to stay on stable updates, but notify the user often when new stable versions are available.
