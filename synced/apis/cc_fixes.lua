@@ -52,6 +52,23 @@ function requeue(unused_events)
 end
 
 
+local old_term_set_cursor_blink = term.setCursorBlink
+function term.setCursorBlink(state)
+	if state == term_set_cursor_blink_state then
+		return
+	end
+	
+	term_set_cursor_blink_state = state
+	
+	return old_term_set_cursor_blink(state)
+end
+
+
+rawset(term, "getCursorBlink", function()
+	return term_set_cursor_blink_state
+end)
+
+
 --[[
 -- This implementation pushes and pops queued events,
 -- which means os.pulLEvent() won't destroy events anymore.

@@ -5,7 +5,12 @@ local record_history = true
 local running_program = false
 
 local typed_history = {}
-local typed_history_index = 1 -- 1, because the first up arrow press shows the most recent command.
+
+-- Starts at 1 instead of 0, because you have to press the up arrow first to show the most recently typed command.
+-- TODO: Refactor this variable away by using #typed_history.
+local typed_history_index = 1
+
+local saved_cursor_x, saved_cursor_y
 
 local w, h = term.getSize() -- TODO: Move to globals file.
 
@@ -114,6 +119,12 @@ function scroll_down(scroll_amount)
 	if start_line + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
 		start_line = start_line + scroll_amount
 		draw_history()
+
+		local lines_scrolled_up = get_lines_scrolled_up()
+		if lines_scrolled_up == 0 then
+			term.setCursorBlink(true)
+			term.setCursorPos(saved_cursor_x, saved_cursor_y)
+		end
 	end
 end
 
@@ -147,7 +158,10 @@ end
 
 function scroll_up(scroll_amount)
 	if start_line - scroll_amount >= 1 then
+		term.setCursorBlink(false)
+
 		start_line = start_line - scroll_amount
+
 		draw_history()
 	end
 end
@@ -158,16 +172,16 @@ end
 function pressed_enter(shell)
 	store_typed_in_history()
 	
-	-- server.print(history)
-	
 	write("\n")
 	
 	running_program = true
-	shell.run(keyboard.typed) -- Can write "No such program\n"
+	shell.run(keyboard.typed) -- This can write "No such program\n"
 	term.setCursorBlink(true)
 	running_program = false
 	
 	utils.draw_cursor_prompt()
+
+	saved_cursor_x, saved_cursor_y = term.getCursorPos()
 	
 	keyboard.typed = ""
 end
@@ -175,7 +189,7 @@ end
 
 function store_typed_in_history()
 	local previously_typed = typed_history[#typed_history]
-	if keyboard.typed ~= previously_typed then
+	if keyboard.typed ~= "" and keyboard.typed ~= previously_typed then
 		table.insert(typed_history, keyboard.typed)
 	end
 	typed_history_index = #typed_history + 1 -- Resetting the index to the last typed.
@@ -196,6 +210,8 @@ function pressed_backspace_or_delete_overseer(key)
 		end
 		
 		overwrite_history_with_typed(cursor_y)
+
+		saved_cursor_x, saved_cursor_y = term.getCursorPos()
 	end
 end
 
@@ -239,6 +255,8 @@ end
 
 function move_cursor(key)
 	if not running_program then
+		scroll_to_bottom()
+
 		local cursor_x, cursor_y = term.getCursorPos()
 
 		if key == "up" then
@@ -260,7 +278,28 @@ function move_cursor(key)
 				term.setCursorPos(cursor_x + 1, cursor_y)
 			end
 		end
+
+		saved_cursor_x, saved_cursor_y = term.getCursorPos()
 	end
+end
+
+
+function scroll_to_bottom()
+	local lines_scrolled_up = get_lines_scrolled_up()
+	if lines_scrolled_up > 0 then
+		scroll_down(lines_scrolled_up)
+		term.setCursorBlink(true)
+	end
+end
+
+
+function get_lines_scrolled_up()
+	return math.max(#history - start_line + 1 - h, 0)
+end
+
+
+function get_last_typed_cursor_xy()
+	return #history[#history] + 1, math.min(#history, h)
 end
 
 
@@ -304,7 +343,11 @@ end
 
 
 function pressed_char(char)
-	local cursor_x, cursor_y = term.getCursorPos()
+	scroll_to_bottom()
+
+	-- TODO: 2. Get the cursor_x and cursor_y from the history.
+	local cursor_x, cursor_y = get_last_typed_cursor_xy()
+
 	local typed_index = cursor_x - utils.typing_start_x
 	
 	local back = keyboard.typed:sub(1, typed_index)
@@ -314,5 +357,6 @@ function pressed_char(char)
 	if not running_program then
 		write(keyboard.typed:sub(typed_index + 1, -1))
 		term.setCursorPos(cursor_x + 1, cursor_y)
+		saved_cursor_x, saved_cursor_y = cursor_x + 1, cursor_y
 	end
 end

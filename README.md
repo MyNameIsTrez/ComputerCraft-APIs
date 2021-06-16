@@ -4,7 +4,6 @@ Project for hosting a server that stores and updates ComputerCraft APIs in real-
 # TODO
 
 * Fix wrapping when typing past terminal width.
-* Characters selected with arrow key history don't get saved to line history.
 * lua program doesn't draw correctly while scrolling.
 * The server doesn't always respond to the long poll GET on a file being saved.
 * Replace term.write with a version that saves history?
