@@ -23,11 +23,7 @@ end
 
 -- Pythagorean theorem.
 function pythagoras(x1, y1, x2, y2)
-	if x2 and y2 then
-		return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
-	else
-		return math.sqrt(x1^2 + y1^2)
-	end
+	return math.sqrt((x1 - x2)^2 + (y1 - y2)^2)
 end
 
 -- Rounds a number to a specified number of decimals.
@@ -37,7 +33,7 @@ function round(input, decimals)
 	decimals = decimals or 0
 	if decimals < 0 then error("utils.round(n, d) doesn't take a negative decimal count") end
 	local mult = math.pow(10, decimals)
-    return math.floor(input * mult + 0.5) / mult
+	return math.floor(input * mult + 0.5) / mult
 end
 
 function clearTerm()
@@ -81,12 +77,12 @@ end
 -- t is 4 by default.
 local previous_time = 0
 function try_yield(t)
-    t = t or 4
-    local current_time = os.clock()
-    if current_time - previous_time > t then
-        previous_time = current_time
-        yield()
-    end
+	t = t or 4
+	local current_time = os.clock()
+	if current_time - previous_time > t then
+		previous_time = current_time
+		yield()
+	end
 end
 
 -- Prevents the program from crashing after 5 seconds.
@@ -213,27 +209,27 @@ function frameWrite(string, offsetX, offsetY, sleepTime)
 	local offsetStartY = offsetY
 
 	local nWidth, _ = term.getSize();
-    local sWriteArray = {};
+	local sWriteArray = {};
 	
-    for i in string.gmatch(string, "[^\n]+") do
-        local maxlen = (nWidth - offsetX);
+	for i in string.gmatch(string, "[^\n]+") do
+		local maxlen = (nWidth - offsetX);
 		
-        if string.len(i) > maxlen then
-            local newstr = string.sub(i, 1, maxlen);
-            table.insert(sWriteArray, newstr);
-        else
-            table.insert(sWriteArray, i);
-        end
+		if string.len(i) > maxlen then
+			local newstr = string.sub(i, 1, maxlen);
+			table.insert(sWriteArray, newstr);
+		else
+			table.insert(sWriteArray, i);
+		end
 	end
 	
-    for i = 1, #sWriteArray do
-        term.setCursorPos(offsetX, offsetY);
-        local x, _ = term.getCursorPos();
+	for i = 1, #sWriteArray do
+		term.setCursorPos(offsetX, offsetY);
+		local x, _ = term.getCursorPos();
 
-        if not (x >= nWidth) then
-            term.write(sWriteArray[i]);
-            offsetY = offsetY + 1;
-        end
+		if not (x >= nWidth) then
+			term.write(sWriteArray[i]);
+			offsetY = offsetY + 1;
+		end
 	end
 	
 	-- term.setCursorPos(1, offsetY);
@@ -287,7 +283,7 @@ end
 function getPeripheralSide(type)
 	for _, side in ipairs(rs.getSides()) do
 		if type then
-    		if peripheral.getType(side) == type then
+			if peripheral.getType(side) == type then
 				return side
 			end
 		else
@@ -313,7 +309,7 @@ end
 function split(str, splitter)
 	local tab = {}
 	for word in str:gmatch('%s*([^' .. splitter .. ']+)') do
-    	tab[#tab + 1] = word
+		tab[#tab + 1] = word
 	end
 	return tab
 end
@@ -431,4 +427,17 @@ typing_start_x = #cursor_prompt + 1 -- First typed char is at x=3.
 
 function draw_cursor_prompt()
 	write(cursor_prompt)
+end
+
+
+function open_and_create_missing_directories(filepath, mode)
+	local parent_path = get_parent_path(filepath)
+	fs.makeDir(parent_path)
+	local handle = io.open(filepath, mode)
+	return handle
+end
+
+
+function get_parent_path(filepath)
+    return filepath:match("(.*[/\\])")
 end

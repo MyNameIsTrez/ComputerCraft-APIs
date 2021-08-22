@@ -23,7 +23,7 @@ function get_latest(printing)
 
 	write_combined_metadata(local_metadata, diff_metadata)
 
-	load_apis()
+	load_apis(apis_path)
 
 	return true
 end
@@ -32,7 +32,7 @@ end
 function add_files(diff_metadata)
 	for name, data in pairs(diff_metadata.add) do
 		local file_path = fs.combine(synced_path, fs.combine(data.dir, name))
-		local h = io.open(file_path, "w")
+		local h = open_and_create_missing_directories(file_path, "w")
 		h:write(data.lua)
 		h:close()
 		data.lua = nil -- So Lua code doesn't end up in the metadata file.
@@ -43,6 +43,21 @@ function add_files(diff_metadata)
 			fs.copy(file_path, "startup")
 		end
 	end
+end
+
+
+-- Copied from utils.lua
+function open_and_create_missing_directories(filepath, mode)
+	local parent_path = get_parent_path(filepath)
+	fs.makeDir(parent_path)
+	local handle = io.open(filepath, mode)
+	return handle
+end
+
+
+-- Copied from utils.lua
+function get_parent_path(filepath)
+    return filepath:match("(.*[/\\])")
 end
 
 
@@ -139,8 +154,14 @@ function write_combined_metadata(local_metadata, diff_metadata)
 end
 
 
-function load_apis()
-	for _, name in ipairs(fs.list(apis_path)) do
-		os.loadAPI(fs.combine(apis_path, name))
+function load_apis(parent_path)
+	for _, name in ipairs(fs.list(parent_path)) do
+        local subpath = fs.combine(parent_path, name)
+
+        if fs.isDir(subpath) then
+            load_apis(subpath)
+        else
+		    os.loadAPI(subpath)
+        end
 	end
 end

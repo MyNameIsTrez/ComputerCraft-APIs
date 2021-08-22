@@ -25,7 +25,6 @@ module.exports = app => {
 	});
 
 
-	// TODO: Refactor into subfunctions.
 	app.post("/get-latest-files", (httpRequest, httpResponse) => {
 		startConnectionTimeout(httpResponse);
 		printStats("get-latest-files");

@@ -1,9 +1,9 @@
 function add_listeners(shell)
 
 
-events.listen("r", function()
-	os.reboot()
-end)
+-- events.listen("r", function()
+-- 	os.reboot()
+-- end)
 
 events.listen("t", function()
 	sleep(0.05) -- So the "t" isn't printed.

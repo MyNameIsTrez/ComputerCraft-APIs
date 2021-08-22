@@ -1,4 +1,4 @@
-local start_line = 1
+local top_line_y = 1
 local history = { "" } -- Initializing with an empty string so it can be concatenated with.
 
 local record_history = true
@@ -11,6 +11,7 @@ local typed_history = {}
 local typed_history_index = 1
 
 local saved_cursor_x, saved_cursor_y
+-- local saved_cursor_x, saved_cursor_y = term.getCursorPos()
 
 local w, h = term.getSize() -- TODO: Move to globals file.
 
@@ -20,9 +21,12 @@ local w, h = term.getSize() -- TODO: Move to globals file.
 local old_term_write = term.write
 function term.write(...)
 	if record_history then
-		server.print(...)
+		-- overwrite_history_line_with_typed(saved_cursor_y)
+	-- 	-- server.print(..., #history, type(...), ... == "")
 		history[#history] = history[#history] .. ...
+		-- history[#history] = utils.typed
 	end
+	-- server.print(history[1])
 	return old_term_write(...)
 end
 
@@ -119,7 +123,7 @@ end
 
 
 function scroll_after_write()
-	local scroll_amount = #history - h - start_line + 1 -- 19 - 18 - 1 + 1 = 1
+	local scroll_amount = #history - h - top_line_y + 1 -- 19 - 18 - 1 + 1 = 1
 	if scroll_amount >= 1 then
 		scroll_down(scroll_amount)
 	end
@@ -127,8 +131,8 @@ end
 
 
 function scroll_down(scroll_amount)
-	if start_line + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
-		start_line = start_line + scroll_amount
+	if top_line_y + scroll_amount - 1 <= #history - h then -- 1 + 1 - 1 <= 19 - 18
+		top_line_y = top_line_y + scroll_amount
 		draw_history()
 
 		local lines_scrolled_up = get_lines_scrolled_up()
@@ -143,7 +147,7 @@ end
 function draw_history()
 	local start_x, start_y = term.getCursorPos()
 	for i = 1, h do
-		local line = history[i + start_line - 1]
+		local line = history[i + top_line_y - 1]
 		if line ~= nil then
 			term.setCursorPos(1, i)
 			term.clearLine()
@@ -168,10 +172,10 @@ end
 
 
 function scroll_up(scroll_amount)
-	if start_line - scroll_amount >= 1 then
+	if top_line_y - scroll_amount >= 1 then
 		term.setCursorBlink(false)
 
-		start_line = start_line - scroll_amount
+		top_line_y = top_line_y - scroll_amount
 
 		draw_history()
 	end
@@ -220,17 +224,19 @@ function pressed_backspace_or_delete_overseer(key)
 			pressed_backspace_or_delete(1, cursor_x, cursor_y, typed_index)
 		end
 		
-		overwrite_history_with_typed(cursor_y)
+		overwrite_history_line_with_typed(cursor_y)
 
 		saved_cursor_x, saved_cursor_y = term.getCursorPos()
 	end
 end
 
 
-function overwrite_history_with_typed(cursor_y)
-	local cursor_y_history = get_cursor_y_history(cursor_y)
+function overwrite_history_line_with_typed(cursor_y)
+	local visual_cursor_y = get_visual_cursor_y(cursor_y)
 	local line = utils.cursor_prompt .. keyboard.typed
-	history[cursor_y_history] = line
+	server.print(line)
+	server.print("----")
+	history[visual_cursor_y] = line
 end
 
 
@@ -260,8 +266,8 @@ function clear_last_char_of_typed(cursor_y)
 end
 
 
-function get_cursor_y_history(cursor_y)
-	return start_line - 1 + cursor_y
+function get_visual_cursor_y(cursor_y)
+	return top_line_y - 1 + cursor_y
 end
 
 
@@ -308,13 +314,13 @@ end
 
 
 function get_lines_scrolled_up()
-	return math.max(#history - start_line + 1 - h, 0)
+	return math.max(#history - top_line_y + 1 - h, 0)
 end
 
 
-function get_last_typed_cursor_xy()
-	return #history[#history] + 1, math.min(#history, h)
-end
+-- function get_last_typed_cursor_xy()
+-- 	return #history[#history] + 1, math.min(#history, h)
+-- end
 
 
 
@@ -335,7 +341,7 @@ function move_cursor_up_or_down(direction, cursor_y)
 
 	term.setCursorPos(utils.typing_start_x + #keyboard.typed, cursor_y)
 	
-	overwrite_history_with_typed(cursor_y)
+	overwrite_history_line_with_typed(cursor_y)
 end
 
 
@@ -359,17 +365,25 @@ end
 function pressed_char(char)
 	scroll_to_bottom()
 
-	local cursor_x, cursor_y = get_last_typed_cursor_xy()
+	-- local cursor_x, cursor_y = get_last_typed_cursor_xy()
+	local cursor_x, cursor_y = term.getCursorPos()
+	-- server.print(cursor_x, cursor_y)
 
 	local typed_index = cursor_x - utils.typing_start_x
+	-- server.print(typed_index)
 	
 	local back = keyboard.typed:sub(1, typed_index)
 	local front = keyboard.typed:sub(typed_index + 1, -1)
 	keyboard.typed = back .. char .. front
+	-- server.print(back, char, front)
 	
 	if not running_program then
-		write(keyboard.typed:sub(typed_index + 1, -1))
-		term.setCursorPos(cursor_x + 1, cursor_y)
+		write(keyboard.typed:sub(typed_index + 1, -1)) -- TODO: Use term.write() instead?
+		-- server.print(keyboard.typed:sub(typed_index + 1, -1))
 		saved_cursor_x, saved_cursor_y = cursor_x + 1, cursor_y
+		term.setCursorPos(saved_cursor_x, saved_cursor_y)
+		-- server.print(saved_cursor_x, saved_cursor_y)
+		-- server.print(history[#history])
+		-- server.print("----")
 	end
 end
