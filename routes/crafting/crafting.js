@@ -10,7 +10,7 @@ module.exports = app => {
 
 app.post("/add-recipe", (req, res) => {
 	startConnectionTimeout(res);
-	printStats("add-recipe?recipe_info=");
+	printStats("add-recipe?recipe_info="); // TODO: Is the recipe_info query part necessary?
 	
 	readItems()
 	.then(items => {
