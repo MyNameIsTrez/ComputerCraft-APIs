@@ -56,17 +56,17 @@ end
 
 
 function craft(item_name, count)
-	local item = items[item_name] -- item_name will always be in items.
+	local item = items[item_name] -- item_name will always be present in items.
 	local recipe_info = item.recipe_info
 	
 	if recipe_info == false then -- If it is gotten from a Condenser/Chest.
 		grab(item_name, count)
 	else -- If it needs to be crafted.
 		local recipe = recipe_info.recipe
-	
-		local subitem_counts = get_subitem_counts(recipe)
+		local subcounts_per_recipe = get_subcounts_per_recipe(recipe)
 
-		for subitem_name, subcount in ipairs(subitem_counts) do
+		for subitem_name, subcount_per_recipe in ipairs(subcounts_per_recipe) do
+			local subcount = subcount_per_recipe * count
 			craft(subitem_name, subcount) -- Craft the subitems needed for the recipe.
 		end
 	end
@@ -74,13 +74,13 @@ end
 
 
 -- For example, returns { ["Oak Planks"] = 3, ["Cobblestone"] = 4 }
-function get_subitem_counts(recipe)
-	local subitem_counts = {}
+function get_subcounts_per_recipe(recipe)
+	local subcounts_per_recipe = {}
 	for _, subitem_name in ipairs(recipe) do
-		local subitem_count = subitem_counts[subitem_name]
-		subitem_counts[subitem_name] = subitem_count == nil and 1 or subitem_counts[subitem_name]
+		local subcount_per_recipe = subcounts_per_recipe[subitem_name]
+		subcounts_per_recipe[subitem_name] = subcount_per_recipe == nil and 1 or subcounts_per_recipe[subitem_name]
 	end
-	return subitem_counts
+	return subcounts_per_recipe
 end
 
 
