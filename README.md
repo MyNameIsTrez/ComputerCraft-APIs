@@ -1,8 +1,27 @@
 # Introduction
-Project for hosting a server that stores and updates ComputerCraft APIs in real-time. (for Tekkit Classic, CC 1.33)
+This repository is for running a Node.js server. It hosts all the files for the "BackwardsOS" operating system for ComputerCraft (a Minecraft mod).
+
+When the server is running and any changes to the files in its `synced/` directory are made, it'll tell any computers running BackwardsOS to redownload the updated server files.
+
+This enables the latest version of BackwardsOS to be pushed across any singleplayer and multiplayer worlds that are using it.
+
+# Getting started
+
+## Running the server to download the latest version of BackwardsOS from
+
+Run `node app.js`
+
+## Downloading BackWardsOS to a Computer/Turtle
+
+1. Open a Computer/Turtle.
+2. Type `lua`
+3. Paste and enter this:
+`h=io.open("startup","w")h:write(http.get("http://h2896147.stratoserver.net:1338/file?name=programs/startup").readAll())h:close()`
+4. Restart by holding `ctrl+r` for a few seconds.
 
 # TODO
 
+* Typing "aaaaa" and then removing the first "a" with backspace and then pressing "c" places the "c" at the end instead of the front. Might have to do with history[1] being very wrong.
 * Replace term.write with a version that saves history?
 * lua program doesn't draw correctly while scrolling.
 
