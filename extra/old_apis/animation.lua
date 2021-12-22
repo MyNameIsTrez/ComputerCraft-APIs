@@ -135,12 +135,7 @@ end
 function Animation:_create_timed_subfiles()
 	fs.makeDir(self.timed_document_path)
 
-	-- Create table of frame indices to sleep at.
-	local framesToSleep = {}
-	for v = 1, self.document.frame_count, self.frameSleepSkipping do
-		table.insert(framesToSleep, math.floor(v + 0.5))
-	end
-	local frameSleepSkippingIndex = 1
+	local sleep_index = 0
 
 	if self.progressBool then
 		self:_print_status("Opening data files...")
@@ -183,10 +178,8 @@ function Animation:_create_timed_subfiles()
 				strTable[k] = ","
 				k = k + 1
 
-				-- TODO: framesToSleep[frameSleepSkippingIndex] might cause errors when trying to access stuff outside of the table's scope
-				if self.frameSleeping and self.frameSleep ~= -1 and f == framesToSleep[frameSleepSkippingIndex] then
-					frameSleepSkippingIndex = frameSleepSkippingIndex + 1
-
+				if self.frameSleeping and self.frameSleep ~= -1 and math.floor(f / self.frameSleepSkipping) > sleep_index then
+					sleep_index = sleep_index + 1
 					strTable[k] = tostring(self.frameSleep) -- TODO: May not need tostring().
 					k = k + 1
 				else
